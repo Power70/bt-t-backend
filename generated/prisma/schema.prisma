@@ -1,0 +1,219 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 3. Define the data models for the LMS.
+
+// ENUMS for data consistency
+enum UserRole {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+}
+
+enum LessonType {
+  VIDEO
+  TEXT
+  QUIZ
+}
+
+// CORE MODELS
+
+model User {
+  id              String           @id @default(cuid())
+  email           String           @unique
+  name            String
+  password        String
+  role            UserRole         @default(STUDENT)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  taughtCourses   Course[]         @relation("InstructorCourses")
+  enrollments     Enrollment[]
+  progress        UserProgress[]
+  quizSubmissions QuizSubmission[]
+
+  @@index([email])
+}
+
+model Course {
+  id           String       @id @default(cuid())
+  title        String
+  slug         String       @unique
+  description  String?      @db.Text
+  imageUrl     String?
+  price        Float        @default(0.0)
+  isPublished  Boolean      @default(false)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  instructorId String
+  instructor   User         @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
+  categoryId   String
+  category     Category     @relation(fields: [categoryId], references: [id])
+  modules      Module[]
+  attachments  Attachment[]
+  enrollments  Enrollment[]
+
+  @@index([instructorId])
+  @@index([categoryId])
+  @@index([slug])
+}
+
+model Category {
+  id      String   @id @default(cuid())
+  name    String   @unique
+  courses Course[]
+}
+
+model Module {
+  id        String   @id @default(cuid())
+  title     String
+  order     Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons   Lesson[]
+
+  @@unique([courseId, order])
+  @@index([courseId])
+}
+
+model Lesson {
+  id           String         @id @default(cuid())
+  title        String
+  type         LessonType
+  content      String?        @db.Text
+  videoUrl     String?
+  order        Int
+  moduleId     String
+  userProgress UserProgress[]
+  module       Module         @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  quiz         Quiz?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([moduleId, order])
+  @@index([moduleId])
+}
+
+// JOIN TABLES & SUPPORTING MODELS
+
+model Enrollment {
+  id         String   @id @default(cuid())
+  enrolledAt DateTime @default(now())
+  userId     String
+  courseId   String
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
+}
+
+model UserProgress {
+  id          String    @id @default(cuid())
+  isCompleted Boolean   @default(false)
+  completedAt DateTime?
+  userId      String
+  lessonId    String
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  // A user can only have one progress record per lesson
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+}
+
+model Attachment {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  createdAt DateTime @default(now())
+
+  // An attachment belongs to a course
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+}
+
+// QUIZ RELATED MODELS
+
+model Quiz {
+  id String @id @default(cuid())
+
+  // A quiz is directly linked to a lesson of type QUIZ
+  lessonId    String           @unique
+  lesson      Lesson           @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  questions   Question[]
+  submissions QuizSubmission[]
+}
+
+model Question {
+  id          String       @id @default(cuid())
+  text        String       @db.Text
+  quizId      String
+  quiz        Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  options     Option[]
+  userAnswers UserAnswer[]
+
+  @@index([quizId])
+}
+
+model Option {
+  id          String       @id @default(cuid())
+  text        String
+  isCorrect   Boolean      @default(false)
+  questionId  String
+  question    Question     @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  userAnswers UserAnswer[]
+
+  @@index([questionId])
+}
+
+model QuizSubmission {
+  id          String       @id @default(cuid())
+  submittedAt DateTime     @default(now())
+  score       Float
+  userId      String
+  quizId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz        Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  userAnswers UserAnswer[]
+
+  @@index([userId, quizId])
+}
+
+model UserAnswer {
+  id String @id @default(cuid())
+
+  // Links a user's submission, the question, and the chosen option
+  submissionId String
+  questionId   String
+  optionId     String
+
+  // Relations
+  submission QuizSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  question   Question       @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  option     Option         @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  @@unique([submissionId, questionId]) // User can only answer a question once per submission
+}
