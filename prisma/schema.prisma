@@ -40,6 +40,10 @@ model User {
   role      UserRole @default(STUDENT)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  isVerified   Boolean   @default(false)
+  otpSecret    String? 
+  otpCounter   Int?      
+  otpCreatedAt DateTime?
   taughtCourses Course[] @relation("InstructorCourses")
   enrollments Enrollment[]
   progress UserProgress[]

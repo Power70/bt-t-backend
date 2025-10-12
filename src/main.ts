@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import helmet from 'helmet';             
 import { json } from 'express';
+import * as cookieParser from 'cookie-parser';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 // import { PrismaService } from './prisma/prisma.service';
@@ -22,9 +23,11 @@ async function bootstrap() {
 
   // --- Security & CORS ---
   app.use(helmet());
+  app.use(cookieParser());
   app.enableCors({
     origin: '*', // TODO: In production, restrict this to your frontend's domain.
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true, // Enable credentials for cookie-based auth
   });
 
   // --- Global Pipes ---
