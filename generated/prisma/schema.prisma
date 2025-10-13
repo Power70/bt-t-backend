@@ -32,21 +32,21 @@ enum LessonType {
 // CORE MODELS
 
 model User {
-  id              String           @id @default(cuid())
-  email           String           @unique
-  name            String
-  password        String
-  role            UserRole         @default(STUDENT)
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  isVerified      Boolean          @default(false)
-  otpSecret       String?
-  otpCounter      Int?
-  otpCreatedAt    DateTime?
-  taughtCourses   Course[]         @relation("InstructorCourses")
-  enrollments     Enrollment[]
-  progress        UserProgress[]
-  quizSubmissions QuizSubmission[]
+  id               String           @id @default(cuid())
+  email            String           @unique
+  name             String
+  password         String
+  role             UserRole         @default(STUDENT)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  isVerified       Boolean          @default(false)
+  otp_secret       String?
+  otp_count        Int?             @default(0)
+  otp_generated_at DateTime?
+  taughtCourses    Course[]         @relation("InstructorCourses")
+  enrollments      Enrollment[]
+  progress         UserProgress[]
+  quizSubmissions  QuizSubmission[]
 
   @@index([email])
 }

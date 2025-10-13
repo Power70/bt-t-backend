@@ -1,10 +1,22 @@
-import { Injectable, ConflictException, InternalServerErrorException } from '@nestjs/common';
+import { 
+  Injectable, 
+  ConflictException, 
+  InternalServerErrorException 
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entities/user.entity';
-import { User } from '../../generated/prisma';
+import { User, UserRole } from '../../generated/prisma';
 import * as bcrypt from 'bcrypt';
-import { hotp } from 'otplib';
+
+// Define updatable user fields for cleaner type signature
+interface UpdatableUserFields {
+  name?: string;
+  email?: string;
+  otp_secret?: string | null;
+  otp_count?: number | null;
+  otp_generated_at?: Date | null;
+}
 
 @Injectable()
 export class UsersService {
@@ -29,9 +41,16 @@ export class UsersService {
    * Create a new user with STUDENT role by default
    */
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+    const user = await this.createUserInternal(createUserDto);
+    return this.formatUser(user);
+  }
+
+  /**
+   * Internal method to create user and return raw data
+   */
+  private async createUserInternal(createUserDto: CreateUserDto): Promise<User> {
     const { name, email, password } = createUserDto;
 
-    // Check for duplicate email
     const existingUser = await this.prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       throw new ConflictException('A user with this email already exists');
@@ -45,11 +64,11 @@ export class UsersService {
           name,
           email,
           password: hashedPassword,
-          role: 'STUDENT', // Default role as specified
+          role: UserRole.STUDENT
         },
       });
 
-      return this.formatUser(user);
+      return user;
     } catch (error) {
       throw new InternalServerErrorException('Could not create user');
     }
@@ -66,39 +85,16 @@ export class UsersService {
   /**
    * Update user information
    */
-  async updateUserInfo(userId: string, data: Partial<Pick<User, 'name' | 'email'>>): Promise<UserEntity> {
-    const user = await this.prisma.user.update({
+  async updateUserInfo(
+    userId: string, 
+    data: UpdatableUserFields
+  ): Promise<UserEntity> {
+    const updatedUser = await this.prisma.user.update({
       where: { id: userId },
       data,
     });
 
-    return this.formatUser(user);
-  }
-
-  // ===== METHODS FOR AUTH SERVICE INTERNAL USE =====
-
-  /**
-   * Create user for auth purposes (internal use)
-   */
-  async createForAuth(createUserDto: CreateUserDto): Promise<User> {
-    const { name, email, password } = createUserDto;
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    try {
-      const user = await this.prisma.user.create({
-        data: {
-          name,
-          email,
-          password: hashedPassword,
-          role: 'STUDENT',
-        },
-      });
-
-      return user;
-    } catch (error) {
-      throw new InternalServerErrorException('Could not create user');
-    }
+    return this.formatUser(updatedUser);
   }
 
   /**
@@ -109,15 +105,22 @@ export class UsersService {
   }
 
   /**
+   * Find user by ID and return raw user data with sensitive fields (internal use for auth)
+   */
+  async findRawById(userId: string): Promise<User | null> {
+    return this.prisma.user.findUnique({ where: { id: userId } });
+  }
+
+  /**
    * Update user with OTP details for authentication
    */
   async updateUserOtp(userId: string, otpSecret: string, otpCounter: number): Promise<void> {
     await this.prisma.user.update({
       where: { id: userId },
       data: {
-        otpSecret,
-        otpCounter,
-        otpCreatedAt: new Date(),
+        otp_secret: otpSecret,
+        otp_count: otpCounter,
+        otp_generated_at: new Date(),
       },
     });
   }
@@ -130,10 +133,9 @@ export class UsersService {
       where: { id: userId },
       data: {
         isVerified: true,
-        // Clear OTP fields after successful verification for security
-        otpSecret: null,
-        otpCounter: null,
-        otpCreatedAt: null,
+        otp_secret: null,
+        otp_count: null,
+        otp_generated_at: null,
       },
     });
 
@@ -147,9 +149,9 @@ export class UsersService {
     await this.prisma.user.update({
       where: { id: userId },
       data: {
-        otpSecret: null,
-        otpCounter: null,
-        otpCreatedAt: null,
+        otp_secret: null,
+        otp_count: null,
+        otp_generated_at: null,
       },
     });
   }

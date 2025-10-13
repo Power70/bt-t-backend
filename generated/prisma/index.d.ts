@@ -2337,11 +2337,11 @@ export namespace Prisma {
   }
 
   export type UserAvgAggregateOutputType = {
-    otpCounter: number | null
+    otp_count: number | null
   }
 
   export type UserSumAggregateOutputType = {
-    otpCounter: number | null
+    otp_count: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -2353,9 +2353,9 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     isVerified: boolean | null
-    otpSecret: string | null
-    otpCounter: number | null
-    otpCreatedAt: Date | null
+    otp_secret: string | null
+    otp_count: number | null
+    otp_generated_at: Date | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2367,9 +2367,9 @@ export namespace Prisma {
     createdAt: Date | null
     updatedAt: Date | null
     isVerified: boolean | null
-    otpSecret: string | null
-    otpCounter: number | null
-    otpCreatedAt: Date | null
+    otp_secret: string | null
+    otp_count: number | null
+    otp_generated_at: Date | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2381,19 +2381,19 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     isVerified: number
-    otpSecret: number
-    otpCounter: number
-    otpCreatedAt: number
+    otp_secret: number
+    otp_count: number
+    otp_generated_at: number
     _all: number
   }
 
 
   export type UserAvgAggregateInputType = {
-    otpCounter?: true
+    otp_count?: true
   }
 
   export type UserSumAggregateInputType = {
-    otpCounter?: true
+    otp_count?: true
   }
 
   export type UserMinAggregateInputType = {
@@ -2405,9 +2405,9 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isVerified?: true
-    otpSecret?: true
-    otpCounter?: true
-    otpCreatedAt?: true
+    otp_secret?: true
+    otp_count?: true
+    otp_generated_at?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2419,9 +2419,9 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isVerified?: true
-    otpSecret?: true
-    otpCounter?: true
-    otpCreatedAt?: true
+    otp_secret?: true
+    otp_count?: true
+    otp_generated_at?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -2433,9 +2433,9 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     isVerified?: true
-    otpSecret?: true
-    otpCounter?: true
-    otpCreatedAt?: true
+    otp_secret?: true
+    otp_count?: true
+    otp_generated_at?: true
     _all?: true
   }
 
@@ -2534,9 +2534,9 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     isVerified: boolean
-    otpSecret: string | null
-    otpCounter: number | null
-    otpCreatedAt: Date | null
+    otp_secret: string | null
+    otp_count: number | null
+    otp_generated_at: Date | null
     _count: UserCountAggregateOutputType | null
     _avg: UserAvgAggregateOutputType | null
     _sum: UserSumAggregateOutputType | null
@@ -2567,9 +2567,9 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isVerified?: boolean
-    otpSecret?: boolean
-    otpCounter?: boolean
-    otpCreatedAt?: boolean
+    otp_secret?: boolean
+    otp_count?: boolean
+    otp_generated_at?: boolean
     taughtCourses?: boolean | User$taughtCoursesArgs<ExtArgs>
     enrollments?: boolean | User$enrollmentsArgs<ExtArgs>
     progress?: boolean | User$progressArgs<ExtArgs>
@@ -2586,9 +2586,9 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isVerified?: boolean
-    otpSecret?: boolean
-    otpCounter?: boolean
-    otpCreatedAt?: boolean
+    otp_secret?: boolean
+    otp_count?: boolean
+    otp_generated_at?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2600,9 +2600,9 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isVerified?: boolean
-    otpSecret?: boolean
-    otpCounter?: boolean
-    otpCreatedAt?: boolean
+    otp_secret?: boolean
+    otp_count?: boolean
+    otp_generated_at?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -2614,12 +2614,12 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     isVerified?: boolean
-    otpSecret?: boolean
-    otpCounter?: boolean
-    otpCreatedAt?: boolean
+    otp_secret?: boolean
+    otp_count?: boolean
+    otp_generated_at?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "password" | "role" | "createdAt" | "updatedAt" | "isVerified" | "otpSecret" | "otpCounter" | "otpCreatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "name" | "password" | "role" | "createdAt" | "updatedAt" | "isVerified" | "otp_secret" | "otp_count" | "otp_generated_at", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     taughtCourses?: boolean | User$taughtCoursesArgs<ExtArgs>
     enrollments?: boolean | User$enrollmentsArgs<ExtArgs>
@@ -2647,9 +2647,9 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       isVerified: boolean
-      otpSecret: string | null
-      otpCounter: number | null
-      otpCreatedAt: Date | null
+      otp_secret: string | null
+      otp_count: number | null
+      otp_generated_at: Date | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -3085,9 +3085,9 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly isVerified: FieldRef<"User", 'Boolean'>
-    readonly otpSecret: FieldRef<"User", 'String'>
-    readonly otpCounter: FieldRef<"User", 'Int'>
-    readonly otpCreatedAt: FieldRef<"User", 'DateTime'>
+    readonly otp_secret: FieldRef<"User", 'String'>
+    readonly otp_count: FieldRef<"User", 'Int'>
+    readonly otp_generated_at: FieldRef<"User", 'DateTime'>
   }
     
 
@@ -16850,9 +16850,9 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     isVerified: 'isVerified',
-    otpSecret: 'otpSecret',
-    otpCounter: 'otpCounter',
-    otpCreatedAt: 'otpCreatedAt'
+    otp_secret: 'otp_secret',
+    otp_count: 'otp_count',
+    otp_generated_at: 'otp_generated_at'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -17125,9 +17125,9 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     isVerified?: BoolFilter<"User"> | boolean
-    otpSecret?: StringNullableFilter<"User"> | string | null
-    otpCounter?: IntNullableFilter<"User"> | number | null
-    otpCreatedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    otp_secret?: StringNullableFilter<"User"> | string | null
+    otp_count?: IntNullableFilter<"User"> | number | null
+    otp_generated_at?: DateTimeNullableFilter<"User"> | Date | string | null
     taughtCourses?: CourseListRelationFilter
     enrollments?: EnrollmentListRelationFilter
     progress?: UserProgressListRelationFilter
@@ -17143,9 +17143,9 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isVerified?: SortOrder
-    otpSecret?: SortOrderInput | SortOrder
-    otpCounter?: SortOrderInput | SortOrder
-    otpCreatedAt?: SortOrderInput | SortOrder
+    otp_secret?: SortOrderInput | SortOrder
+    otp_count?: SortOrderInput | SortOrder
+    otp_generated_at?: SortOrderInput | SortOrder
     taughtCourses?: CourseOrderByRelationAggregateInput
     enrollments?: EnrollmentOrderByRelationAggregateInput
     progress?: UserProgressOrderByRelationAggregateInput
@@ -17164,9 +17164,9 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     isVerified?: BoolFilter<"User"> | boolean
-    otpSecret?: StringNullableFilter<"User"> | string | null
-    otpCounter?: IntNullableFilter<"User"> | number | null
-    otpCreatedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    otp_secret?: StringNullableFilter<"User"> | string | null
+    otp_count?: IntNullableFilter<"User"> | number | null
+    otp_generated_at?: DateTimeNullableFilter<"User"> | Date | string | null
     taughtCourses?: CourseListRelationFilter
     enrollments?: EnrollmentListRelationFilter
     progress?: UserProgressListRelationFilter
@@ -17182,9 +17182,9 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isVerified?: SortOrder
-    otpSecret?: SortOrderInput | SortOrder
-    otpCounter?: SortOrderInput | SortOrder
-    otpCreatedAt?: SortOrderInput | SortOrder
+    otp_secret?: SortOrderInput | SortOrder
+    otp_count?: SortOrderInput | SortOrder
+    otp_generated_at?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
@@ -17204,9 +17204,9 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     isVerified?: BoolWithAggregatesFilter<"User"> | boolean
-    otpSecret?: StringNullableWithAggregatesFilter<"User"> | string | null
-    otpCounter?: IntNullableWithAggregatesFilter<"User"> | number | null
-    otpCreatedAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    otp_secret?: StringNullableWithAggregatesFilter<"User"> | string | null
+    otp_count?: IntNullableWithAggregatesFilter<"User"> | number | null
+    otp_generated_at?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   }
 
   export type CourseWhereInput = {
@@ -17945,9 +17945,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
-    otpSecret?: string | null
-    otpCounter?: number | null
-    otpCreatedAt?: Date | string | null
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
     taughtCourses?: CourseCreateNestedManyWithoutInstructorInput
     enrollments?: EnrollmentCreateNestedManyWithoutUserInput
     progress?: UserProgressCreateNestedManyWithoutUserInput
@@ -17963,9 +17963,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
-    otpSecret?: string | null
-    otpCounter?: number | null
-    otpCreatedAt?: Date | string | null
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
     taughtCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutUserInput
     progress?: UserProgressUncheckedCreateNestedManyWithoutUserInput
@@ -17981,9 +17981,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
-    otpSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    otpCounter?: NullableIntFieldUpdateOperationsInput | number | null
-    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     taughtCourses?: CourseUpdateManyWithoutInstructorNestedInput
     enrollments?: EnrollmentUpdateManyWithoutUserNestedInput
     progress?: UserProgressUpdateManyWithoutUserNestedInput
@@ -17999,9 +17999,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
-    otpSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    otpCounter?: NullableIntFieldUpdateOperationsInput | number | null
-    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     taughtCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutUserNestedInput
     progress?: UserProgressUncheckedUpdateManyWithoutUserNestedInput
@@ -18017,9 +18017,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
-    otpSecret?: string | null
-    otpCounter?: number | null
-    otpCreatedAt?: Date | string | null
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -18031,9 +18031,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
-    otpSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    otpCounter?: NullableIntFieldUpdateOperationsInput | number | null
-    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -18045,9 +18045,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
-    otpSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    otpCounter?: NullableIntFieldUpdateOperationsInput | number | null
-    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type CourseCreateInput = {
@@ -18886,13 +18886,13 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isVerified?: SortOrder
-    otpSecret?: SortOrder
-    otpCounter?: SortOrder
-    otpCreatedAt?: SortOrder
+    otp_secret?: SortOrder
+    otp_count?: SortOrder
+    otp_generated_at?: SortOrder
   }
 
   export type UserAvgOrderByAggregateInput = {
-    otpCounter?: SortOrder
+    otp_count?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -18904,9 +18904,9 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isVerified?: SortOrder
-    otpSecret?: SortOrder
-    otpCounter?: SortOrder
-    otpCreatedAt?: SortOrder
+    otp_secret?: SortOrder
+    otp_count?: SortOrder
+    otp_generated_at?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -18918,13 +18918,13 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     isVerified?: SortOrder
-    otpSecret?: SortOrder
-    otpCounter?: SortOrder
-    otpCreatedAt?: SortOrder
+    otp_secret?: SortOrder
+    otp_count?: SortOrder
+    otp_generated_at?: SortOrder
   }
 
   export type UserSumOrderByAggregateInput = {
-    otpCounter?: SortOrder
+    otp_count?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -21032,9 +21032,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
-    otpSecret?: string | null
-    otpCounter?: number | null
-    otpCreatedAt?: Date | string | null
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
     enrollments?: EnrollmentCreateNestedManyWithoutUserInput
     progress?: UserProgressCreateNestedManyWithoutUserInput
     quizSubmissions?: QuizSubmissionCreateNestedManyWithoutUserInput
@@ -21049,9 +21049,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
-    otpSecret?: string | null
-    otpCounter?: number | null
-    otpCreatedAt?: Date | string | null
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutUserInput
     progress?: UserProgressUncheckedCreateNestedManyWithoutUserInput
     quizSubmissions?: QuizSubmissionUncheckedCreateNestedManyWithoutUserInput
@@ -21171,9 +21171,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
-    otpSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    otpCounter?: NullableIntFieldUpdateOperationsInput | number | null
-    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enrollments?: EnrollmentUpdateManyWithoutUserNestedInput
     progress?: UserProgressUpdateManyWithoutUserNestedInput
     quizSubmissions?: QuizSubmissionUpdateManyWithoutUserNestedInput
@@ -21188,9 +21188,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
-    otpSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    otpCounter?: NullableIntFieldUpdateOperationsInput | number | null
-    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     enrollments?: EnrollmentUncheckedUpdateManyWithoutUserNestedInput
     progress?: UserProgressUncheckedUpdateManyWithoutUserNestedInput
     quizSubmissions?: QuizSubmissionUncheckedUpdateManyWithoutUserNestedInput
@@ -21634,9 +21634,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
-    otpSecret?: string | null
-    otpCounter?: number | null
-    otpCreatedAt?: Date | string | null
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
     taughtCourses?: CourseCreateNestedManyWithoutInstructorInput
     progress?: UserProgressCreateNestedManyWithoutUserInput
     quizSubmissions?: QuizSubmissionCreateNestedManyWithoutUserInput
@@ -21651,9 +21651,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
-    otpSecret?: string | null
-    otpCounter?: number | null
-    otpCreatedAt?: Date | string | null
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
     taughtCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
     progress?: UserProgressUncheckedCreateNestedManyWithoutUserInput
     quizSubmissions?: QuizSubmissionUncheckedCreateNestedManyWithoutUserInput
@@ -21721,9 +21721,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
-    otpSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    otpCounter?: NullableIntFieldUpdateOperationsInput | number | null
-    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     taughtCourses?: CourseUpdateManyWithoutInstructorNestedInput
     progress?: UserProgressUpdateManyWithoutUserNestedInput
     quizSubmissions?: QuizSubmissionUpdateManyWithoutUserNestedInput
@@ -21738,9 +21738,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
-    otpSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    otpCounter?: NullableIntFieldUpdateOperationsInput | number | null
-    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     taughtCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
     progress?: UserProgressUncheckedUpdateManyWithoutUserNestedInput
     quizSubmissions?: QuizSubmissionUncheckedUpdateManyWithoutUserNestedInput
@@ -21798,9 +21798,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
-    otpSecret?: string | null
-    otpCounter?: number | null
-    otpCreatedAt?: Date | string | null
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
     taughtCourses?: CourseCreateNestedManyWithoutInstructorInput
     enrollments?: EnrollmentCreateNestedManyWithoutUserInput
     quizSubmissions?: QuizSubmissionCreateNestedManyWithoutUserInput
@@ -21815,9 +21815,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
-    otpSecret?: string | null
-    otpCounter?: number | null
-    otpCreatedAt?: Date | string | null
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
     taughtCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutUserInput
     quizSubmissions?: QuizSubmissionUncheckedCreateNestedManyWithoutUserInput
@@ -21879,9 +21879,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
-    otpSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    otpCounter?: NullableIntFieldUpdateOperationsInput | number | null
-    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     taughtCourses?: CourseUpdateManyWithoutInstructorNestedInput
     enrollments?: EnrollmentUpdateManyWithoutUserNestedInput
     quizSubmissions?: QuizSubmissionUpdateManyWithoutUserNestedInput
@@ -21896,9 +21896,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
-    otpSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    otpCounter?: NullableIntFieldUpdateOperationsInput | number | null
-    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     taughtCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutUserNestedInput
     quizSubmissions?: QuizSubmissionUncheckedUpdateManyWithoutUserNestedInput
@@ -22409,9 +22409,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
-    otpSecret?: string | null
-    otpCounter?: number | null
-    otpCreatedAt?: Date | string | null
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
     taughtCourses?: CourseCreateNestedManyWithoutInstructorInput
     enrollments?: EnrollmentCreateNestedManyWithoutUserInput
     progress?: UserProgressCreateNestedManyWithoutUserInput
@@ -22426,9 +22426,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     isVerified?: boolean
-    otpSecret?: string | null
-    otpCounter?: number | null
-    otpCreatedAt?: Date | string | null
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
     taughtCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutUserInput
     progress?: UserProgressUncheckedCreateNestedManyWithoutUserInput
@@ -22498,9 +22498,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
-    otpSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    otpCounter?: NullableIntFieldUpdateOperationsInput | number | null
-    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     taughtCourses?: CourseUpdateManyWithoutInstructorNestedInput
     enrollments?: EnrollmentUpdateManyWithoutUserNestedInput
     progress?: UserProgressUpdateManyWithoutUserNestedInput
@@ -22515,9 +22515,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     isVerified?: BoolFieldUpdateOperationsInput | boolean
-    otpSecret?: NullableStringFieldUpdateOperationsInput | string | null
-    otpCounter?: NullableIntFieldUpdateOperationsInput | number | null
-    otpCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     taughtCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutUserNestedInput
     progress?: UserProgressUncheckedUpdateManyWithoutUserNestedInput

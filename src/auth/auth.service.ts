@@ -1,6 +1,5 @@
 import { Injectable, ConflictException, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../user/user.service';
 import { MailService } from '../mail/mail.service';
 import { UserEntity } from '../user/entities/user.entity';
@@ -10,6 +9,8 @@ import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { ResendOtpDto } from './dto/resend-otp.dto';
 import * as bcrypt from 'bcrypt';
 import { hotp } from 'otplib';
+import * as crypto from 'crypto';
+import { ConfigService } from '@nestjs/config';
 
 export interface AuthResult {
   accessToken: string;
@@ -25,135 +26,147 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  /**
-   * Private helper to hash passwords
-   */
-  private async hashPassword(password: string): Promise<string> {
-    return bcrypt.hash(password, 10);
-  }
+ 
 
   /**
-   * Private helper to compare passwords
+   * Create an OTP for a user, persist/update otp_count and otp_generated_at and return the token.
+   * Ensures the counter is advanced so every issued OTP is unique and cannot be replayed.
    */
-  private async comparePassword(password: string, hashedPassword: string): Promise<boolean> {
-    return bcrypt.compare(password, hashedPassword);
-  }
+  private async createAndStoreOtpForUser(
+    userId: string,
+    currentOtpCount?: number | null,
+  ): Promise<{ token: string; counter: number }> {
+    // Configure HOTP
+    hotp.options = { digits: this.configService.get<number>('OTP_DIGITS') };
+    
+    // Get or initialize the counter
+    const baseCounter =
+      typeof currentOtpCount === "number" && currentOtpCount > 0
+        ? currentOtpCount
+        : Math.floor(Math.random() * 1000000);
 
-  /**
-   * Private helper to generate and store OTP for user
-   */
-  private async createAndStoreOtpForUser(userId: string): Promise<string> {
-    // Generate OTP secret (using authenticator for secret generation)
-    const otpSecret = 'JBSWY3DPEHPK3PXP'; // Base32 secret - in production, generate random
-    const otpCounter = 0;
+    const newCounter = baseCounter + 1;
+
+    // Get or generate unique secret for this user
+    const user = await this.usersService.findRawById(userId);
+    if (!user) {
+      throw new Error('User not found');
+    }
     
-    // Store OTP data in user record
-    await this.usersService.updateUserOtp(userId, otpSecret, otpCounter);
+    let otpSecret = user.otp_secret;
     
-    // Generate the actual OTP code
-    const otpCode = hotp.generate(otpSecret, otpCounter);
-    
-    return otpCode;
+    if (!otpSecret) {
+      // Generate a new unique Base32 secret for this user
+      otpSecret = crypto.randomBytes(20).toString('base64').replace(/[^A-Z2-7]/gi, '').substring(0, 32);
+    }
+
+    const token = hotp.generate(otpSecret, newCounter);
+
+    // Update user with new counter, secret (if new), and generation timestamp
+    await this.usersService.updateUserInfo(userId, {
+      otp_count: newCounter,
+      otp_secret: otpSecret,
+      otp_generated_at: new Date(),
+    });
+
+    return { token, counter: newCounter };
   }
 
   /**
    * Register a new user
    */
   async register(createUserDto: CreateUserDto): Promise<{ message: string }> {
-    const { name, email, password } = createUserDto;
 
-    // Check for existing user
-    const existingUser = await this.usersService.findUserByEmail(email);
+    const existingUser = await this.usersService.findUserByEmail(createUserDto.email);
     if (existingUser) {
       throw new ConflictException('A user with this email already exists');
     }
-
-    // Create the user (UsersService handles password hashing and default role)
-    const user = await this.usersService.createForAuth(createUserDto);
+    const user = await this.usersService.createUser(createUserDto);
 
     // Generate and store OTP
-    const otpCode = await this.createAndStoreOtpForUser(user.id);
+    const { token: otpCode } = await this.createAndStoreOtpForUser(user.id);
 
     // Send welcome email with OTP
-    await this.mailService.sendWelcomeEmail(email, otpCode);
+    // await this.mailService.sendWelcomeEmail(email, otpCode);
 
-    return { message: 'Registration successful. Please check your email for verification code.' };
+    return { message: `Registration successful. Please check your email for verification code. ${otpCode}` };
   }
 
   /**
    * Login user with password, then send OTP for MFA
    */
   async login(loginDto: LoginDto): Promise<{ message: string }> {
-    const { email, password } = loginDto;
 
-    // Get user with sensitive data
-    const user = await this.usersService.findRawByEmail(email);
+    const user = await this.usersService.findRawByEmail(loginDto.email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
     // Verify password
-    const passwordValid = await this.comparePassword(password, user.password);
+    const passwordValid = await bcrypt.compare(loginDto.password, user.password);
     if (!passwordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
     // Generate and store OTP for MFA
-    const otpCode = await this.createAndStoreOtpForUser(user.id);
+    const { token: otpCode } = await this.createAndStoreOtpForUser(user.id, user.otp_count);
 
     // Send login OTP
-    await this.mailService.sendLoginOtp(email, otpCode);
+    // await this.mailService.sendLoginOtp(user.email, otpCode);
 
-    return { message: 'Login credentials verified. Please check your email for verification code.' };
+    return { message: `Login credentials verified. Please check your email for verification code. ${otpCode}` };
   }
 
   /**
    * Verify OTP and issue JWT token
    */
   async verifyOtp(verifyOtpDto: VerifyOtpDto): Promise<AuthResult> {
-    const { email, otp } = verifyOtpDto;
 
     // Get user with OTP data
-    const user = await this.usersService.findRawByEmail(email);
+    const user = await this.usersService.findRawByEmail(verifyOtpDto.email);
     if (!user) {
       throw new UnauthorizedException('Invalid request');
     }
 
     // Check if OTP data exists
-    if (!user.otpSecret || user.otpCounter === null || !user.otpCreatedAt) {
+    if (!user.otp_secret || user.otp_count === null || !user.otp_generated_at) {
       throw new UnauthorizedException('No OTP request found');
     }
 
     // Check OTP expiration (15 minutes)
-    const otpAge = Date.now() - user.otpCreatedAt.getTime();
+    const otpAge = Date.now() - user.otp_generated_at.getTime();
     const fifteenMinutes = 15 * 60 * 1000;
     if (otpAge > fifteenMinutes) {
-      throw new UnauthorizedException('OTP has expired');
+      throw new UnauthorizedException('OTP has expired, request a new one');
     }
 
     // Verify OTP
     const isValidOtp = hotp.verify({
-      token: otp,
-      secret: user.otpSecret,
-      counter: user.otpCounter,
+      token: verifyOtpDto.otp,
+      secret: user.otp_secret,
+      counter: user.otp_count,
     });
 
     if (!isValidOtp) {
       throw new UnauthorizedException('Invalid OTP');
     }
 
-    // Handle first-time verification
+    // Handle verification and OTP cleanup
     let userEntity: UserEntity;
     if (!user.isVerified) {
       userEntity = await this.usersService.verifyUserAndClearOtp(user.id);
     } else {
-      // For subsequent logins, just clear OTP data
       await this.usersService.clearUserOtp(user.id);
-      const foundUser = await this.usersService.findUserByEmail(email);
-      if (!foundUser) {
-        throw new UnauthorizedException('User not found');
-      }
-      userEntity = foundUser;
+      // Create UserEntity from user we already have in memory
+      userEntity = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        isVerified: user.isVerified,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      };
     }
 
     // Generate JWT
@@ -172,44 +185,50 @@ export class AuthService {
   }
 
   /**
-   * Resend OTP
+   * Resend OTP for verification
    */
-  async resendOtp(resendOtpDto: ResendOtpDto): Promise<{ message: string }> {
-    const { email } = resendOtpDto;
-
-    // Get user - if not found, proceed silently to prevent email enumeration
-    const user = await this.usersService.findRawByEmail(email);
-    
-    if (user) {
-      // Generate and store new OTP
-      const otpCode = await this.createAndStoreOtpForUser(user.id);
-      
-      // Send OTP resend email
-      await this.mailService.sendOtpResend(email, otpCode);
-    }
-
-    // Return same message regardless of whether user was found
-    return { message: 'If an account with this email exists, a new verification code has been sent.' };
+  async resendOtp(resendOtpDto: ResendOtpDto): Promise<{ message: string; otp?: string }> {
+    return this.handleOtpRequest(
+      resendOtpDto.email,
+      (email, otp) => this.mailService.sendOtpResend(email, otp),
+      'If an account with this email exists, a new verification code has been sent.'
+    );
   }
 
   /**
-   * Forgot password - same flow as resend OTP to prevent email enumeration
+   * Forgot password functionality
    */
-  async forgotPassword(resendOtpDto: ResendOtpDto): Promise<{ message: string }> {
-    const { email } = resendOtpDto;
+  async forgotPassword(resendOtpDto: ResendOtpDto): Promise<{ message: string; otp?: string }> {
+    return this.handleOtpRequest(
+      resendOtpDto.email,
+      (email, otp) => this.mailService.sendForgotPasswordOtp(email, otp),
+      'If an account with this email exists, a password reset code has been sent.'
+    );
+  }
 
-    // Get user - if not found, proceed silently to prevent email enumeration
+   /**
+   * Private helper to handle OTP request - shared logic between resendOtp and forgotPassword
+   */
+  private async handleOtpRequest(
+    email: string, 
+    sendEmailFn: (email: string, otp: string) => Promise<void>,
+    successMessage: string
+  ): Promise<{ message: string; otp?: string }> {
     const user = await this.usersService.findRawByEmail(email);
     
+    let otpCode: string | undefined;
+    
     if (user) {
-      // Generate and store new OTP
-      const otpCode = await this.createAndStoreOtpForUser(user.id);
+      const { token } = await this.createAndStoreOtpForUser(user.id, user.otp_count);
+      otpCode = token;
       
-      // Send forgot password OTP email
-      await this.mailService.sendForgotPasswordOtp(email, otpCode);
+      // Send OTP email using provided function
+      // await sendEmailFn(email, otpCode);
     }
 
-    // Return same message regardless of whether user was found
-    return { message: 'If an account with this email exists, a password reset code has been sent.' };
+    return { 
+      message: successMessage,
+      ...(otpCode && { otp: otpCode })
+    };
   }
 }

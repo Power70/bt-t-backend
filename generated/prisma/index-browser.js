@@ -129,9 +129,9 @@ exports.Prisma.UserScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   isVerified: 'isVerified',
-  otpSecret: 'otpSecret',
-  otpCounter: 'otpCounter',
-  otpCreatedAt: 'otpCreatedAt'
+  otp_secret: 'otp_secret',
+  otp_count: 'otp_count',
+  otp_generated_at: 'otp_generated_at'
 };
 
 exports.Prisma.CourseScalarFieldEnum = {
