@@ -50,34 +50,12 @@ export class AuthController {
   @ApiResponse({ 
     status: 201, 
     description: 'User registered successfully. OTP sent to email.',
-    schema: {
-      type: 'object',
-      properties: {
-        message: { type: 'string', example: 'Registration successful. Please check your email for verification code.' }
-      }
-    }
   })
   @ApiConflictResponse({ 
     description: 'User with this email already exists',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 409 },
-        message: { type: 'string', example: 'A user with this email already exists' },
-        error: { type: 'string', example: 'Conflict' }
-      }
-    }
   })
   @ApiBadRequestResponse({ 
     description: 'Validation error',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 400 },
-        message: { type: 'array', items: { type: 'string' }, example: ['email must be an email', 'password must be at least 8 characters long'] },
-        error: { type: 'string', example: 'Bad Request' }
-      }
-    }
   })
   async register(@Body() createUserDto: CreateUserDto) {
     return this.authService.register(createUserDto);
@@ -96,34 +74,12 @@ export class AuthController {
   @ApiResponse({ 
     status: 200, 
     description: 'Credentials validated. OTP sent to email.',
-    schema: {
-      type: 'object',
-      properties: {
-        message: { type: 'string', example: 'Login credentials verified. Please check your email for verification code.' }
-      }
-    }
   })
   @ApiUnauthorizedResponse({ 
     description: 'Invalid credentials',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 401 },
-        message: { type: 'string', example: 'Invalid credentials' },
-        error: { type: 'string', example: 'Unauthorized' }
-      }
-    }
   })
   @ApiBadRequestResponse({ 
     description: 'Validation error',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 400 },
-        message: { type: 'array', items: { type: 'string' }, example: ['email must be an email', 'password should not be empty'] },
-        error: { type: 'string', example: 'Bad Request' }
-      }
-    }
   })
   async login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
@@ -140,48 +96,12 @@ export class AuthController {
   })
   @ApiBody({ type: VerifyOtpDto })
   @ApiResponse({ 
-    status: 200, 
-    description: 'OTP verified successfully. Authentication cookie set.',
-    schema: {
-      type: 'object',
-      properties: {
-        message: { type: 'string', example: 'Authentication successful' },
-        user: {
-          type: 'object',
-          properties: {
-            id: { type: 'string', example: 'cuid123456789' },
-            email: { type: 'string', example: 'user@example.com' },
-            name: { type: 'string', example: 'John Doe' },
-            role: { type: 'string', enum: ['STUDENT', 'INSTRUCTOR', 'ADMIN'], example: 'STUDENT' },
-            isVerified: { type: 'boolean', example: true },
-            createdAt: { type: 'string', format: 'date-time' },
-            updatedAt: { type: 'string', format: 'date-time' }
-          }
-        }
-      }
-    }
   })
   @ApiUnauthorizedResponse({ 
     description: 'Invalid or expired OTP',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 401 },
-        message: { type: 'string', example: 'Invalid OTP' },
-        error: { type: 'string', example: 'Unauthorized' }
-      }
-    }
   })
   @ApiBadRequestResponse({ 
     description: 'Validation error',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 400 },
-        message: { type: 'array', items: { type: 'string' }, example: ['OTP must be exactly 6 digits'] },
-        error: { type: 'string', example: 'Bad Request' }
-      }
-    }
   })
   async verifyOtp(
     @Body() verifyOtpDto: VerifyOtpDto,
@@ -216,23 +136,9 @@ export class AuthController {
   @ApiResponse({ 
     status: 200, 
     description: 'OTP resend request processed.',
-    schema: {
-      type: 'object',
-      properties: {
-        message: { type: 'string', example: 'If an account with this email exists, a new verification code has been sent.' }
-      }
-    }
   })
   @ApiBadRequestResponse({ 
     description: 'Validation error',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 400 },
-        message: { type: 'array', items: { type: 'string' }, example: ['email must be an email'] },
-        error: { type: 'string', example: 'Bad Request' }
-      }
-    }
   })
   async resendOtp(@Body() resendOtpDto: ResendOtpDto) {
     return this.authService.resendOtp(resendOtpDto);
@@ -251,23 +157,9 @@ export class AuthController {
   @ApiResponse({ 
     status: 200, 
     description: 'Password reset request processed.',
-    schema: {
-      type: 'object',
-      properties: {
-        message: { type: 'string', example: 'If an account with this email exists, a password reset code has been sent.' }
-      }
-    }
   })
   @ApiBadRequestResponse({ 
     description: 'Validation error',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 400 },
-        message: { type: 'array', items: { type: 'string' }, example: ['email must be an email'] },
-        error: { type: 'string', example: 'Bad Request' }
-      }
-    }
   })
   async forgotPassword(@Body() resendOtpDto: ResendOtpDto) {
     return this.authService.forgotPassword(resendOtpDto);
@@ -285,12 +177,6 @@ export class AuthController {
   @ApiResponse({ 
     status: 200, 
     description: 'User logged out successfully.',
-    schema: {
-      type: 'object',
-      properties: {
-        message: { type: 'string', example: 'Logout successful' }
-      }
-    }
   })
   async logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('Authentication');
@@ -312,30 +198,9 @@ export class AuthController {
   @ApiResponse({ 
     status: 200, 
     description: 'User profile retrieved successfully.',
-    schema: {
-      type: 'object',
-      properties: {
-        message: { type: 'string', example: 'Profile access granted' },
-        user: {
-          type: 'object',
-          properties: {
-            id: { type: 'string', example: 'cuid123456789' },
-            email: { type: 'string', example: 'user@example.com' },
-            role: { type: 'string', enum: ['STUDENT', 'INSTRUCTOR', 'ADMIN'], example: 'STUDENT' }
-          }
-        }
-      }
-    }
   })
   @ApiUnauthorizedResponse({ 
     description: 'Authentication required',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 401 },
-        message: { type: 'string', example: 'Unauthorized' }
-      }
-    }
   })
   async getProfile(@Request() req) {
     return {
@@ -358,49 +223,12 @@ export class AuthController {
   @ApiResponse({ 
     status: 200, 
     description: 'Admin dashboard data retrieved successfully.',
-    schema: {
-      type: 'object',
-      properties: {
-        message: { type: 'string', example: 'Admin dashboard access granted' },
-        user: {
-          type: 'object',
-          properties: {
-            id: { type: 'string', example: 'cuid123456789' },
-            email: { type: 'string', example: 'admin@example.com' },
-            role: { type: 'string', example: 'ADMIN' }
-          }
-        },
-        adminData: {
-          type: 'object',
-          properties: {
-            totalUsers: { type: 'number', example: 150 },
-            totalCourses: { type: 'number', example: 25 },
-            systemHealth: { type: 'string', example: 'Good' }
-          }
-        }
-      }
-    }
   })
   @ApiUnauthorizedResponse({ 
     description: 'Authentication required',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 401 },
-        message: { type: 'string', example: 'Unauthorized' }
-      }
-    }
   })
   @ApiForbiddenResponse({ 
     description: 'Admin role required',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 403 },
-        message: { type: 'string', example: 'Insufficient permissions' },
-        error: { type: 'string', example: 'Forbidden' }
-      }
-    }
   })
   async getAdminDashboard(@Request() req) {
     return {
@@ -428,49 +256,13 @@ export class AuthController {
   @ApiResponse({ 
     status: 200, 
     description: 'Instructor panel data retrieved successfully.',
-    schema: {
-      type: 'object',
-      properties: {
-        message: { type: 'string', example: 'Instructor panel access granted' },
-        user: {
-          type: 'object',
-          properties: {
-            id: { type: 'string', example: 'cuid123456789' },
-            email: { type: 'string', example: 'instructor@example.com' },
-            role: { type: 'string', example: 'INSTRUCTOR' }
-          }
-        },
-        instructorData: {
-          type: 'object',
-          properties: {
-            myCourses: { type: 'number', example: 5 },
-            totalStudents: { type: 'number', example: 120 },
-            pendingReviews: { type: 'number', example: 3 }
-          }
-        }
-      }
-    }
   })
   @ApiUnauthorizedResponse({ 
     description: 'Authentication required',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 401 },
-        message: { type: 'string', example: 'Unauthorized' }
-      }
-    }
   })
   @ApiForbiddenResponse({ 
     description: 'Instructor or Admin role required',
-    schema: {
-      type: 'object',
-      properties: {
-        statusCode: { type: 'number', example: 403 },
-        message: { type: 'string', example: 'Insufficient permissions' },
-        error: { type: 'string', example: 'Forbidden' }
-      }
-    }
+    
   })
   async getInstructorPanel(@Request() req) {
     return {
