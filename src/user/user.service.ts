@@ -16,6 +16,7 @@ interface UpdatableUserFields {
   otp_secret?: string | null;
   otp_count?: number | null;
   otp_generated_at?: Date | null;
+  password?: string;
 }
 
 @Injectable()

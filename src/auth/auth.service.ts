@@ -1,4 +1,9 @@
-import { Injectable, ConflictException, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { 
+  Injectable, 
+  ConflictException, 
+  UnauthorizedException,
+  BadRequestException, 
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../user/user.service';
 import { MailService } from '../mail/mail.service';
@@ -11,6 +16,7 @@ import * as bcrypt from 'bcrypt';
 import { hotp } from 'otplib';
 import * as crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
+import { ResetPasswordDto } from './dto/reset-password-dto';
 
 export interface AuthResult {
   accessToken: string;
@@ -206,6 +212,25 @@ export class AuthService {
     );
   }
 
+  /**
+   * Reset password functionality
+  */
+ async resetPassword(resetPasswordDto: ResetPasswordDto, userId: string): Promise<{ message: string }> {
+  const user = await this.usersService.findRawById(userId);
+  if (!user) {
+    throw new UnauthorizedException('Invalid user');
+  }
+
+  if (resetPasswordDto.newPassword !== resetPasswordDto.confirmPassword) {
+    throw new BadRequestException('Passwords do not match');
+  }
+
+  const hashedPassword = await bcrypt.hash(resetPasswordDto.newPassword, 10);
+  
+  await this.usersService.updateUserInfo(user.id, { password: hashedPassword });
+  return {...user, message: 'Password reset successfully' };
+}
+
    /**
    * Private helper to handle OTP request - shared logic between resendOtp and forgotPassword
    */
@@ -215,8 +240,9 @@ export class AuthService {
     successMessage: string
   ): Promise<{ message: string; otp?: string }> {
     const user = await this.usersService.findRawByEmail(email);
-    
-    if (user) {
+    if (!user) {
+      throw new UnauthorizedException('Invalid email address.');
+    } else if (user) {
       const { token } = await this.createAndStoreOtpForUser(user.id, user.otp_count);
       
       // Send OTP email using provided function

@@ -14,7 +14,6 @@ import {
   ApiOperation, 
   ApiResponse, 
   ApiBody, 
-  ApiBearerAuth,
   ApiCookieAuth,
   ApiUnauthorizedResponse,
   ApiForbiddenResponse,
@@ -31,6 +30,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
 import { UserRole } from '../../generated/prisma';
+import { ResetPasswordDto } from './dto/reset-password-dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -163,6 +163,30 @@ export class AuthController {
   })
   async forgotPassword(@Body() resendOtpDto: ResendOtpDto) {
     return this.authService.forgotPassword(resendOtpDto);
+  }
+
+  /**
+   * Reset password
+   */
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ 
+    summary: 'Reset password',
+    description: 'Resets the user password using the provided OTP and new password.'
+  })
+  @ApiBody({ type: ResetPasswordDto })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Password reset successfully.',
+  })
+  @ApiUnauthorizedResponse({ 
+    description: 'Invalid or expired OTP',
+  })
+  @ApiBadRequestResponse({ 
+    description: 'Validation error',
+  })
+  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto, @Request() req) {
+    return this.authService.resetPassword(resetPasswordDto, req.user.id);
   }
 
   /**
