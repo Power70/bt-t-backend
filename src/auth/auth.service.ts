@@ -37,8 +37,8 @@ export class AuthService {
     currentOtpCount?: number | null,
   ): Promise<{ token: string; counter: number }> {
     // Configure HOTP
-    hotp.options = { digits: this.configService.get<number>('OTP_DIGITS') };
-    
+    hotp.options = { digits: 6 };
+
     // Get or initialize the counter
     const baseCounter =
       typeof currentOtpCount === "number" && currentOtpCount > 0
@@ -87,9 +87,9 @@ export class AuthService {
     const { token: otpCode } = await this.createAndStoreOtpForUser(user.id);
 
     // Send welcome email with OTP
-    // await this.mailService.sendWelcomeEmail(email, otpCode);
+    await this.mailService.sendWelcomeEmail(createUserDto.email, otpCode);
 
-    return { message: `Registration successful. Please check your email for verification code. ${otpCode}` };
+    return { message: 'Registration successful. Please check your email for verification code.' };
   }
 
   /**
@@ -112,9 +112,9 @@ export class AuthService {
     const { token: otpCode } = await this.createAndStoreOtpForUser(user.id, user.otp_count);
 
     // Send login OTP
-    // await this.mailService.sendLoginOtp(user.email, otpCode);
+    await this.mailService.sendLoginOtp(user.email, otpCode);
 
-    return { message: `Login credentials verified. Please check your email for verification code. ${otpCode}` };
+    return { message: 'Login credentials verified. Please check your email for verification code.' };
   }
 
   /**
@@ -216,19 +216,15 @@ export class AuthService {
   ): Promise<{ message: string; otp?: string }> {
     const user = await this.usersService.findRawByEmail(email);
     
-    let otpCode: string | undefined;
-    
     if (user) {
       const { token } = await this.createAndStoreOtpForUser(user.id, user.otp_count);
-      otpCode = token;
       
       // Send OTP email using provided function
-      // await sendEmailFn(email, otpCode);
+      await sendEmailFn(email, token);
     }
 
     return { 
-      message: successMessage,
-      ...(otpCode && { otp: otpCode })
+      message: successMessage
     };
   }
 }
