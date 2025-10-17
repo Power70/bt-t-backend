@@ -63,8 +63,8 @@ async function bootstrap() {
 
   // --- Swagger API Documentation ---
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('LMS API')
-    .setDescription('API documentation for the Learning Management System')
+    .setTitle('BT&T API')
+    .setDescription('API documentation for the BT&T platform')
     .setVersion('1.0')
     .addBearerAuth(
       {
