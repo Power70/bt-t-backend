@@ -3,9 +3,9 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class ResendOtpDto {
   @ApiProperty({
-    description: 'User\'s email address to resend OTP to',
+    description: "User's email address to resend OTP to",
     example: 'user@example.com',
-    format: 'email'
+    format: 'email',
   })
   @IsNotEmpty()
   @IsEmail()

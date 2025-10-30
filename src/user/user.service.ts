@@ -1,7 +1,7 @@
-import { 
-  Injectable, 
-  ConflictException, 
-  InternalServerErrorException 
+import {
+  Injectable,
+  ConflictException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -49,10 +49,14 @@ export class UsersService {
   /**
    * Internal method to create user and return raw data
    */
-  private async createUserInternal(createUserDto: CreateUserDto): Promise<User> {
+  private async createUserInternal(
+    createUserDto: CreateUserDto,
+  ): Promise<User> {
     const { name, email, password } = createUserDto;
 
-    const existingUser = await this.prisma.user.findUnique({ where: { email } });
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email },
+    });
     if (existingUser) {
       throw new ConflictException('A user with this email already exists');
     }
@@ -65,12 +69,12 @@ export class UsersService {
           name,
           email,
           password: hashedPassword,
-          role: UserRole.STUDENT
+          role: UserRole.STUDENT,
         },
       });
 
       return user;
-    } catch (error) {
+    } catch {
       throw new InternalServerErrorException('Could not create user');
     }
   }
@@ -87,8 +91,8 @@ export class UsersService {
    * Update user information
    */
   async updateUserInfo(
-    userId: string, 
-    data: UpdatableUserFields
+    userId: string,
+    data: UpdatableUserFields,
   ): Promise<UserEntity> {
     const updatedUser = await this.prisma.user.update({
       where: { id: userId },
@@ -115,7 +119,11 @@ export class UsersService {
   /**
    * Update user with OTP details for authentication
    */
-  async updateUserOtp(userId: string, otpSecret: string, otpCounter: number): Promise<void> {
+  async updateUserOtp(
+    userId: string,
+    otpSecret: string,
+    otpCounter: number,
+  ): Promise<void> {
     await this.prisma.user.update({
       where: { id: userId },
       data: {

@@ -6,7 +6,10 @@ export class MailConfigError extends Error {
 }
 
 export class EmailSendError extends Error {
-  constructor(message: string, public readonly originalError?: Error) {
+  constructor(
+    message: string,
+    public readonly originalError?: Error,
+  ) {
     super(message);
     this.name = 'EmailSendError';
   }

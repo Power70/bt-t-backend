@@ -1,8 +1,8 @@
-import { 
-  Injectable, 
-  ConflictException, 
+import {
+  Injectable,
+  ConflictException,
   UnauthorizedException,
-  BadRequestException, 
+  BadRequestException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../user/user.service';
@@ -32,8 +32,6 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
- 
-
   /**
    * Create an OTP for a user, persist/update otp_count and otp_generated_at and return the token.
    * Ensures the counter is advanced so every issued OTP is unique and cannot be replayed.
@@ -47,7 +45,7 @@ export class AuthService {
 
     // Get or initialize the counter
     const baseCounter =
-      typeof currentOtpCount === "number" && currentOtpCount > 0
+      typeof currentOtpCount === 'number' && currentOtpCount > 0
         ? currentOtpCount
         : Math.floor(Math.random() * 1000000);
 
@@ -58,12 +56,16 @@ export class AuthService {
     if (!user) {
       throw new Error('User not found');
     }
-    
+
     let otpSecret = user.otp_secret;
-    
+
     if (!otpSecret) {
       // Generate a new unique Base32 secret for this user
-      otpSecret = crypto.randomBytes(20).toString('base64').replace(/[^A-Z2-7]/gi, '').substring(0, 32);
+      otpSecret = crypto
+        .randomBytes(20)
+        .toString('base64')
+        .replace(/[^A-Z2-7]/gi, '')
+        .substring(0, 32);
     }
 
     const token = hotp.generate(otpSecret, newCounter);
@@ -82,8 +84,9 @@ export class AuthService {
    * Register a new user
    */
   async register(createUserDto: CreateUserDto): Promise<{ message: string }> {
-
-    const existingUser = await this.usersService.findUserByEmail(createUserDto.email);
+    const existingUser = await this.usersService.findUserByEmail(
+      createUserDto.email,
+    );
     if (existingUser) {
       throw new ConflictException('A user with this email already exists');
     }
@@ -95,39 +98,49 @@ export class AuthService {
     // Send welcome email with OTP
     await this.mailService.sendWelcomeEmail(createUserDto.email, otpCode);
 
-    return { message: 'Registration successful. Please check your email for verification code.' };
+    return {
+      message:
+        'Registration successful. Please check your email for verification code.',
+    };
   }
 
   /**
    * Login user with password, then send OTP for MFA
    */
   async login(loginDto: LoginDto): Promise<{ message: string }> {
-
     const user = await this.usersService.findRawByEmail(loginDto.email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
     // Verify password
-    const passwordValid = await bcrypt.compare(loginDto.password, user.password);
+    const passwordValid = await bcrypt.compare(
+      loginDto.password,
+      user.password,
+    );
     if (!passwordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
     // Generate and store OTP for MFA
-    const { token: otpCode } = await this.createAndStoreOtpForUser(user.id, user.otp_count);
+    const { token: otpCode } = await this.createAndStoreOtpForUser(
+      user.id,
+      user.otp_count,
+    );
 
     // Send login OTP
     await this.mailService.sendLoginOtp(user.email, otpCode);
 
-    return { message: 'Login credentials verified. Please check your email for verification code.' };
+    return {
+      message:
+        'Login credentials verified. Please check your email for verification code.',
+    };
   }
 
   /**
    * Verify OTP and issue JWT token
    */
   async verifyOtp(verifyOtpDto: VerifyOtpDto): Promise<AuthResult> {
-
     // Get user with OTP data
     const user = await this.usersService.findRawByEmail(verifyOtpDto.email);
     if (!user) {
@@ -193,64 +206,76 @@ export class AuthService {
   /**
    * Resend OTP for verification
    */
-  async resendOtp(resendOtpDto: ResendOtpDto): Promise<{ message: string; otp?: string }> {
+  async resendOtp(
+    resendOtpDto: ResendOtpDto,
+  ): Promise<{ message: string; otp?: string }> {
     return this.handleOtpRequest(
       resendOtpDto.email,
       (email, otp) => this.mailService.sendOtpResend(email, otp),
-      'If an account with this email exists, a new verification code has been sent.'
+      'If an account with this email exists, a new verification code has been sent.',
     );
   }
 
   /**
    * Forgot password functionality
    */
-  async forgotPassword(resendOtpDto: ResendOtpDto): Promise<{ message: string; otp?: string }> {
+  async forgotPassword(
+    resendOtpDto: ResendOtpDto,
+  ): Promise<{ message: string; otp?: string }> {
     return this.handleOtpRequest(
       resendOtpDto.email,
       (email, otp) => this.mailService.sendForgotPasswordOtp(email, otp),
-      'If an account with this email exists, a password reset code has been sent.'
+      'If an account with this email exists, a password reset code has been sent.',
     );
   }
 
   /**
    * Reset password functionality
-  */
- async resetPassword(resetPasswordDto: ResetPasswordDto, userId: string): Promise<{ message: string }> {
-  const user = await this.usersService.findRawById(userId);
-  if (!user) {
-    throw new UnauthorizedException('Invalid user');
+   */
+  async resetPassword(
+    resetPasswordDto: ResetPasswordDto,
+    userId: string,
+  ): Promise<{ message: string }> {
+    const user = await this.usersService.findRawById(userId);
+    if (!user) {
+      throw new UnauthorizedException('Invalid user');
+    }
+
+    if (resetPasswordDto.newPassword !== resetPasswordDto.confirmPassword) {
+      throw new BadRequestException('Passwords do not match');
+    }
+
+    const hashedPassword = await bcrypt.hash(resetPasswordDto.newPassword, 10);
+
+    await this.usersService.updateUserInfo(user.id, {
+      password: hashedPassword,
+    });
+    return { ...user, message: 'Password reset successfully' };
   }
 
-  if (resetPasswordDto.newPassword !== resetPasswordDto.confirmPassword) {
-    throw new BadRequestException('Passwords do not match');
-  }
-
-  const hashedPassword = await bcrypt.hash(resetPasswordDto.newPassword, 10);
-  
-  await this.usersService.updateUserInfo(user.id, { password: hashedPassword });
-  return {...user, message: 'Password reset successfully' };
-}
-
-   /**
+  /**
    * Private helper to handle OTP request - shared logic between resendOtp and forgotPassword
    */
   private async handleOtpRequest(
-    email: string, 
+    email: string,
     sendEmailFn: (email: string, otp: string) => Promise<void>,
-    successMessage: string
+    successMessage: string,
   ): Promise<{ message: string; otp?: string }> {
     const user = await this.usersService.findRawByEmail(email);
     if (!user) {
       throw new UnauthorizedException('Invalid email address.');
     } else if (user) {
-      const { token } = await this.createAndStoreOtpForUser(user.id, user.otp_count);
-      
+      const { token } = await this.createAndStoreOtpForUser(
+        user.id,
+        user.otp_count,
+      );
+
       // Send OTP email using provided function
       await sendEmailFn(email, token);
     }
 
-    return { 
-      message: successMessage
+    return {
+      message: successMessage,
     };
   }
 }

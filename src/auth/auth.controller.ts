@@ -1,24 +1,25 @@
-import { 
-  Controller, 
-  Post, 
-  Body, 
-  Res, 
-  Get, 
-  UseGuards, 
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  Get,
+  UseGuards,
   Request,
   HttpCode,
-  HttpStatus 
+  HttpStatus,
 } from '@nestjs/common';
-import { 
-  ApiTags, 
-  ApiOperation, 
-  ApiResponse, 
-  ApiBody, 
+import type { Request as ExpressRequest } from 'express';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
   ApiCookieAuth,
   ApiUnauthorizedResponse,
   ApiForbiddenResponse,
   ApiConflictResponse,
-  ApiBadRequestResponse 
+  ApiBadRequestResponse,
 } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
@@ -42,19 +43,20 @@ export class AuthController {
    */
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Register a new user',
-    description: 'Creates a new user account with STUDENT role by default. Sends OTP to email for verification.'
+    description:
+      'Creates a new user account with STUDENT role by default. Sends OTP to email for verification.',
   })
   @ApiBody({ type: CreateUserDto })
-  @ApiResponse({ 
-    status: 201, 
+  @ApiResponse({
+    status: 201,
     description: 'User registered successfully. OTP sent to email.',
   })
-  @ApiConflictResponse({ 
+  @ApiConflictResponse({
     description: 'User with this email already exists',
   })
-  @ApiBadRequestResponse({ 
+  @ApiBadRequestResponse({
     description: 'Validation error',
   })
   async register(@Body() createUserDto: CreateUserDto) {
@@ -66,19 +68,20 @@ export class AuthController {
    */
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Login with email and password',
-    description: 'First step of 2FA login. Validates credentials and sends OTP to email for MFA verification.'
+    description:
+      'First step of 2FA login. Validates credentials and sends OTP to email for MFA verification.',
   })
   @ApiBody({ type: LoginDto })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Credentials validated. OTP sent to email.',
   })
-  @ApiUnauthorizedResponse({ 
+  @ApiUnauthorizedResponse({
     description: 'Invalid credentials',
   })
-  @ApiBadRequestResponse({ 
+  @ApiBadRequestResponse({
     description: 'Validation error',
   })
   async login(@Body() loginDto: LoginDto) {
@@ -90,17 +93,17 @@ export class AuthController {
    */
   @Post('verify-otp')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Verify OTP and authenticate',
-    description: 'Second step of 2FA login. Verifies OTP code and sets secure authentication cookie with JWT token.'
+    description:
+      'Second step of 2FA login. Verifies OTP code and sets secure authentication cookie with JWT token.',
   })
   @ApiBody({ type: VerifyOtpDto })
-  @ApiResponse({ 
-  })
-  @ApiUnauthorizedResponse({ 
+  @ApiResponse({})
+  @ApiUnauthorizedResponse({
     description: 'Invalid or expired OTP',
   })
-  @ApiBadRequestResponse({ 
+  @ApiBadRequestResponse({
     description: 'Validation error',
   })
   async verifyOtp(
@@ -128,16 +131,17 @@ export class AuthController {
    */
   @Post('resend-otp')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Resend OTP code',
-    description: 'Resends OTP verification code to user email. Returns same message regardless of whether email exists to prevent enumeration.'
+    description:
+      'Resends OTP verification code to user email. Returns same message regardless of whether email exists to prevent enumeration.',
   })
   @ApiBody({ type: ResendOtpDto })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'OTP resend request processed.',
   })
-  @ApiBadRequestResponse({ 
+  @ApiBadRequestResponse({
     description: 'Validation error',
   })
   async resendOtp(@Body() resendOtpDto: ResendOtpDto) {
@@ -149,16 +153,17 @@ export class AuthController {
    */
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Request password reset',
-    description: 'Sends password reset OTP to user email. Returns same message regardless of whether email exists to prevent enumeration.'
+    description:
+      'Sends password reset OTP to user email. Returns same message regardless of whether email exists to prevent enumeration.',
   })
   @ApiBody({ type: ResendOtpDto })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Password reset request processed.',
   })
-  @ApiBadRequestResponse({ 
+  @ApiBadRequestResponse({
     description: 'Validation error',
   })
   async forgotPassword(@Body() resendOtpDto: ResendOtpDto) {
@@ -170,22 +175,29 @@ export class AuthController {
    */
   @Post('reset-password')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Reset password',
-    description: 'Resets the user password using the provided OTP and new password.'
+    description:
+      'Resets the user password using the provided OTP and new password.',
   })
   @ApiBody({ type: ResetPasswordDto })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Password reset successfully.',
   })
-  @ApiUnauthorizedResponse({ 
+  @ApiUnauthorizedResponse({
     description: 'Invalid or expired OTP',
   })
-  @ApiBadRequestResponse({ 
+  @ApiBadRequestResponse({
     description: 'Validation error',
   })
-  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto, @Request() req) {
+  async resetPassword(
+    @Body() resetPasswordDto: ResetPasswordDto,
+    @Request()
+    req: ExpressRequest & {
+      user: { id: string; role?: UserRole; email?: string };
+    },
+  ) {
     return this.authService.resetPassword(resetPasswordDto, req.user.id);
   }
 
@@ -194,15 +206,15 @@ export class AuthController {
    */
   @Post('logout')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Logout user',
-    description: 'Clears the authentication cookie to log out the user.'
+    description: 'Clears the authentication cookie to log out the user.',
   })
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'User logged out successfully.',
   })
-  async logout(@Res({ passthrough: true }) response: Response) {
+  logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('Authentication');
     return { message: 'Logout successful' };
   }
@@ -214,19 +226,25 @@ export class AuthController {
    */
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Get user profile',
-    description: 'Returns the current authenticated user\'s profile information. Accessible by any authenticated user.'
+    description:
+      "Returns the current authenticated user's profile information. Accessible by any authenticated user.",
   })
   @ApiCookieAuth('Authentication')
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'User profile retrieved successfully.',
   })
-  @ApiUnauthorizedResponse({ 
+  @ApiUnauthorizedResponse({
     description: 'Authentication required',
   })
-  async getProfile(@Request() req) {
+  getProfile(
+    @Request()
+    req: ExpressRequest & {
+      user: { id: string; role?: UserRole; email?: string };
+    },
+  ) {
     return {
       message: 'Profile access granted',
       user: req.user,
@@ -239,22 +257,28 @@ export class AuthController {
   @Get('admin/dashboard')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Get admin dashboard',
-    description: 'Returns admin dashboard data. Only accessible by users with ADMIN role.'
+    description:
+      'Returns admin dashboard data. Only accessible by users with ADMIN role.',
   })
   @ApiCookieAuth('Authentication')
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Admin dashboard data retrieved successfully.',
   })
-  @ApiUnauthorizedResponse({ 
+  @ApiUnauthorizedResponse({
     description: 'Authentication required',
   })
-  @ApiForbiddenResponse({ 
+  @ApiForbiddenResponse({
     description: 'Admin role required',
   })
-  async getAdminDashboard(@Request() req) {
+  getAdminDashboard(
+    @Request()
+    req: ExpressRequest & {
+      user: { id: string; role?: UserRole; email?: string };
+    },
+  ) {
     return {
       message: 'Admin dashboard access granted',
       user: req.user,
@@ -272,23 +296,28 @@ export class AuthController {
   @Get('instructor/panel')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.INSTRUCTOR, UserRole.ADMIN)
-  @ApiOperation({ 
+  @ApiOperation({
     summary: 'Get instructor panel',
-    description: 'Returns instructor panel data. Accessible by users with INSTRUCTOR or ADMIN roles.'
+    description:
+      'Returns instructor panel data. Accessible by users with INSTRUCTOR or ADMIN roles.',
   })
   @ApiCookieAuth('Authentication')
-  @ApiResponse({ 
-    status: 200, 
+  @ApiResponse({
+    status: 200,
     description: 'Instructor panel data retrieved successfully.',
   })
-  @ApiUnauthorizedResponse({ 
+  @ApiUnauthorizedResponse({
     description: 'Authentication required',
   })
-  @ApiForbiddenResponse({ 
+  @ApiForbiddenResponse({
     description: 'Instructor or Admin role required',
-    
   })
-  async getInstructorPanel(@Request() req) {
+  getInstructorPanel(
+    @Request()
+    req: ExpressRequest & {
+      user: { id: string; role?: UserRole; email?: string };
+    },
+  ) {
     return {
       message: 'Instructor panel access granted',
       user: req.user,

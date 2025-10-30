@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { MailService } from './mail.service';
-import { MailConfigError, EmailSendError } from './exceptions/mail.exceptions';
+import { EmailSendError } from './exceptions/mail.exceptions';
 
 // Mock nodemailer
 const mockTransporter = {
@@ -15,7 +15,6 @@ jest.mock('nodemailer', () => ({
 
 describe('MailService', () => {
   let service: MailService;
-  let configService: ConfigService;
 
   const mockConfigService = {
     get: jest.fn((key: string, defaultValue?: any) => {
@@ -51,7 +50,6 @@ describe('MailService', () => {
     }).compile();
 
     service = module.get<MailService>(MailService);
-    configService = module.get<ConfigService>(ConfigService);
   });
 
   describe('initialization', () => {
@@ -77,7 +75,7 @@ describe('MailService', () => {
           to: email,
           subject: 'Welcome! Please verify your account',
           html: expect.stringContaining(otp),
-        })
+        }),
       );
     });
 
@@ -87,7 +85,9 @@ describe('MailService', () => {
 
       mockTransporter.sendMail.mockRejectedValue(new Error('SMTP Error'));
 
-      await expect(service.sendWelcomeEmail(email, otp)).rejects.toThrow(EmailSendError);
+      await expect(service.sendWelcomeEmail(email, otp)).rejects.toThrow(
+        EmailSendError,
+      );
     });
   });
 
@@ -108,7 +108,7 @@ describe('MailService', () => {
           to: email,
           subject: 'Your login verification code',
           html: expect.stringContaining(otp),
-        })
+        }),
       );
     });
   });
@@ -152,7 +152,7 @@ describe('MailService', () => {
           to: email,
           subject: subject,
           html: 'Hello John, welcome to BT&T!',
-        })
+        }),
       );
     });
   });
@@ -174,7 +174,7 @@ describe('MailService', () => {
           to: email,
           subject: 'Password reset verification code',
           html: expect.stringContaining(otp),
-        })
+        }),
       );
     });
   });
@@ -196,7 +196,7 @@ describe('MailService', () => {
           to: email,
           subject: 'Your verification code (resent)',
           html: expect.stringContaining(otp),
-        })
+        }),
       );
     });
   });

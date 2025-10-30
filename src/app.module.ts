@@ -10,7 +10,7 @@ import { MailModule } from './mail/mail.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true, 
+      isGlobal: true,
     }),
     PrismaModule,
     AuthModule,
