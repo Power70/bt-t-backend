@@ -12,10 +12,7 @@ import { PrismaService } from './prisma/prisma.service';
 import { RolesGuard } from './auth/guards/roles.guard';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    // Disable the default body parser to handle raw body for Stripe webhooks.
-    bodyParser: false,
-  });
+  const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
   const reflector = app.get(Reflector);
@@ -42,7 +39,7 @@ async function bootstrap() {
   // --- Global Guards ---
   // Apply rate limiting and role-based access control to all endpoints.
   // app.useGlobalGuards(new ThrottlerGuard());
-  app.useGlobalGuards(new RolesGuard(reflector));
+  // app.useGlobalGuards(new RolesGuard(reflector));
 
   // --- Swagger API Documentation ---
   const swaggerConfig = new DocumentBuilder()
@@ -66,8 +63,8 @@ async function bootstrap() {
   // --- Prisma Shutdown Hooks ---
   // This ensures that Prisma gracefully disconnects from the database
   // when the NestJS application is shutting down.
-  const prismaService = app.get(PrismaService);
-  await prismaService.enableShutdownHooks(app);
+  // const prismaService = app.get(PrismaService);
+  // await prismaService.enableShutdownHooks(app);
 
   // --- Start Application ---
   const port = configService.get<number>('PORT', 30004);
