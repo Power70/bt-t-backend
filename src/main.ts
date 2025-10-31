@@ -1,4 +1,4 @@
-import { NestFactory, Reflector } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { ValidationPipe, Logger } from '@nestjs/common';
@@ -6,16 +6,10 @@ import helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-// import { PrismaService } from './prisma/prisma.service';
-// import { RolesGuard } from './auth/guards/roles.guard'; // Assumes you create this guard
-import { PrismaService } from './prisma/prisma.service';
-import { RolesGuard } from './auth/guards/roles.guard';
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const configService = app.get(ConfigService);
-  const reflector = app.get(Reflector);
   const logger = new Logger('Bootstrap');
 
   // --- Security & CORS ---
