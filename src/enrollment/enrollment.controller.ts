@@ -104,7 +104,7 @@ export class EnrollmentController {
     @Body() initiateEnrollmentDto: InitiateEnrollmentDto,
     @Request() req: any,
   ) {
-    const userId = req.user.sub as string;
+    const userId = req.user.id as string;
     return this.enrollmentService.initiateEnrollment(
       initiateEnrollmentDto,
       userId,
@@ -237,7 +237,7 @@ export class EnrollmentController {
     description: 'Unauthorized - Invalid or missing JWT token',
   })
   async getMyEnrollments(@Request() req: any) {
-    const userId = req.user.sub as string;
+    const userId = req.user.id as string;
     return this.enrollmentService.getUserEnrollments(userId);
   }
 
@@ -280,7 +280,7 @@ export class EnrollmentController {
     @Param('courseId') courseId: string,
     @Request() req: any,
   ) {
-    const userId = req.user.sub as string;
+    const userId = req.user.id as string;
     const isEnrolled = await this.enrollmentService.isUserEnrolled(
       userId,
       courseId,
