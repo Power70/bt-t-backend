@@ -20,12 +20,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.17.1
- * Query Engine version: 272a37d34178c2894197e17273bf937f25acdeac
+ * Prisma Client JS version: 6.18.0
+ * Query Engine version: 34b5a692b7bd79939a9a2c3ef97d816e749cda2f
  */
 Prisma.prismaVersion = {
-  client: "6.17.1",
-  engine: "272a37d34178c2894197e17273bf937f25acdeac"
+  client: "6.18.0",
+  engine: "34b5a692b7bd79939a9a2c3ef97d816e749cda2f"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -230,9 +230,29 @@ exports.Prisma.UserAnswerScalarFieldEnum = {
   optionId: 'optionId'
 };
 
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  reference: 'reference',
+  accessCode: 'accessCode',
+  authorizationUrl: 'authorizationUrl',
+  amountInt: 'amountInt',
+  currency: 'currency',
+  status: 'status',
+  metadata: 'metadata',
+  userId: 'userId',
+  courseId: 'courseId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -243,6 +263,12 @@ exports.Prisma.QueryMode = {
 exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
+};
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
 };
 exports.UserRole = exports.$Enums.UserRole = {
   STUDENT: 'STUDENT',
@@ -269,7 +295,8 @@ exports.Prisma.ModelName = {
   Question: 'Question',
   Option: 'Option',
   QuizSubmission: 'QuizSubmission',
-  UserAnswer: 'UserAnswer'
+  UserAnswer: 'UserAnswer',
+  Transaction: 'Transaction'
 };
 
 /**

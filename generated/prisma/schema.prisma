@@ -221,3 +221,22 @@ model UserAnswer {
 
   @@unique([submissionId, questionId]) // User can only answer a question once per submission
 }
+
+// Transactions created when initializing payments with Paystack
+model Transaction {
+  id               String   @id @default(cuid())
+  reference        String   @unique
+  accessCode       String
+  authorizationUrl String
+  amountInt        Int
+  currency         String   @default("NGN")
+  status           String   @default("initialized")
+  metadata         Json?
+  userId           String
+  courseId         String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([userId])
+  @@index([courseId])
+}

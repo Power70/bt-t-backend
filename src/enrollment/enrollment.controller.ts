@@ -45,43 +45,11 @@ export class EnrollmentController {
   @ApiOperation({
     summary: 'Initiate enrollment',
     description:
-      'Creates a Paystack payment transaction for course enrollment. Returns payment details including authorization URL and access code.',
+      'Creates a Paystack payment transaction for course enrollment.',
   })
   @ApiResponse({
     status: 200,
     description: 'Payment initialized successfully',
-    schema: {
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string',
-          example: 'Payment initialized successfully',
-        },
-        data: {
-          type: 'object',
-          properties: {
-            authorization_url: {
-              type: 'string',
-              example: 'https://checkout.paystack.com/abc123',
-            },
-            access_code: { type: 'string', example: 'abc123def456' },
-            reference: { type: 'string', example: 'T1234567890' },
-            amount: { type: 'number', example: 1500 },
-            currency: { type: 'string', example: 'NGN' },
-            course: {
-              type: 'object',
-              properties: {
-                id: { type: 'string' },
-                title: { type: 'string' },
-                description: { type: 'string' },
-                imageUrl: { type: 'string' },
-                instructor: { type: 'string' },
-              },
-            },
-          },
-        },
-      },
-    },
   })
   @ApiResponse({
     status: 400,
@@ -127,37 +95,6 @@ export class EnrollmentController {
   @ApiResponse({
     status: 200,
     description: 'Enrollment created successfully',
-    schema: {
-      type: 'object',
-      properties: {
-        message: { type: 'string', example: 'Enrollment successful' },
-        enrollment: {
-          type: 'object',
-          properties: {
-            id: { type: 'string' },
-            userId: { type: 'string' },
-            courseId: { type: 'string' },
-            enrolledAt: { type: 'string', format: 'date-time' },
-          },
-        },
-        course: {
-          type: 'object',
-          properties: {
-            id: { type: 'string' },
-            title: { type: 'string' },
-            description: { type: 'string' },
-            imageUrl: { type: 'string' },
-            instructor: {
-              type: 'object',
-              properties: {
-                name: { type: 'string' },
-                email: { type: 'string' },
-              },
-            },
-          },
-        },
-      },
-    },
   })
   @ApiResponse({
     status: 400,
@@ -193,44 +130,6 @@ export class EnrollmentController {
   @ApiResponse({
     status: 200,
     description: 'Enrollments retrieved successfully',
-    schema: {
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string',
-          example: 'Enrollments retrieved successfully',
-        },
-        data: {
-          type: 'array',
-          items: {
-            type: 'object',
-            properties: {
-              id: { type: 'string' },
-              userId: { type: 'string' },
-              courseId: { type: 'string' },
-              enrolledAt: { type: 'string', format: 'date-time' },
-              course: {
-                type: 'object',
-                properties: {
-                  id: { type: 'string' },
-                  title: { type: 'string' },
-                  description: { type: 'string' },
-                  imageUrl: { type: 'string' },
-                  price: { type: 'number' },
-                  instructor: {
-                    type: 'object',
-                    properties: {
-                      name: { type: 'string' },
-                      email: { type: 'string' },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
   })
   @ApiResponse({
     status: 401,
@@ -261,16 +160,6 @@ export class EnrollmentController {
   @ApiResponse({
     status: 200,
     description: 'Enrollment status checked successfully',
-    schema: {
-      type: 'object',
-      properties: {
-        isEnrolled: { type: 'boolean', example: true },
-        message: {
-          type: 'string',
-          example: 'You are enrolled in this course',
-        },
-      },
-    },
   })
   @ApiResponse({
     status: 401,
@@ -314,24 +203,6 @@ export class EnrollmentController {
   @ApiResponse({
     status: 200,
     description: 'Webhook processed successfully',
-    schema: {
-      type: 'object',
-      properties: {
-        message: {
-          type: 'string',
-          example: 'Enrollment created successfully',
-        },
-        enrollment: {
-          type: 'object',
-          properties: {
-            id: { type: 'string' },
-            userId: { type: 'string' },
-            courseId: { type: 'string' },
-            enrolledAt: { type: 'string', format: 'date-time' },
-          },
-        },
-      },
-    },
   })
   @ApiResponse({
     status: 400,
