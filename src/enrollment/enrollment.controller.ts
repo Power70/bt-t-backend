@@ -72,7 +72,7 @@ export class EnrollmentController {
     @Body() initiateEnrollmentDto: InitiateEnrollmentDto,
     @Request() req: any,
   ) {
-    const userId = req.user.id as string;
+  const userId = (req.user?.sub ?? req.user?.id) as string;
     return this.enrollmentService.initiateEnrollment(
       initiateEnrollmentDto,
       userId,
@@ -136,7 +136,7 @@ export class EnrollmentController {
     description: 'Unauthorized - Invalid or missing JWT token',
   })
   async getMyEnrollments(@Request() req: any) {
-    const userId = req.user.id as string;
+  const userId = (req.user?.sub ?? req.user?.id) as string;
     return this.enrollmentService.getUserEnrollments(userId);
   }
 
@@ -169,7 +169,7 @@ export class EnrollmentController {
     @Param('courseId') courseId: string,
     @Request() req: any,
   ) {
-    const userId = req.user.id as string;
+  const userId = (req.user?.sub ?? req.user?.id) as string;
     const isEnrolled = await this.enrollmentService.isUserEnrolled(
       userId,
       courseId,
@@ -212,15 +212,10 @@ export class EnrollmentController {
     @Headers('x-paystack-signature') signature: string,
     @Body() body: any,
   ) {
-    // Verify webhook signature
     if (!signature) {
       throw new BadRequestException('Missing webhook signature');
     }
-
-    // Convert body to string for signature verification
     const bodyString = JSON.stringify(body);
-
-    // Verify the signature
     const isValid = this.paystackService.verifyWebhookSignature(
       signature,
       bodyString,
@@ -230,7 +225,6 @@ export class EnrollmentController {
       throw new BadRequestException('Invalid webhook signature');
     }
 
-    // Process the webhook
     const webhookData: PaystackWebhookDto = body;
     return this.enrollmentService.handlePaymentWebhook(webhookData);
   }
