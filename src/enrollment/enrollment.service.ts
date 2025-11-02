@@ -118,20 +118,17 @@ export class EnrollmentService {
    * @returns Enrollment details
    */
   async verifyAndCreateEnrollment(reference: string) {
-    // Verify transaction with Paystack
     const verificationResponse =
       await this.paystackService.verifyTransaction(reference);
 
     const { data } = verificationResponse;
 
-    // Check if payment was successful
     if (data.status !== 'success') {
       throw new BadRequestException(
         `Payment was not successful. Status: ${data.status}`,
       );
     }
 
-    // Extract metadata
     const { courseId, userId } = data.metadata;
 
     if (!courseId || !userId) {
@@ -219,7 +216,6 @@ export class EnrollmentService {
    * @param webhookData Webhook payload from Paystack
    */
   async handlePaymentWebhook(webhookData: PaystackWebhookDto) {
-    // Only process successful charge events
     if (webhookData.event !== 'charge.success') {
       return {
         message: 'Webhook received but not processed',
