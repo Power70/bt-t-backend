@@ -6,9 +6,8 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
+import { AuthService } from '../auth/auth.service';
 import * as bcrypt from 'bcrypt';
-import * as crypto from 'crypto';
-import { hotp } from 'otplib';
 import { generateSlug } from './utils/slug.util';
 import { UserRole, LessonType } from '../../generated/prisma';
 import { PaginatedResult } from './dto/common/pagination.dto';
@@ -33,68 +32,8 @@ export class AdminService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly mailService: MailService,
+    private readonly authService: AuthService,
   ) {}
-
-  // ============================================
-  // HELPER METHODS
-  // ============================================
-
-  /**
-   * Generate and store OTP for a user
-   * @param userId User ID
-   * @param currentOtpCount Current OTP count
-   * @returns OTP token and counter
-   */
-  private async generateAndStoreOtp(
-    userId: string,
-    currentOtpCount?: number | null,
-  ): Promise<{ token: string; counter: number }> {
-    // Configure HOTP
-    hotp.options = { digits: 6 };
-
-    // Get or initialize the counter
-    const baseCounter =
-      typeof currentOtpCount === 'number' && currentOtpCount > 0
-        ? currentOtpCount
-        : Math.floor(Math.random() * 1000000);
-
-    const newCounter = baseCounter + 1;
-
-    // Get user to check for existing secret
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-      select: { otp_secret: true },
-    });
-
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
-
-    let otpSecret = user.otp_secret;
-
-    if (!otpSecret) {
-      // Generate a new unique Base32 secret for this user
-      otpSecret = crypto
-        .randomBytes(20)
-        .toString('base64')
-        .replace(/[^A-Z2-7]/gi, '')
-        .substring(0, 32);
-    }
-
-    const token = hotp.generate(otpSecret, newCounter);
-
-    // Update user with new counter, secret (if new), and generation timestamp
-    await this.prisma.user.update({
-      where: { id: userId },
-      data: {
-        otp_count: newCounter,
-        otp_secret: otpSecret,
-        otp_generated_at: new Date(),
-      },
-    });
-
-    return { token, counter: newCounter };
-  }
 
   // ============================================
   // COURSE MANAGEMENT
@@ -1429,12 +1368,14 @@ export class AdminService {
         name: createAdminDto.name,
         password: hashedPassword,
         role: UserRole.ADMIN,
-        isVerified: false, // Require OTP verification
+        isVerified: false,
       },
     });
 
-    // Generate and store OTP
-    const { token: otpCode } = await this.generateAndStoreOtp(admin.id);
+    // Generate and store OTP using AuthService
+    const { token: otpCode } = await this.authService.createAndStoreOtpForUser(
+      admin.id,
+    );
 
     // Send welcome email with OTP
     await this.mailService.sendWelcomeEmail(createAdminDto.email, otpCode);
@@ -1472,12 +1413,14 @@ export class AdminService {
         name: createInstructorDto.name,
         password: hashedPassword,
         role: UserRole.INSTRUCTOR,
-        isVerified: false, // Require OTP verification
+        isVerified: false,
       },
     });
 
-    // Generate and store OTP
-    const { token: otpCode } = await this.generateAndStoreOtp(instructor.id);
+    // Generate and store OTP using AuthService
+    const { token: otpCode } = await this.authService.createAndStoreOtpForUser(
+      instructor.id,
+    );
 
     // Send welcome email with OTP
     await this.mailService.sendWelcomeEmail(createInstructorDto.email, otpCode);

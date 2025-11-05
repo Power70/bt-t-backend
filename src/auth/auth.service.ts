@@ -36,7 +36,7 @@ export class AuthService {
    * Create an OTP for a user, persist/update otp_count and otp_generated_at and return the token.
    * Ensures the counter is advanced so every issued OTP is unique and cannot be replayed.
    */
-  private async createAndStoreOtpForUser(
+  async createAndStoreOtpForUser(
     userId: string,
     currentOtpCount?: number | null,
   ): Promise<{ token: string; counter: number }> {
