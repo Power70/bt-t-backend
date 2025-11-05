@@ -30,6 +30,12 @@ enum LessonType {
   QUIZ
 }
 
+enum Status{
+  NotStarted
+  InProgress
+  Completed
+}
+
 // CORE MODELS
 
 model User {
@@ -65,7 +71,9 @@ model Course {
   instructorId String
   instructor   User   @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
   categoryId String
+  status      Status   @default(NotStarted)
   category   Category @relation(fields: [categoryId], references: [id])
+  completionTime Int?
   modules Module[]
   attachments Attachment[]
   enrollments Enrollment[]
@@ -101,7 +109,8 @@ model Lesson {
   type       LessonType
   content    String?    @db.Text 
   videoUrl   String?
-  order      Int      
+  order      Int
+  completionTime Int?
   moduleId String
   userProgress UserProgress[]
   module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
