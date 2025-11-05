@@ -1381,8 +1381,7 @@ export class AdminService {
     await this.mailService.sendWelcomeEmail(createAdminDto.email, otpCode);
 
     return {
-      message:
-        'Admin account created successfully. Please check your email for verification code.',
+      message: 'Admin account created successfully',
       user: {
         id: admin.id,
         email: admin.email,
@@ -1426,8 +1425,7 @@ export class AdminService {
     await this.mailService.sendWelcomeEmail(createInstructorDto.email, otpCode);
 
     return {
-      message:
-        'Instructor account created successfully. Please check your email for verification code.',
+      message: 'Instructor account created successfully',
       user: {
         id: instructor.id,
         email: instructor.email,
