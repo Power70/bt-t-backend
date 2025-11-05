@@ -29,6 +29,12 @@ enum LessonType {
   QUIZ
 }
 
+enum Status {
+  NotStarted
+  InProgress
+  Completed
+}
+
 // CORE MODELS
 
 model User {
@@ -52,22 +58,24 @@ model User {
 }
 
 model Course {
-  id           String       @id @default(cuid())
-  title        String
-  slug         String       @unique
-  description  String?      @db.Text
-  imageUrl     String?
-  price        Float        @default(0.0)
-  isPublished  Boolean      @default(false)
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
-  instructorId String
-  instructor   User         @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
-  categoryId   String
-  category     Category     @relation(fields: [categoryId], references: [id])
-  modules      Module[]
-  attachments  Attachment[]
-  enrollments  Enrollment[]
+  id             String       @id @default(cuid())
+  title          String
+  slug           String       @unique
+  description    String?      @db.Text
+  imageUrl       String?
+  price          Float        @default(0.0)
+  isPublished    Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  instructorId   String
+  instructor     User         @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
+  categoryId     String
+  status         Status       @default(NotStarted)
+  category       Category     @relation(fields: [categoryId], references: [id])
+  completionTime Int?
+  modules        Module[]
+  attachments    Attachment[]
+  enrollments    Enrollment[]
 
   @@index([instructorId])
   @@index([categoryId])
@@ -95,16 +103,17 @@ model Module {
 }
 
 model Lesson {
-  id           String         @id @default(cuid())
-  title        String
-  type         LessonType
-  content      String?        @db.Text
-  videoUrl     String?
-  order        Int
-  moduleId     String
-  userProgress UserProgress[]
-  module       Module         @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  quiz         Quiz?
+  id             String         @id @default(cuid())
+  title          String
+  type           LessonType
+  content        String?        @db.Text
+  videoUrl       String?
+  order          Int
+  completionTime Int?
+  moduleId       String
+  userProgress   UserProgress[]
+  module         Module         @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  quiz           Quiz?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -220,23 +229,4 @@ model UserAnswer {
   option     Option         @relation(fields: [optionId], references: [id], onDelete: Cascade)
 
   @@unique([submissionId, questionId]) // User can only answer a question once per submission
-}
-
-// Transactions created when initializing payments with Paystack
-model Transaction {
-  id               String   @id @default(cuid())
-  reference        String   @unique
-  accessCode       String
-  authorizationUrl String
-  amountInt        Int
-  currency         String   @default("NGN")
-  status           String   @default("initialized")
-  metadata         Json?
-  userId           String
-  courseId         String
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
-
-  @@index([userId])
-  @@index([courseId])
 }

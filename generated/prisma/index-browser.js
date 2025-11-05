@@ -145,7 +145,9 @@ exports.Prisma.CourseScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   instructorId: 'instructorId',
-  categoryId: 'categoryId'
+  categoryId: 'categoryId',
+  status: 'status',
+  completionTime: 'completionTime'
 };
 
 exports.Prisma.CategoryScalarFieldEnum = {
@@ -169,6 +171,7 @@ exports.Prisma.LessonScalarFieldEnum = {
   content: 'content',
   videoUrl: 'videoUrl',
   order: 'order',
+  completionTime: 'completionTime',
   moduleId: 'moduleId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -230,29 +233,9 @@ exports.Prisma.UserAnswerScalarFieldEnum = {
   optionId: 'optionId'
 };
 
-exports.Prisma.TransactionScalarFieldEnum = {
-  id: 'id',
-  reference: 'reference',
-  accessCode: 'accessCode',
-  authorizationUrl: 'authorizationUrl',
-  amountInt: 'amountInt',
-  currency: 'currency',
-  status: 'status',
-  metadata: 'metadata',
-  userId: 'userId',
-  courseId: 'courseId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
-};
-
-exports.Prisma.NullableJsonNullValueInput = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -264,16 +247,16 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-
-exports.Prisma.JsonNullValueFilter = {
-  DbNull: Prisma.DbNull,
-  JsonNull: Prisma.JsonNull,
-  AnyNull: Prisma.AnyNull
-};
 exports.UserRole = exports.$Enums.UserRole = {
   STUDENT: 'STUDENT',
   INSTRUCTOR: 'INSTRUCTOR',
   ADMIN: 'ADMIN'
+};
+
+exports.Status = exports.$Enums.Status = {
+  NotStarted: 'NotStarted',
+  InProgress: 'InProgress',
+  Completed: 'Completed'
 };
 
 exports.LessonType = exports.$Enums.LessonType = {
@@ -295,8 +278,7 @@ exports.Prisma.ModelName = {
   Question: 'Question',
   Option: 'Option',
   QuizSubmission: 'QuizSubmission',
-  UserAnswer: 'UserAnswer',
-  Transaction: 'Transaction'
+  UserAnswer: 'UserAnswer'
 };
 
 /**
