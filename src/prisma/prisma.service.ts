@@ -3,8 +3,8 @@ import {
   Injectable,
   OnModuleInit,
   OnModuleDestroy,
-} from "@nestjs/common";
-import { PrismaClient } from "../../generated/prisma";
+} from '@nestjs/common';
+import { PrismaClient } from '../../generated/prisma';
 
 @Injectable()
 export class PrismaService
@@ -23,17 +23,18 @@ export class PrismaService
     await this.$disconnect();
   }
 
-  async enableShutdownHooks(app: INestApplication) {
-    process.on("beforeExit", async () => {
-      await app.close();
+  enableShutdownHooks(app: INestApplication) {
+    // Use non-async handlers and intentionally ignore the returned promise
+    process.on('beforeExit', () => {
+      void app.close();
     });
 
-    process.on("SIGINT", async () => {
-      await app.close();
+    process.on('SIGINT', () => {
+      void app.close();
     });
 
-    process.on("SIGTERM", async () => {
-      await app.close();
+    process.on('SIGTERM', () => {
+      void app.close();
     });
   }
 }
