@@ -36,6 +36,67 @@ export class AdminService {
   ) {}
 
   // ============================================
+  // HELPER METHODS
+  // ============================================
+
+  /**
+   * Generate and store OTP for a user
+   * @param userId User ID
+   * @param currentOtpCount Current OTP count
+   * @returns OTP token and counter
+   */
+  private async generateAndStoreOtp(
+    userId: string,
+    currentOtpCount?: number | null,
+  ): Promise<{ token: string; counter: number }> {
+    // Configure HOTP
+    hotp.options = { digits: 6 };
+
+    // Get or initialize the counter
+    const baseCounter =
+      typeof currentOtpCount === 'number' && currentOtpCount > 0
+        ? currentOtpCount
+        : Math.floor(Math.random() * 1000000);
+
+    const newCounter = baseCounter + 1;
+
+    // Get user to check for existing secret
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { otp_secret: true },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    let otpSecret = user.otp_secret;
+
+    if (!otpSecret) {
+      // Generate a new unique Base32 secret for this user
+      otpSecret = crypto
+        .randomBytes(20)
+        .toString('base64')
+        .replace(/[^A-Z2-7]/gi, '')
+        .substring(0, 32);
+    }
+
+    const token = hotp.generate(otpSecret, newCounter);
+
+    // Update user with new counter, secret (if new), and generation timestamp
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        otp_count: newCounter,
+        otp_secret: otpSecret,
+        otp_generated_at: new Date(),
+      },
+    });
+
+    return { token, counter: newCounter };
+  }
+
+  // ============================================
   // COURSE MANAGEMENT
   // ============================================
 
@@ -1368,20 +1429,27 @@ export class AdminService {
         name: createAdminDto.name,
         password: hashedPassword,
         role: UserRole.ADMIN,
-        isVerified: true, // Auto-verify admins
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        isVerified: true,
-        createdAt: true,
-        updatedAt: true,
+        isVerified: false, // Require OTP verification
       },
     });
 
-    return admin;
+    // Generate and store OTP
+    const { token: otpCode } = await this.generateAndStoreOtp(admin.id);
+
+    // Send welcome email with OTP
+    await this.mailService.sendWelcomeEmail(createAdminDto.email, otpCode);
+
+    return {
+      message:
+        'Admin account created successfully. Please check your email for verification code.',
+      user: {
+        id: admin.id,
+        email: admin.email,
+        name: admin.name,
+        role: admin.role,
+        isVerified: admin.isVerified,
+      },
+    };
   }
 
   /**
@@ -1404,20 +1472,27 @@ export class AdminService {
         name: createInstructorDto.name,
         password: hashedPassword,
         role: UserRole.INSTRUCTOR,
-        isVerified: true, // Auto-verify instructors
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        isVerified: true,
-        createdAt: true,
-        updatedAt: true,
+        isVerified: false, // Require OTP verification
       },
     });
 
-    return instructor;
+    // Generate and store OTP
+    const { token: otpCode } = await this.generateAndStoreOtp(instructor.id);
+
+    // Send welcome email with OTP
+    await this.mailService.sendWelcomeEmail(createInstructorDto.email, otpCode);
+
+    return {
+      message:
+        'Instructor account created successfully. Please check your email for verification code.',
+      user: {
+        id: instructor.id,
+        email: instructor.email,
+        name: instructor.name,
+        role: instructor.role,
+        isVerified: instructor.isVerified,
+      },
+    };
   }
 
   /**

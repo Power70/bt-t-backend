@@ -552,15 +552,18 @@ Dashboard overview of progress across all courses.
 **Response:** `201 Created`
 ```json
 {
-  "id": "clx...",
-  "email": "admin@example.com",
-  "name": "Admin User",
-  "role": "ADMIN",
-  "isVerified": true,
-  "createdAt": "2025-11-05T10:00:00Z",
-  "updatedAt": "2025-11-05T10:00:00Z"
+  "message": "Admin account created successfully. Please check your email for verification code.",
+  "user": {
+    "id": "clx...",
+    "email": "admin@example.com",
+    "name": "Admin User",
+    "role": "ADMIN",
+    "isVerified": false
+  }
 }
 ```
+
+> **Note:** A 6-digit OTP will be sent to the email address. The admin must verify their account using the `/auth/verify-otp` endpoint before they can log in.
 
 ---
 
@@ -577,6 +580,20 @@ Dashboard overview of progress across all courses.
 ```
 
 **Response:** `201 Created`
+```json
+{
+  "message": "Instructor account created successfully. Please check your email for verification code.",
+  "user": {
+    "id": "clx...",
+    "email": "instructor@example.com",
+    "name": "Instructor User",
+    "role": "INSTRUCTOR",
+    "isVerified": false
+  }
+}
+```
+
+> **Note:** A 6-digit OTP will be sent to the email address. The instructor must verify their account using the `/auth/verify-otp` endpoint before they can log in.
 
 ---
 
