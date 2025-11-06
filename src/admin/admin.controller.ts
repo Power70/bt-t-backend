@@ -162,8 +162,9 @@ export class AdminController {
 
   @Patch('courses/:id/publish')
   @ApiOperation({
-    summary: 'Publish or unpublish a course',
-    description: 'Toggles the published status of a course.',
+    summary: 'Toggle course publish status',
+    description:
+      'Toggles the published status of a course (true becomes false, false becomes true).',
   })
   @ApiParam({
     name: 'id',
@@ -172,17 +173,14 @@ export class AdminController {
   })
   @ApiResponse({
     status: 200,
-    description: 'Course publish status updated',
+    description: 'Course publish status toggled successfully',
   })
   @ApiResponse({
     status: 404,
     description: 'Course not found',
   })
-  async toggleCoursePublish(
-    @Param('id') id: string,
-    @Body() body: { isPublished: boolean },
-  ) {
-    return this.adminService.toggleCoursePublish(id, body.isPublished);
+  async toggleCoursePublish(@Param('id') id: string) {
+    return this.adminService.toggleCoursePublish(id);
   }
 
   // ============================================

@@ -112,6 +112,7 @@ export class AdminService {
         slug,
         instructorId: instructor.id,
         categoryId: category.id,
+        isPublished: false,
       },
       include: {
         instructor: {
@@ -146,7 +147,6 @@ export class AdminService {
       instructor,
       category,
       isPublished,
-      status,
     } = filterDto;
 
     const skip = (page - 1) * limit;
@@ -229,10 +229,6 @@ export class AdminService {
 
     if (typeof isPublished === 'boolean') {
       where.isPublished = isPublished;
-    }
-
-    if (status) {
-      where.status = status;
     }
 
     const [courses, total] = await Promise.all([
@@ -450,9 +446,9 @@ export class AdminService {
   }
 
   /**
-   * Publish or unpublish a course
+   * Toggle the publish status of a course
    */
-  async toggleCoursePublish(id: string, isPublished: boolean) {
+  async toggleCoursePublish(id: string) {
     const course = await this.prisma.course.findUnique({
       where: { id },
     });
@@ -463,7 +459,7 @@ export class AdminService {
 
     const updatedCourse = await this.prisma.course.update({
       where: { id },
-      data: { isPublished },
+      data: { isPublished: !course.isPublished },
       include: {
         instructor: {
           select: {
@@ -997,7 +993,7 @@ export class AdminService {
       0,
     );
 
-    // Get all enrollments
+    // Get all enrollments with status
     const enrollments = await this.prisma.enrollment.findMany({
       where: { courseId },
       include: {
@@ -1036,6 +1032,7 @@ export class AdminService {
           userEmail: enrollment.user.email,
           completedLessons: completedCount,
           progressPercentage: Math.round(progressPercentage * 100) / 100,
+          status: enrollment.status, // Include enrollment status
         };
       }),
     );
@@ -1139,6 +1136,7 @@ export class AdminService {
       userEmail: user.email,
       courseId: course.id,
       courseTitle: course.title,
+      enrollmentStatus: enrollment.status, // Include enrollment status
       totalLessons,
       completedLessons,
       progressPercentage: Math.round(progressPercentage * 100) / 100,
@@ -1164,55 +1162,62 @@ export class AdminService {
           },
         },
         enrollments: {
-          include: {
-            user: true,
+          select: {
+            status: true,
           },
         },
       },
     });
 
-    const courseStats = await Promise.all(
-      courses.map(async (course) => {
-        const totalLessons = course.modules.reduce(
-          (sum, module) => sum + module.lessons.length,
-          0,
-        );
-
-        const lessonIds = course.modules.flatMap((module) =>
-          module.lessons.map((lesson) => lesson.id),
-        );
-
-        let totalProgress = 0;
-        const enrollmentCount = course.enrollments.length;
-
-        if (enrollmentCount > 0) {
-          for (const enrollment of course.enrollments) {
-            const completedCount = await this.prisma.userProgress.count({
-              where: {
-                userId: enrollment.userId,
-                lessonId: { in: lessonIds },
-                isCompleted: true,
-              },
-            });
-
-            const userProgress =
-              totalLessons > 0 ? (completedCount / totalLessons) * 100 : 0;
-            totalProgress += userProgress;
-          }
-        }
-
-        const averageProgress =
-          enrollmentCount > 0 ? totalProgress / enrollmentCount : 0;
-
+    const courseStats = courses.map((course) => {
+      // TypeScript guard: modules and enrollments will be defined due to include
+      if (!course.modules || !course.enrollments) {
         return {
           courseId: course.id,
           courseTitle: course.title,
-          totalLessons,
-          enrollmentCount,
-          averageProgress: Math.round(averageProgress * 100) / 100,
+          totalLessons: 0,
+          enrollmentCount: 0,
+          statusBreakdown: {
+            notStarted: 0,
+            inProgress: 0,
+            completed: 0,
+          },
         };
-      }),
-    );
+      }
+
+      const modules = course.modules;
+      const enrollments = course.enrollments;
+
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      const totalLessons = modules.reduce(
+        (sum: number, module: any) => sum + (module.lessons?.length || 0),
+        0,
+      );
+
+      const enrollmentCount = enrollments.length;
+
+      // Count enrollments by status
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+      const statusCounts = enrollments.reduce(
+        (acc: Record<string, number>, enrollment: any) => {
+          acc[enrollment.status] = (acc[enrollment.status] || 0) + 1;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
+
+      return {
+        courseId: course.id,
+        courseTitle: course.title,
+        totalLessons,
+        enrollmentCount,
+        statusBreakdown: {
+          notStarted: statusCounts['NotStarted'] || 0,
+          inProgress: statusCounts['InProgress'] || 0,
+          completed: statusCounts['Completed'] || 0,
+        },
+      };
+    });
 
     return {
       totalCourses,

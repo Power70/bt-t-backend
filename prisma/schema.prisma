@@ -71,7 +71,6 @@ model Course {
   instructorId String
   instructor   User   @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
   categoryId String
-  status      Status   @default(NotStarted)
   category   Category @relation(fields: [categoryId], references: [id])
   completionTime Int?
   modules Module[]
@@ -129,7 +128,7 @@ model Enrollment {
   enrolledAt DateTime @default(now())
   userId   String
   courseId String
-
+  status      Status   @default(NotStarted)
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
   @@unique([userId, courseId])

@@ -9,6 +9,7 @@ import { PaystackService } from './services/paystack.service';
 import { InitiateEnrollmentDto } from './dto/initiate-enrollment.dto';
 import { EnrollmentEntity } from './entities/enrollment.entity';
 import { PaystackWebhookDto } from './dto/paystack-webhook.dto';
+import { Status } from 'generated/prisma';
 
 @Injectable()
 export class EnrollmentService {
@@ -173,6 +174,7 @@ export class EnrollmentService {
       data: {
         userId,
         courseId,
+        status: Status.NotStarted,
       },
       include: {
         course: {
@@ -205,6 +207,7 @@ export class EnrollmentService {
         id: enrollment.id,
         userId: enrollment.userId,
         courseId: enrollment.courseId,
+        status: enrollment.status,
         enrolledAt: enrollment.enrolledAt,
       }),
       course: enrollment.course,
@@ -262,6 +265,7 @@ export class EnrollmentService {
       data: {
         userId,
         courseId,
+        status: Status.NotStarted,
       },
     });
 

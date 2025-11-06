@@ -1,8 +1,7 @@
-import { IsOptional, IsString, IsEnum, IsBoolean } from 'class-validator';
+import { IsOptional, IsString, IsBoolean } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import { PaginationDto } from '../common/pagination.dto';
-import { Status } from '../../../../generated/prisma';
 
 export class CourseFilterDto extends PaginationDto {
   @ApiPropertyOptional({
@@ -42,17 +41,12 @@ export class CourseFilterDto extends PaginationDto {
     description: 'Filter by published status',
     example: true,
   })
-  @Type(() => Boolean)
+  @Transform(({ value }) => {
+    if (value === 'true') return true;
+    if (value === 'false') return false;
+    return value;
+  })
   @IsBoolean()
   @IsOptional()
   isPublished?: boolean;
-
-  @ApiPropertyOptional({
-    description: 'Filter by course status',
-    enum: Status,
-    example: Status.InProgress,
-  })
-  @IsEnum(Status)
-  @IsOptional()
-  status?: Status;
 }

@@ -4,7 +4,6 @@ import {
   IsOptional,
   IsNumber,
   Min,
-  IsBoolean,
   IsUrl,
   IsEmail,
 } from 'class-validator';
@@ -61,13 +60,4 @@ export class CreateCourseDto {
   @IsString()
   @IsNotEmpty()
   categoryName: string;
-
-  @ApiPropertyOptional({
-    description: 'Whether the course is published',
-    example: false,
-    default: false,
-  })
-  @IsBoolean()
-  @IsOptional()
-  isPublished?: boolean;
 }
