@@ -428,8 +428,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.18.0
-   * Query Engine version: 34b5a692b7bd79939a9a2c3ef97d816e749cda2f
+   * Prisma Client JS version: 6.19.0
+   * Query Engine version: 2ba551f319ab1df4bc874a89965d8b3641056773
    */
   export type PrismaVersion = {
     client: string
@@ -3638,7 +3638,6 @@ export namespace Prisma {
     updatedAt: Date | null
     instructorId: string | null
     categoryId: string | null
-    status: $Enums.Status | null
     completionTime: number | null
   }
 
@@ -3654,7 +3653,6 @@ export namespace Prisma {
     updatedAt: Date | null
     instructorId: string | null
     categoryId: string | null
-    status: $Enums.Status | null
     completionTime: number | null
   }
 
@@ -3670,7 +3668,6 @@ export namespace Prisma {
     updatedAt: number
     instructorId: number
     categoryId: number
-    status: number
     completionTime: number
     _all: number
   }
@@ -3698,7 +3695,6 @@ export namespace Prisma {
     updatedAt?: true
     instructorId?: true
     categoryId?: true
-    status?: true
     completionTime?: true
   }
 
@@ -3714,7 +3710,6 @@ export namespace Prisma {
     updatedAt?: true
     instructorId?: true
     categoryId?: true
-    status?: true
     completionTime?: true
   }
 
@@ -3730,7 +3725,6 @@ export namespace Prisma {
     updatedAt?: true
     instructorId?: true
     categoryId?: true
-    status?: true
     completionTime?: true
     _all?: true
   }
@@ -3833,7 +3827,6 @@ export namespace Prisma {
     updatedAt: Date
     instructorId: string
     categoryId: string
-    status: $Enums.Status
     completionTime: number | null
     _count: CourseCountAggregateOutputType | null
     _avg: CourseAvgAggregateOutputType | null
@@ -3868,7 +3861,6 @@ export namespace Prisma {
     updatedAt?: boolean
     instructorId?: boolean
     categoryId?: boolean
-    status?: boolean
     completionTime?: boolean
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -3890,7 +3882,6 @@ export namespace Prisma {
     updatedAt?: boolean
     instructorId?: boolean
     categoryId?: boolean
-    status?: boolean
     completionTime?: boolean
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -3908,7 +3899,6 @@ export namespace Prisma {
     updatedAt?: boolean
     instructorId?: boolean
     categoryId?: boolean
-    status?: boolean
     completionTime?: boolean
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -3926,11 +3916,10 @@ export namespace Prisma {
     updatedAt?: boolean
     instructorId?: boolean
     categoryId?: boolean
-    status?: boolean
     completionTime?: boolean
   }
 
-  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "description" | "imageUrl" | "price" | "isPublished" | "createdAt" | "updatedAt" | "instructorId" | "categoryId" | "status" | "completionTime", ExtArgs["result"]["course"]>
+  export type CourseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "title" | "slug" | "description" | "imageUrl" | "price" | "isPublished" | "createdAt" | "updatedAt" | "instructorId" | "categoryId" | "completionTime", ExtArgs["result"]["course"]>
   export type CourseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     instructor?: boolean | UserDefaultArgs<ExtArgs>
     category?: boolean | CategoryDefaultArgs<ExtArgs>
@@ -3969,7 +3958,6 @@ export namespace Prisma {
       updatedAt: Date
       instructorId: string
       categoryId: string
-      status: $Enums.Status
       completionTime: number | null
     }, ExtArgs["result"]["course"]>
     composites: {}
@@ -4410,7 +4398,6 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"Course", 'DateTime'>
     readonly instructorId: FieldRef<"Course", 'String'>
     readonly categoryId: FieldRef<"Course", 'String'>
-    readonly status: FieldRef<"Course", 'Status'>
     readonly completionTime: FieldRef<"Course", 'Int'>
   }
     
@@ -8293,6 +8280,7 @@ export namespace Prisma {
     enrolledAt: Date | null
     userId: string | null
     courseId: string | null
+    status: $Enums.Status | null
   }
 
   export type EnrollmentMaxAggregateOutputType = {
@@ -8300,6 +8288,7 @@ export namespace Prisma {
     enrolledAt: Date | null
     userId: string | null
     courseId: string | null
+    status: $Enums.Status | null
   }
 
   export type EnrollmentCountAggregateOutputType = {
@@ -8307,6 +8296,7 @@ export namespace Prisma {
     enrolledAt: number
     userId: number
     courseId: number
+    status: number
     _all: number
   }
 
@@ -8316,6 +8306,7 @@ export namespace Prisma {
     enrolledAt?: true
     userId?: true
     courseId?: true
+    status?: true
   }
 
   export type EnrollmentMaxAggregateInputType = {
@@ -8323,6 +8314,7 @@ export namespace Prisma {
     enrolledAt?: true
     userId?: true
     courseId?: true
+    status?: true
   }
 
   export type EnrollmentCountAggregateInputType = {
@@ -8330,6 +8322,7 @@ export namespace Prisma {
     enrolledAt?: true
     userId?: true
     courseId?: true
+    status?: true
     _all?: true
   }
 
@@ -8410,6 +8403,7 @@ export namespace Prisma {
     enrolledAt: Date
     userId: string
     courseId: string
+    status: $Enums.Status
     _count: EnrollmentCountAggregateOutputType | null
     _min: EnrollmentMinAggregateOutputType | null
     _max: EnrollmentMaxAggregateOutputType | null
@@ -8434,6 +8428,7 @@ export namespace Prisma {
     enrolledAt?: boolean
     userId?: boolean
     courseId?: boolean
+    status?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
@@ -8443,6 +8438,7 @@ export namespace Prisma {
     enrolledAt?: boolean
     userId?: boolean
     courseId?: boolean
+    status?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
@@ -8452,6 +8448,7 @@ export namespace Prisma {
     enrolledAt?: boolean
     userId?: boolean
     courseId?: boolean
+    status?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["enrollment"]>
@@ -8461,9 +8458,10 @@ export namespace Prisma {
     enrolledAt?: boolean
     userId?: boolean
     courseId?: boolean
+    status?: boolean
   }
 
-  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrolledAt" | "userId" | "courseId", ExtArgs["result"]["enrollment"]>
+  export type EnrollmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "enrolledAt" | "userId" | "courseId" | "status", ExtArgs["result"]["enrollment"]>
   export type EnrollmentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     course?: boolean | CourseDefaultArgs<ExtArgs>
@@ -8488,6 +8486,7 @@ export namespace Prisma {
       enrolledAt: Date
       userId: string
       courseId: string
+      status: $Enums.Status
     }, ExtArgs["result"]["enrollment"]>
     composites: {}
   }
@@ -8917,6 +8916,7 @@ export namespace Prisma {
     readonly enrolledAt: FieldRef<"Enrollment", 'DateTime'>
     readonly userId: FieldRef<"Enrollment", 'String'>
     readonly courseId: FieldRef<"Enrollment", 'String'>
+    readonly status: FieldRef<"Enrollment", 'Status'>
   }
     
 
@@ -16931,7 +16931,6 @@ export namespace Prisma {
     updatedAt: 'updatedAt',
     instructorId: 'instructorId',
     categoryId: 'categoryId',
-    status: 'status',
     completionTime: 'completionTime'
   };
 
@@ -16978,7 +16977,8 @@ export namespace Prisma {
     id: 'id',
     enrolledAt: 'enrolledAt',
     userId: 'userId',
-    courseId: 'courseId'
+    courseId: 'courseId',
+    status: 'status'
   };
 
   export type EnrollmentScalarFieldEnum = (typeof EnrollmentScalarFieldEnum)[keyof typeof EnrollmentScalarFieldEnum]
@@ -17161,20 +17161,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Status'
-   */
-  export type EnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status'>
-    
-
-
-  /**
-   * Reference to a field of type 'Status[]'
-   */
-  export type ListEnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status[]'>
-    
-
-
-  /**
    * Reference to a field of type 'LessonType'
    */
   export type EnumLessonTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LessonType'>
@@ -17185,6 +17171,20 @@ export namespace Prisma {
    * Reference to a field of type 'LessonType[]'
    */
   export type ListEnumLessonTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'LessonType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Status'
+   */
+  export type EnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status'>
+    
+
+
+  /**
+   * Reference to a field of type 'Status[]'
+   */
+  export type ListEnumStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Status[]'>
     
   /**
    * Deep Input Types
@@ -17302,7 +17302,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Course"> | Date | string
     instructorId?: StringFilter<"Course"> | string
     categoryId?: StringFilter<"Course"> | string
-    status?: EnumStatusFilter<"Course"> | $Enums.Status
     completionTime?: IntNullableFilter<"Course"> | number | null
     instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
@@ -17323,7 +17322,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
     instructorId?: SortOrder
     categoryId?: SortOrder
-    status?: SortOrder
     completionTime?: SortOrderInput | SortOrder
     instructor?: UserOrderByWithRelationInput
     category?: CategoryOrderByWithRelationInput
@@ -17347,7 +17345,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Course"> | Date | string
     instructorId?: StringFilter<"Course"> | string
     categoryId?: StringFilter<"Course"> | string
-    status?: EnumStatusFilter<"Course"> | $Enums.Status
     completionTime?: IntNullableFilter<"Course"> | number | null
     instructor?: XOR<UserScalarRelationFilter, UserWhereInput>
     category?: XOR<CategoryScalarRelationFilter, CategoryWhereInput>
@@ -17368,7 +17365,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
     instructorId?: SortOrder
     categoryId?: SortOrder
-    status?: SortOrder
     completionTime?: SortOrderInput | SortOrder
     _count?: CourseCountOrderByAggregateInput
     _avg?: CourseAvgOrderByAggregateInput
@@ -17392,7 +17388,6 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Course"> | Date | string
     instructorId?: StringWithAggregatesFilter<"Course"> | string
     categoryId?: StringWithAggregatesFilter<"Course"> | string
-    status?: EnumStatusWithAggregatesFilter<"Course"> | $Enums.Status
     completionTime?: IntNullableWithAggregatesFilter<"Course"> | number | null
   }
 
@@ -17599,6 +17594,7 @@ export namespace Prisma {
     enrolledAt?: DateTimeFilter<"Enrollment"> | Date | string
     userId?: StringFilter<"Enrollment"> | string
     courseId?: StringFilter<"Enrollment"> | string
+    status?: EnumStatusFilter<"Enrollment"> | $Enums.Status
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
   }
@@ -17608,6 +17604,7 @@ export namespace Prisma {
     enrolledAt?: SortOrder
     userId?: SortOrder
     courseId?: SortOrder
+    status?: SortOrder
     user?: UserOrderByWithRelationInput
     course?: CourseOrderByWithRelationInput
   }
@@ -17621,6 +17618,7 @@ export namespace Prisma {
     enrolledAt?: DateTimeFilter<"Enrollment"> | Date | string
     userId?: StringFilter<"Enrollment"> | string
     courseId?: StringFilter<"Enrollment"> | string
+    status?: EnumStatusFilter<"Enrollment"> | $Enums.Status
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
   }, "id" | "userId_courseId">
@@ -17630,6 +17628,7 @@ export namespace Prisma {
     enrolledAt?: SortOrder
     userId?: SortOrder
     courseId?: SortOrder
+    status?: SortOrder
     _count?: EnrollmentCountOrderByAggregateInput
     _max?: EnrollmentMaxOrderByAggregateInput
     _min?: EnrollmentMinOrderByAggregateInput
@@ -17643,6 +17642,7 @@ export namespace Prisma {
     enrolledAt?: DateTimeWithAggregatesFilter<"Enrollment"> | Date | string
     userId?: StringWithAggregatesFilter<"Enrollment"> | string
     courseId?: StringWithAggregatesFilter<"Enrollment"> | string
+    status?: EnumStatusWithAggregatesFilter<"Enrollment"> | $Enums.Status
   }
 
   export type UserProgressWhereInput = {
@@ -18153,7 +18153,6 @@ export namespace Prisma {
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    status?: $Enums.Status
     completionTime?: number | null
     instructor: UserCreateNestedOneWithoutTaughtCoursesInput
     category: CategoryCreateNestedOneWithoutCoursesInput
@@ -18174,7 +18173,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     instructorId: string
     categoryId: string
-    status?: $Enums.Status
     completionTime?: number | null
     modules?: ModuleUncheckedCreateNestedManyWithoutCourseInput
     attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
@@ -18191,7 +18189,6 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
     instructor?: UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
     category?: CategoryUpdateOneRequiredWithoutCoursesNestedInput
@@ -18212,7 +18209,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructorId?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
     modules?: ModuleUncheckedUpdateManyWithoutCourseNestedInput
     attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
@@ -18231,7 +18227,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     instructorId: string
     categoryId: string
-    status?: $Enums.Status
     completionTime?: number | null
   }
 
@@ -18245,7 +18240,6 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -18261,7 +18255,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructorId?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -18471,6 +18464,7 @@ export namespace Prisma {
   export type EnrollmentCreateInput = {
     id?: string
     enrolledAt?: Date | string
+    status?: $Enums.Status
     user: UserCreateNestedOneWithoutEnrollmentsInput
     course: CourseCreateNestedOneWithoutEnrollmentsInput
   }
@@ -18480,11 +18474,13 @@ export namespace Prisma {
     enrolledAt?: Date | string
     userId: string
     courseId: string
+    status?: $Enums.Status
   }
 
   export type EnrollmentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     user?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
   }
@@ -18494,6 +18490,7 @@ export namespace Prisma {
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
   }
 
   export type EnrollmentCreateManyInput = {
@@ -18501,11 +18498,13 @@ export namespace Prisma {
     enrolledAt?: Date | string
     userId: string
     courseId: string
+    status?: $Enums.Status
   }
 
   export type EnrollmentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
   }
 
   export type EnrollmentUncheckedUpdateManyInput = {
@@ -18513,6 +18512,7 @@ export namespace Prisma {
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
     courseId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
   }
 
   export type UserProgressCreateInput = {
@@ -19150,13 +19150,6 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type EnumStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
-  }
-
   export type UserScalarRelationFilter = {
     is?: UserWhereInput
     isNot?: UserWhereInput
@@ -19199,7 +19192,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
     instructorId?: SortOrder
     categoryId?: SortOrder
-    status?: SortOrder
     completionTime?: SortOrder
   }
 
@@ -19220,7 +19212,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
     instructorId?: SortOrder
     categoryId?: SortOrder
-    status?: SortOrder
     completionTime?: SortOrder
   }
 
@@ -19236,7 +19227,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
     instructorId?: SortOrder
     categoryId?: SortOrder
-    status?: SortOrder
     completionTime?: SortOrder
   }
 
@@ -19259,16 +19249,6 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
-  }
-
-  export type EnumStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStatusFilter<$PrismaModel>
-    _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
   export type CategoryCountOrderByAggregateInput = {
@@ -19449,6 +19429,13 @@ export namespace Prisma {
     _max?: NestedEnumLessonTypeFilter<$PrismaModel>
   }
 
+  export type EnumStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
+  }
+
   export type EnrollmentUserIdCourseIdCompoundUniqueInput = {
     userId: string
     courseId: string
@@ -19459,6 +19446,7 @@ export namespace Prisma {
     enrolledAt?: SortOrder
     userId?: SortOrder
     courseId?: SortOrder
+    status?: SortOrder
   }
 
   export type EnrollmentMaxOrderByAggregateInput = {
@@ -19466,6 +19454,7 @@ export namespace Prisma {
     enrolledAt?: SortOrder
     userId?: SortOrder
     courseId?: SortOrder
+    status?: SortOrder
   }
 
   export type EnrollmentMinOrderByAggregateInput = {
@@ -19473,6 +19462,17 @@ export namespace Prisma {
     enrolledAt?: SortOrder
     userId?: SortOrder
     courseId?: SortOrder
+    status?: SortOrder
+  }
+
+  export type EnumStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusFilter<$PrismaModel>
+    _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
   export type LessonScalarRelationFilter = {
@@ -19957,10 +19957,6 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type EnumStatusFieldUpdateOperationsInput = {
-    set?: $Enums.Status
-  }
-
   export type UserUpdateOneRequiredWithoutTaughtCoursesNestedInput = {
     create?: XOR<UserCreateWithoutTaughtCoursesInput, UserUncheckedCreateWithoutTaughtCoursesInput>
     connectOrCreate?: UserCreateOrConnectWithoutTaughtCoursesInput
@@ -20269,6 +20265,10 @@ export namespace Prisma {
     create?: XOR<CourseCreateWithoutEnrollmentsInput, CourseUncheckedCreateWithoutEnrollmentsInput>
     connectOrCreate?: CourseCreateOrConnectWithoutEnrollmentsInput
     connect?: CourseWhereUniqueInput
+  }
+
+  export type EnumStatusFieldUpdateOperationsInput = {
+    set?: $Enums.Status
   }
 
   export type UserUpdateOneRequiredWithoutEnrollmentsNestedInput = {
@@ -20895,13 +20895,6 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type NestedEnumStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
-  }
-
   export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -20916,16 +20909,6 @@ export namespace Prisma {
     _sum?: NestedFloatFilter<$PrismaModel>
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
-  }
-
-  export type NestedEnumStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStatusFilter<$PrismaModel>
-    _max?: NestedEnumStatusFilter<$PrismaModel>
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -20961,6 +20944,23 @@ export namespace Prisma {
     _max?: NestedEnumLessonTypeFilter<$PrismaModel>
   }
 
+  export type NestedEnumStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusFilter<$PrismaModel> | $Enums.Status
+  }
+
+  export type NestedEnumStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.Status | EnumStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Status[] | ListEnumStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStatusWithAggregatesFilter<$PrismaModel> | $Enums.Status
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStatusFilter<$PrismaModel>
+    _max?: NestedEnumStatusFilter<$PrismaModel>
+  }
+
   export type CourseCreateWithoutInstructorInput = {
     id?: string
     title: string
@@ -20971,7 +20971,6 @@ export namespace Prisma {
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    status?: $Enums.Status
     completionTime?: number | null
     category: CategoryCreateNestedOneWithoutCoursesInput
     modules?: ModuleCreateNestedManyWithoutCourseInput
@@ -20990,7 +20989,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId: string
-    status?: $Enums.Status
     completionTime?: number | null
     modules?: ModuleUncheckedCreateNestedManyWithoutCourseInput
     attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
@@ -21010,6 +21008,7 @@ export namespace Prisma {
   export type EnrollmentCreateWithoutUserInput = {
     id?: string
     enrolledAt?: Date | string
+    status?: $Enums.Status
     course: CourseCreateNestedOneWithoutEnrollmentsInput
   }
 
@@ -21017,6 +21016,7 @@ export namespace Prisma {
     id?: string
     enrolledAt?: Date | string
     courseId: string
+    status?: $Enums.Status
   }
 
   export type EnrollmentCreateOrConnectWithoutUserInput = {
@@ -21110,7 +21110,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Course"> | Date | string
     instructorId?: StringFilter<"Course"> | string
     categoryId?: StringFilter<"Course"> | string
-    status?: EnumStatusFilter<"Course"> | $Enums.Status
     completionTime?: IntNullableFilter<"Course"> | number | null
   }
 
@@ -21138,6 +21137,7 @@ export namespace Prisma {
     enrolledAt?: DateTimeFilter<"Enrollment"> | Date | string
     userId?: StringFilter<"Enrollment"> | string
     courseId?: StringFilter<"Enrollment"> | string
+    status?: EnumStatusFilter<"Enrollment"> | $Enums.Status
   }
 
   export type UserProgressUpsertWithWhereUniqueWithoutUserInput = {
@@ -21303,6 +21303,7 @@ export namespace Prisma {
   export type EnrollmentCreateWithoutCourseInput = {
     id?: string
     enrolledAt?: Date | string
+    status?: $Enums.Status
     user: UserCreateNestedOneWithoutEnrollmentsInput
   }
 
@@ -21310,6 +21311,7 @@ export namespace Prisma {
     id?: string
     enrolledAt?: Date | string
     userId: string
+    status?: $Enums.Status
   }
 
   export type EnrollmentCreateOrConnectWithoutCourseInput = {
@@ -21469,7 +21471,6 @@ export namespace Prisma {
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    status?: $Enums.Status
     completionTime?: number | null
     instructor: UserCreateNestedOneWithoutTaughtCoursesInput
     modules?: ModuleCreateNestedManyWithoutCourseInput
@@ -21488,7 +21489,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     instructorId: string
-    status?: $Enums.Status
     completionTime?: number | null
     modules?: ModuleUncheckedCreateNestedManyWithoutCourseInput
     attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
@@ -21531,7 +21531,6 @@ export namespace Prisma {
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    status?: $Enums.Status
     completionTime?: number | null
     instructor: UserCreateNestedOneWithoutTaughtCoursesInput
     category: CategoryCreateNestedOneWithoutCoursesInput
@@ -21551,7 +21550,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     instructorId: string
     categoryId: string
-    status?: $Enums.Status
     completionTime?: number | null
     attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
@@ -21621,7 +21619,6 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
     instructor?: UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
     category?: CategoryUpdateOneRequiredWithoutCoursesNestedInput
@@ -21641,7 +21638,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructorId?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
     attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
@@ -21860,7 +21856,6 @@ export namespace Prisma {
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    status?: $Enums.Status
     completionTime?: number | null
     instructor: UserCreateNestedOneWithoutTaughtCoursesInput
     category: CategoryCreateNestedOneWithoutCoursesInput
@@ -21880,7 +21875,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     instructorId: string
     categoryId: string
-    status?: $Enums.Status
     completionTime?: number | null
     modules?: ModuleUncheckedCreateNestedManyWithoutCourseInput
     attachments?: AttachmentUncheckedCreateNestedManyWithoutCourseInput
@@ -21957,7 +21951,6 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
     instructor?: UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
     category?: CategoryUpdateOneRequiredWithoutCoursesNestedInput
@@ -21977,7 +21970,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructorId?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
     modules?: ModuleUncheckedUpdateManyWithoutCourseNestedInput
     attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
@@ -22149,7 +22141,6 @@ export namespace Prisma {
     isPublished?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    status?: $Enums.Status
     completionTime?: number | null
     instructor: UserCreateNestedOneWithoutTaughtCoursesInput
     category: CategoryCreateNestedOneWithoutCoursesInput
@@ -22169,7 +22160,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     instructorId: string
     categoryId: string
-    status?: $Enums.Status
     completionTime?: number | null
     modules?: ModuleUncheckedCreateNestedManyWithoutCourseInput
     enrollments?: EnrollmentUncheckedCreateNestedManyWithoutCourseInput
@@ -22201,7 +22191,6 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
     instructor?: UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
     category?: CategoryUpdateOneRequiredWithoutCoursesNestedInput
@@ -22221,7 +22210,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructorId?: StringFieldUpdateOperationsInput | string
     categoryId?: StringFieldUpdateOperationsInput | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
     modules?: ModuleUncheckedUpdateManyWithoutCourseNestedInput
     enrollments?: EnrollmentUncheckedUpdateManyWithoutCourseNestedInput
@@ -22919,7 +22907,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     categoryId: string
-    status?: $Enums.Status
     completionTime?: number | null
   }
 
@@ -22927,6 +22914,7 @@ export namespace Prisma {
     id?: string
     enrolledAt?: Date | string
     courseId: string
+    status?: $Enums.Status
   }
 
   export type UserProgressCreateManyUserInput = {
@@ -22953,7 +22941,6 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
     category?: CategoryUpdateOneRequiredWithoutCoursesNestedInput
     modules?: ModuleUpdateManyWithoutCourseNestedInput
@@ -22972,7 +22959,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
     modules?: ModuleUncheckedUpdateManyWithoutCourseNestedInput
     attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
@@ -22990,13 +22976,13 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     categoryId?: StringFieldUpdateOperationsInput | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type EnrollmentUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     course?: CourseUpdateOneRequiredWithoutEnrollmentsNestedInput
   }
 
@@ -23004,12 +22990,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     courseId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
   }
 
   export type EnrollmentUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     courseId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
   }
 
   export type UserProgressUpdateWithoutUserInput = {
@@ -23075,6 +23063,7 @@ export namespace Prisma {
     id?: string
     enrolledAt?: Date | string
     userId: string
+    status?: $Enums.Status
   }
 
   export type ModuleUpdateWithoutCourseInput = {
@@ -23127,6 +23116,7 @@ export namespace Prisma {
   export type EnrollmentUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     user?: UserUpdateOneRequiredWithoutEnrollmentsNestedInput
   }
 
@@ -23134,12 +23124,14 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
   }
 
   export type EnrollmentUncheckedUpdateManyWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
     enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userId?: StringFieldUpdateOperationsInput | string
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
   }
 
   export type CourseCreateManyCategoryInput = {
@@ -23153,7 +23145,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     instructorId: string
-    status?: $Enums.Status
     completionTime?: number | null
   }
 
@@ -23167,7 +23158,6 @@ export namespace Prisma {
     isPublished?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
     instructor?: UserUpdateOneRequiredWithoutTaughtCoursesNestedInput
     modules?: ModuleUpdateManyWithoutCourseNestedInput
@@ -23186,7 +23176,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructorId?: StringFieldUpdateOperationsInput | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
     modules?: ModuleUncheckedUpdateManyWithoutCourseNestedInput
     attachments?: AttachmentUncheckedUpdateManyWithoutCourseNestedInput
@@ -23204,7 +23193,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     instructorId?: StringFieldUpdateOperationsInput | string
-    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
   }
 

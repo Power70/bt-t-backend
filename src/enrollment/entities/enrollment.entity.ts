@@ -3,6 +3,7 @@ export class EnrollmentEntity {
   userId: string;
   courseId: string;
   enrolledAt: Date;
+  status: string;
 
   constructor(partial: Partial<EnrollmentEntity>) {
     Object.assign(this, partial);
