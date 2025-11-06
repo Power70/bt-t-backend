@@ -9,7 +9,7 @@ import { PaystackService } from './services/paystack.service';
 import { InitiateEnrollmentDto } from './dto/initiate-enrollment.dto';
 import { EnrollmentEntity } from './entities/enrollment.entity';
 import { PaystackWebhookDto } from './dto/paystack-webhook.dto';
-import { Status } from 'generated/prisma';
+import { Status } from '../../generated/prisma';
 
 @Injectable()
 export class EnrollmentService {

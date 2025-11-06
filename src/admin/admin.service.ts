@@ -1170,7 +1170,6 @@ export class AdminService {
     });
 
     const courseStats = courses.map((course) => {
-      // TypeScript guard: modules and enrollments will be defined due to include
       if (!course.modules || !course.enrollments) {
         return {
           courseId: course.id,
@@ -1188,7 +1187,6 @@ export class AdminService {
       const modules = course.modules;
       const enrollments = course.enrollments;
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       const totalLessons = modules.reduce(
         (sum: number, module: any) => sum + (module.lessons?.length || 0),
         0,
@@ -1197,7 +1195,6 @@ export class AdminService {
       const enrollmentCount = enrollments.length;
 
       // Count enrollments by status
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       const statusCounts = enrollments.reduce(
         (acc: Record<string, number>, enrollment: any) => {
           acc[enrollment.status] = (acc[enrollment.status] || 0) + 1;

@@ -7,7 +7,7 @@ import {
 import { EnrollmentService } from './enrollment.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { PaystackService } from './services/paystack.service';
-import { Status } from 'generated/prisma';
+import { Status } from '../../generated/prisma';
 
 describe('EnrollmentService', () => {
   let service: EnrollmentService;
@@ -213,7 +213,7 @@ describe('EnrollmentService', () => {
         metadata: {
           courseId: 'course123',
           userId: 'user123',
-          Status: Status.NotStarted
+          Status: Status.NotStarted,
         },
       },
     };
@@ -387,6 +387,7 @@ describe('EnrollmentService', () => {
         data: {
           userId: 'user123',
           courseId: 'course123',
+          status: Status.NotStarted,
         },
       });
     });
