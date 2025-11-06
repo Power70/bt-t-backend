@@ -54,6 +54,8 @@ model User {
   enrollments Enrollment[]
   progress UserProgress[]
   quizSubmissions QuizSubmission[]
+  certificates Certificate[]
+  activityLogs UserActivityLog[]
 
   @@index([email])
 }
@@ -76,6 +78,9 @@ model Course {
   modules Module[]
   attachments Attachment[]
   enrollments Enrollment[]
+  certificates      Certificate[]
+  finalAssessmentId String?         @unique
+  finalAssessment   Quiz?           @relation("FinalCourseAssessment", fields: [finalAssessmentId], references: [id], onDelete: SetNull)
 
   @@index([instructorId])
   @@index([categoryId])
@@ -114,6 +119,7 @@ model Lesson {
   userProgress UserProgress[]
   module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   quiz Quiz?
+  activityLogs UserActivityLog[]
 
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
@@ -121,7 +127,6 @@ model Lesson {
   @@index([moduleId])
 }
 
-// JOIN TABLES & SUPPORTING MODELS
 
 model Enrollment {
   id        String   @id @default(cuid())
@@ -144,11 +149,9 @@ model UserProgress {
   userId   String
   lessonId String
 
-  // Relations
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
-  // A user can only have one progress record per lesson
   @@unique([userId, lessonId])
   @@index([userId])
   @@index([lessonId])
@@ -160,7 +163,6 @@ model Attachment {
   url       String 
   createdAt DateTime @default(now())
 
-  // An attachment belongs to a course
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
@@ -173,9 +175,9 @@ model Attachment {
 model Quiz {
   id      String @id @default(cuid())
 
-  // A quiz is directly linked to a lesson of type QUIZ
   lessonId  String  @unique
   lesson    Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  course    Course? @relation("FinalCourseAssessment")
   questions Question[]
   submissions QuizSubmission[]
 }
@@ -218,15 +220,36 @@ model QuizSubmission {
 model UserAnswer {
   id String @id @default(cuid())
 
-  // Links a user's submission, the question, and the chosen option
   submissionId String
   questionId   String
   optionId     String
-
-  // Relations
   submission QuizSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
   question   Question       @relation(fields: [questionId], references: [id], onDelete: Cascade)
   option     Option         @relation(fields: [optionId], references: [id], onDelete: Cascade)
-
   @@unique([submissionId, questionId]) // User can only answer a question once per submission
+}
+
+model Certificate {
+  id          String   @id @default(cuid())
+  issuedAt    DateTime @default(now())
+  uniqueCode  String   @unique @default(cuid()) 
+  pdfUrl      String?  
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId    String
+  course      Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  @@unique([userId, courseId]) 
+  @@index([userId])
+  @@index([courseId])
+}
+
+model UserActivityLog {
+  id              String   @id @default(cuid())
+  loggedAt        DateTime @default(now())
+  durationSeconds Int      
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId        String
+  lesson          Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  @@index([userId, loggedAt])
 }

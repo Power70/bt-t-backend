@@ -38,43 +38,48 @@ enum Status {
 // CORE MODELS
 
 model User {
-  id               String           @id @default(cuid())
-  email            String           @unique
+  id               String            @id @default(cuid())
+  email            String            @unique
   name             String
   password         String
-  role             UserRole         @default(STUDENT)
-  createdAt        DateTime         @default(now())
-  updatedAt        DateTime         @updatedAt
-  isVerified       Boolean          @default(false)
+  role             UserRole          @default(STUDENT)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  isVerified       Boolean           @default(false)
   otp_secret       String?
-  otp_count        Int?             @default(0)
+  otp_count        Int?              @default(0)
   otp_generated_at DateTime?
-  taughtCourses    Course[]         @relation("InstructorCourses")
+  taughtCourses    Course[]          @relation("InstructorCourses")
   enrollments      Enrollment[]
   progress         UserProgress[]
   quizSubmissions  QuizSubmission[]
+  certificates     Certificate[]
+  activityLogs     UserActivityLog[]
 
   @@index([email])
 }
 
 model Course {
-  id             String       @id @default(cuid())
-  title          String
-  slug           String       @unique
-  description    String?      @db.Text
-  imageUrl       String?
-  price          Float        @default(0.0)
-  isPublished    Boolean      @default(false)
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  instructorId   String
-  instructor     User         @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
-  categoryId     String
-  category       Category     @relation(fields: [categoryId], references: [id])
-  completionTime Int?
-  modules        Module[]
-  attachments    Attachment[]
-  enrollments    Enrollment[]
+  id                String        @id @default(cuid())
+  title             String
+  slug              String        @unique
+  description       String?       @db.Text
+  imageUrl          String?
+  price             Float         @default(0.0)
+  isPublished       Boolean       @default(false)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  instructorId      String
+  instructor        User          @relation("InstructorCourses", fields: [instructorId], references: [id], onDelete: Cascade)
+  categoryId        String
+  category          Category      @relation(fields: [categoryId], references: [id])
+  completionTime    Int?
+  modules           Module[]
+  attachments       Attachment[]
+  enrollments       Enrollment[]
+  certificates      Certificate[]
+  finalAssessmentId String?       @unique
+  finalAssessment   Quiz?         @relation("FinalCourseAssessment", fields: [finalAssessmentId], references: [id], onDelete: SetNull)
 
   @@index([instructorId])
   @@index([categoryId])
@@ -102,17 +107,18 @@ model Module {
 }
 
 model Lesson {
-  id             String         @id @default(cuid())
+  id             String            @id @default(cuid())
   title          String
   type           LessonType
-  content        String?        @db.Text
+  content        String?           @db.Text
   videoUrl       String?
   order          Int
   completionTime Int?
   moduleId       String
   userProgress   UserProgress[]
-  module         Module         @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  module         Module            @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   quiz           Quiz?
+  activityLogs   UserActivityLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -120,8 +126,6 @@ model Lesson {
   @@unique([moduleId, order])
   @@index([moduleId])
 }
-
-// JOIN TABLES & SUPPORTING MODELS
 
 model Enrollment {
   id         String   @id @default(cuid())
@@ -144,11 +148,9 @@ model UserProgress {
   userId      String
   lessonId    String
 
-  // Relations
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
-  // A user can only have one progress record per lesson
   @@unique([userId, lessonId])
   @@index([userId])
   @@index([lessonId])
@@ -160,7 +162,6 @@ model Attachment {
   url       String
   createdAt DateTime @default(now())
 
-  // An attachment belongs to a course
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
@@ -172,9 +173,9 @@ model Attachment {
 model Quiz {
   id String @id @default(cuid())
 
-  // A quiz is directly linked to a lesson of type QUIZ
   lessonId    String           @unique
   lesson      Lesson           @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  course      Course?          @relation("FinalCourseAssessment")
   questions   Question[]
   submissions QuizSubmission[]
 }
@@ -221,11 +222,36 @@ model UserAnswer {
   submissionId String
   questionId   String
   optionId     String
-
-  // Relations
-  submission QuizSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
-  question   Question       @relation(fields: [questionId], references: [id], onDelete: Cascade)
-  option     Option         @relation(fields: [optionId], references: [id], onDelete: Cascade)
+  submission   QuizSubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+  question     Question       @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  option       Option         @relation(fields: [optionId], references: [id], onDelete: Cascade)
 
   @@unique([submissionId, questionId]) // User can only answer a question once per submission
+}
+
+model Certificate {
+  id         String   @id @default(cuid())
+  issuedAt   DateTime @default(now())
+  uniqueCode String   @unique @default(cuid()) // For verification
+  pdfUrl     String? // URL to a generated PDF
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId   String
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId]) // A user gets one certificate per course
+  @@index([userId])
+  @@index([courseId])
+}
+
+model UserActivityLog {
+  id              String   @id @default(cuid())
+  loggedAt        DateTime @default(now())
+  durationSeconds Int
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId        String
+  lesson          Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([userId, loggedAt])
 }
