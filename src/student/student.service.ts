@@ -78,7 +78,7 @@ export class StudentService {
       (sum, log) => sum + log.durationSeconds,
       0,
     );
-    const totalStudyTime = totalStudyTimeSeconds / 3600; 
+    const totalStudyTime = totalStudyTimeSeconds / 3600;
 
     const enrollments = await this.prisma.enrollment.findMany({
       where: { userId },
@@ -131,7 +131,7 @@ export class StudentService {
     return {
       totalEnrolled,
       totalCompleted,
-      avgCompletion: Math.round(avgCompletion * 10) / 10, 
+      avgCompletion: Math.round(avgCompletion * 10) / 10,
       totalStudyTime: Math.round(totalStudyTime * 10) / 10,
     };
   }
@@ -140,7 +140,7 @@ export class StudentService {
   // ENROLLMENTS
   // ============================================
 
-    /**
+  /**
    * Get all enrollments for a student with progress percentage
    * Supports pagination, search, and status filtering
    */
@@ -592,6 +592,7 @@ export class StudentService {
   ): Promise<ModuleQuizSubmissionResultDto> {
     const { answers } = submitQuizDto;
 
+    // Fetch quiz with all options (for feedback)
     const quiz = await this.prisma.quiz.findUnique({
       where: { id: quizId },
       include: {
@@ -607,11 +608,10 @@ export class StudentService {
         questions: {
           include: {
             options: {
-              where: {
-                isCorrect: true,
-              },
               select: {
                 id: true,
+                text: true,
+                isCorrect: true,
                 questionId: true,
               },
             },
@@ -640,13 +640,18 @@ export class StudentService {
       throw new EnrollmentNotFoundException(userId, courseId);
     }
 
-    const correctAnswersMap = new Map<string, string>();
+    // Build a map of question -> all correct option IDs (for module quiz)
+    const correctAnswersMap = new Map<string, Set<string>>();
     quiz.questions.forEach(
-      (question: { id: string; options: Array<{ id: string }> }) => {
-        const correctOption = question.options[0]; // some questions can come with multiple correct options
-        if (correctOption) {
-          correctAnswersMap.set(question.id, correctOption.id);
-        }
+      (question: {
+        id: string;
+        text: string;
+        options: Array<{ id: string; text: string; isCorrect: boolean }>;
+      }) => {
+        const correctOptionIds = new Set(
+          question.options.filter((opt) => opt.isCorrect).map((opt) => opt.id),
+        );
+        correctAnswersMap.set(question.id, correctOptionIds);
       },
     );
 
@@ -681,8 +686,19 @@ export class StudentService {
     // Calculate score
     let score = 0;
     answers.forEach((answer) => {
-      const correctOptionId = correctAnswersMap.get(answer.questionId);
-      if (correctOptionId === answer.optionId) {
+      const correctOptionIds = correctAnswersMap.get(answer.questionId);
+      if (!correctOptionIds) return;
+
+      // Convert student's answer to a Set for comparison
+      const studentAnswerSet = new Set(answer.optionIds);
+
+      // Question is correct only if student selected exactly all correct options
+      // (no more, no less)
+      const isCorrect =
+        studentAnswerSet.size === correctOptionIds.size &&
+        [...studentAnswerSet].every((id) => correctOptionIds.has(id));
+
+      if (isCorrect) {
         score++;
       }
     });
@@ -700,10 +716,12 @@ export class StudentService {
           quizId,
           score,
           userAnswers: {
-            create: answers.map((answer) => ({
-              questionId: answer.questionId,
-              optionId: answer.optionId,
-            })),
+            create: answers.flatMap((answer) =>
+              answer.optionIds.map((optionId) => ({
+                questionId: answer.questionId,
+                optionId: optionId,
+              })),
+            ),
           },
         },
       });
@@ -776,6 +794,30 @@ export class StudentService {
       };
     });
 
+    // Generate detailed feedback for each question
+    const feedback = quiz.questions.map((question) => {
+      const correctOptionIds = correctAnswersMap.get(question.id) || new Set();
+      const studentAnswer = answers.find((a) => a.questionId === question.id);
+      const studentAnswerSet = new Set(studentAnswer?.optionIds || []);
+
+      const isCorrect =
+        studentAnswerSet.size === correctOptionIds.size &&
+        [...studentAnswerSet].every((id) => correctOptionIds.has(id));
+
+      return {
+        questionId: question.id,
+        questionText: question.text,
+        isCorrect,
+        studentAnswers: studentAnswer?.optionIds || [],
+        correctAnswers: [...correctOptionIds],
+        options: question.options.map((opt) => ({
+          id: opt.id,
+          text: opt.text,
+          isCorrect: opt.isCorrect,
+        })),
+      };
+    });
+
     return {
       submissionId: result.quizSubmission.id,
       score,
@@ -784,6 +826,7 @@ export class StudentService {
       passed,
       moduleId,
       isLastModuleQuiz: result.isLastModuleQuiz,
+      feedback,
       message: passed
         ? result.isLastModuleQuiz
           ? 'Congratulations! You have passed all module quizzes. You can now take the final assessment.'
@@ -803,7 +846,6 @@ export class StudentService {
     userId: string,
     courseId: string,
   ): Promise<FinalAssessmentDetailsDto> {
-    // Verify course exists
     const course = await this.prisma.course.findUnique({
       where: { id: courseId },
       include: {
@@ -815,7 +857,6 @@ export class StudentService {
                   select: {
                     id: true,
                     text: true,
-                    // Explicitly exclude isCorrect to prevent cheating
                   },
                 },
               },
@@ -881,11 +922,10 @@ export class StudentService {
             questions: {
               include: {
                 options: {
-                  where: {
-                    isCorrect: true,
-                  },
                   select: {
                     id: true,
+                    text: true,
+                    isCorrect: true,
                     questionId: true,
                   },
                 },
@@ -920,14 +960,18 @@ export class StudentService {
 
     const quiz = course.finalAssessment;
 
-    // Create a map of correct answers: questionId -> correctOptionId
-    const correctAnswersMap = new Map<string, string>();
+    // Build a map of question -> all correct option IDs (for final assessment)
+    const correctAnswersMap = new Map<string, Set<string>>();
     quiz.questions.forEach(
-      (question: { id: string; options: Array<{ id: string }> }) => {
-        const correctOption = question.options[0];
-        if (correctOption) {
-          correctAnswersMap.set(question.id, correctOption.id);
-        }
+      (question: {
+        id: string;
+        text: string;
+        options: Array<{ id: string; text: string; isCorrect: boolean }>;
+      }) => {
+        const correctOptionIds = new Set(
+          question.options.filter((opt) => opt.isCorrect).map((opt) => opt.id),
+        );
+        correctAnswersMap.set(question.id, correctOptionIds);
       },
     );
 
@@ -959,11 +1003,22 @@ export class StudentService {
       }
     }
 
-    // Calculate score
+    // Calculate score for final assessment
     let score = 0;
     answers.forEach((answer) => {
-      const correctOptionId = correctAnswersMap.get(answer.questionId);
-      if (correctOptionId === answer.optionId) {
+      const correctOptionIds = correctAnswersMap.get(answer.questionId);
+      if (!correctOptionIds) return;
+
+      // Convert student's answer to a Set for comparison
+      const studentAnswerSet = new Set(answer.optionIds);
+
+      // Question is correct only if student selected exactly all correct options
+      // (no more, no less)
+      const isCorrect =
+        studentAnswerSet.size === correctOptionIds.size &&
+        [...studentAnswerSet].every((id) => correctOptionIds.has(id));
+
+      if (isCorrect) {
         score++;
       }
     });
@@ -981,10 +1036,12 @@ export class StudentService {
           quizId: quiz.id,
           score,
           userAnswers: {
-            create: answers.map((answer) => ({
-              questionId: answer.questionId,
-              optionId: answer.optionId,
-            })),
+            create: answers.flatMap((answer) =>
+              answer.optionIds.map((optionId) => ({
+                questionId: answer.questionId,
+                optionId: optionId,
+              })),
+            ),
           },
         },
       });
@@ -1048,6 +1105,30 @@ export class StudentService {
       };
     });
 
+    // Generate detailed feedback for each question
+    const feedback = quiz.questions.map((question) => {
+      const correctOptionIds = correctAnswersMap.get(question.id) || new Set();
+      const studentAnswer = answers.find((a) => a.questionId === question.id);
+      const studentAnswerSet = new Set(studentAnswer?.optionIds || []);
+
+      const isCorrect =
+        studentAnswerSet.size === correctOptionIds.size &&
+        [...studentAnswerSet].every((id) => correctOptionIds.has(id));
+
+      return {
+        questionId: question.id,
+        questionText: question.text,
+        isCorrect,
+        studentAnswers: studentAnswer?.optionIds || [],
+        correctAnswers: [...correctOptionIds],
+        options: question.options.map((opt) => ({
+          id: opt.id,
+          text: opt.text,
+          isCorrect: opt.isCorrect,
+        })),
+      };
+    });
+
     return {
       submissionId: result.quizSubmission.id,
       score,
@@ -1057,6 +1138,7 @@ export class StudentService {
       courseId,
       courseCompleted: result.courseCompleted,
       certificateId: result.certificateId,
+      feedback,
       message: passed
         ? 'Congratulations! You have completed the course and your certificate is ready.'
         : `Final assessment submitted. You scored ${percentage.toFixed(1)}%. You need ${this.PASSING_THRESHOLD}% to pass and complete the course.`,

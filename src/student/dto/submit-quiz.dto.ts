@@ -16,11 +16,15 @@ export class QuizAnswerDto {
   questionId: string;
 
   @ApiProperty({
-    description: 'ID of the selected option',
-    example: 'cm123option789',
+    description:
+      'Array of selected option IDs (single for radio, multiple for checkbox)',
+    example: ['cm123option789'],
+    type: [String],
   })
-  @IsString()
-  optionId: string;
+  @IsArray()
+  @IsString({ each: true })
+  @ArrayMinSize(1)
+  optionIds: string[];
 }
 
 export class SubmitQuizDto {
@@ -28,8 +32,8 @@ export class SubmitQuizDto {
     description: 'Array of answers submitted by the student',
     type: [QuizAnswerDto],
     example: [
-      { questionId: 'cm123q1', optionId: 'cm123opt1' },
-      { questionId: 'cm123q2', optionId: 'cm123opt2' },
+      { questionId: 'cm123q1', optionIds: ['cm123opt1'] },
+      { questionId: 'cm123q2', optionIds: ['cm123opt2', 'cm123opt3'] },
     ],
   })
   @IsArray()
