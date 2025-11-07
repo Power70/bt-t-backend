@@ -11,4 +11,3 @@ export class AddQuestionDto extends CreateQuestionDto {
   @IsNotEmpty()
   quizId: string;
 }
-

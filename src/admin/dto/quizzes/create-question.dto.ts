@@ -33,4 +33,3 @@ export class CreateQuestionDto {
   @ArrayMinSize(2, { message: 'Each question must have at least 2 options' })
   options: CreateOptionDto[];
 }
-

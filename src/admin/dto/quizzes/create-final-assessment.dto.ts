@@ -27,8 +27,9 @@ export class CreateFinalAssessmentDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => CreateQuestionDto)
-  @ArrayMinSize(1, { message: 'Final assessment must have at least 1 question' })
+  @ArrayMinSize(1, {
+    message: 'Final assessment must have at least 1 question',
+  })
   @IsOptional()
   questions?: CreateQuestionDto[];
 }
-

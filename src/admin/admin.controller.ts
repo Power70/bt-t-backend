@@ -908,19 +908,58 @@ export class AdminController {
     return this.adminService.deleteQuiz('course', quizId);
   }
 
-  @Patch('questions/:questionId')
+  @Patch('questions/:questionId/text')
   @ApiOperation({
-    summary: 'Update question',
+    summary: 'Update question text only',
     description:
-      'Updates question text and/or options. Note: Updating options may affect existing student submissions.',
+      'Updates only the question text. Fails if quiz has student submissions to prevent data invalidation.',
   })
   @ApiParam({ name: 'questionId', description: 'Question ID', type: String })
-  @ApiResponse({ status: 200, description: 'Question updated successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Question text updated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot update - quiz has student submissions',
+  })
   @ApiResponse({ status: 404, description: 'Question not found' })
-  async updateQuestion(
+  async updateQuestionText(
+    @Param('questionId') questionId: string,
+    @Body() updateQuestionDto: { text: string },
+  ) {
+    return this.adminService.updateQuestionText(
+      questionId,
+      updateQuestionDto.text,
+    );
+  }
+
+  @Patch('questions/:questionId/options')
+  @ApiOperation({
+    summary: 'Update question options (DANGEROUS)',
+    description:
+      'Updates question text and options. FAILS if ANY student submissions exist. ' +
+      'This is intentionally restrictive to prevent data loss. ' +
+      'Options are immutable once students submit answers.',
+  })
+  @ApiParam({ name: 'questionId', description: 'Question ID', type: String })
+  @ApiResponse({
+    status: 200,
+    description: 'Question updated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Cannot update - quiz has student submissions. Create new quiz instead.',
+  })
+  @ApiResponse({ status: 404, description: 'Question not found' })
+  async updateQuestionOptions(
     @Param('questionId') questionId: string,
     @Body() updateQuestionDto: UpdateQuestionDto,
   ) {
-    return this.adminService.updateQuestion(questionId, updateQuestionDto);
+    return this.adminService.updateQuestionOptions(
+      questionId,
+      updateQuestionDto,
+    );
   }
 }
