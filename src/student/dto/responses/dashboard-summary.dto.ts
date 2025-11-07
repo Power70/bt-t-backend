@@ -25,4 +25,3 @@ export class DashboardSummaryDto {
   })
   totalStudyTime: number;
 }
-

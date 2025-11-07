@@ -30,4 +30,3 @@ export class LessonCompletionResultDto {
   })
   message: string;
 }
-

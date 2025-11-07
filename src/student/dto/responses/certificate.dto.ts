@@ -51,4 +51,3 @@ export class CertificateDto {
   @ApiProperty({ type: CertificateUserDto })
   user: CertificateUserDto;
 }
-

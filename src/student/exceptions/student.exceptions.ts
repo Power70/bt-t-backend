@@ -57,4 +57,3 @@ export class CourseNotFoundException extends NotFoundException {
     super(`Course with ID '${courseId}' not found`);
   }
 }
-

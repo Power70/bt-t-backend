@@ -80,4 +80,3 @@ export class EnrollmentWithProgressDto {
   })
   progressPercentage: number;
 }
-

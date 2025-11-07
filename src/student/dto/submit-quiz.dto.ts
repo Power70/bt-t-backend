@@ -1,4 +1,9 @@
-import { IsArray, IsString, ValidateNested, ArrayMinSize } from 'class-validator';
+import {
+  IsArray,
+  IsString,
+  ValidateNested,
+  ArrayMinSize,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -33,4 +38,3 @@ export class SubmitQuizDto {
   @ArrayMinSize(1)
   answers: QuizAnswerDto[];
 }
-

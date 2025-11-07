@@ -63,7 +63,8 @@ class ModuleDetailsDto {
   order: number;
 
   @ApiProperty({
-    description: 'Total time required to complete all lessons in this module (seconds)',
+    description:
+      'Total time required to complete all lessons in this module (seconds)',
     example: 3600,
   })
   totalModuleTime: number;
@@ -121,4 +122,3 @@ export class CourseDetailsDto {
   })
   completedLessons: number;
 }
-

@@ -29,4 +29,3 @@ export class QuizDetailsDto {
   @ApiProperty({ type: [QuizQuestionDto] })
   questions: QuizQuestionDto[];
 }
-

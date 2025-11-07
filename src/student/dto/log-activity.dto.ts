@@ -18,4 +18,3 @@ export class LogActivityDto {
   @Min(1)
   durationSeconds: number;
 }
-

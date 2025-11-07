@@ -37,4 +37,3 @@ export class PaginatedFilterDto {
   @IsString()
   search?: string;
 }
-
