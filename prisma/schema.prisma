@@ -30,7 +30,7 @@ enum LessonType {
   QUIZ
 }
 
-enum Status{
+enum Status {
   NotStarted
   InProgress
   Completed
