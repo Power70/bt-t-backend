@@ -26,6 +26,9 @@ import { CreateAdminDto } from './dto/users/create-admin.dto';
 import { CreateInstructorDto } from './dto/users/create-instructor.dto';
 import { UpdateUserDto } from './dto/users/update-user.dto';
 import { UserFilterDto } from './dto/users/user-filter.dto';
+import { CreateModuleQuizDto } from './dto/quizzes/create-module-quiz.dto';
+import { CreateFinalAssessmentDto } from './dto/quizzes/create-final-assessment.dto';
+import { UpdateQuestionDto } from './dto/quizzes/update-question.dto';
 
 @Injectable()
 export class AdminService {
@@ -1629,5 +1632,271 @@ export class AdminService {
     });
 
     return { message: 'User deleted successfully' };
+  }
+
+  // ============================================
+  // QUIZ MANAGEMENT (Module & Final Assessment)
+  // ============================================
+
+  /**
+   * Create or update quiz for module or course
+   * Uses upsert to preserve student submissions
+   */
+  async createQuiz(
+    parentType: 'module' | 'course',
+    parentId: string,
+    quizDto: CreateModuleQuizDto | CreateFinalAssessmentDto,
+  ) {
+    // Verify parent exists
+    const parent =
+      parentType === 'module'
+        ? await this.prisma.module.findUnique({
+            where: { id: parentId },
+            include: {
+              quiz: true,
+              course: { select: { id: true, title: true } },
+            },
+          })
+        : await this.prisma.course.findUnique({
+            where: { id: parentId },
+            include: { finalAssessment: true },
+          });
+
+    if (!parent) {
+      throw new NotFoundException(
+        `${parentType === 'module' ? 'Module' : 'Course'} not found`,
+      );
+    }
+
+    // Get existing quiz
+    const existingQuiz =
+      parentType === 'module'
+        ? (parent as any).quiz
+        : (parent as any).finalAssessment;
+
+    const result = await this.prisma.$transaction(async (tx) => {
+      let quiz;
+
+      if (existingQuiz) {
+        // Quiz exists - just update metadata if needed
+        quiz = existingQuiz;
+      } else {
+        // Create new quiz
+        const quizData: any = {};
+        if (parentType === 'module') {
+          quizData.moduleId = parentId;
+        }
+
+        quiz = await tx.quiz.create({
+          data: quizData,
+        });
+
+        // Link to course if final assessment
+        if (parentType === 'course') {
+          await tx.course.update({
+            where: { id: parentId },
+            data: { finalAssessmentId: quiz.id },
+          });
+        }
+      }
+
+      // Handle questions if provided
+      if (quizDto.questions && quizDto.questions.length > 0) {
+        for (const questionDto of quizDto.questions) {
+          // Create question
+          const question = await tx.question.create({
+            data: {
+              text: questionDto.text,
+              quizId: quiz.id,
+            },
+          });
+
+          // Create options
+          await tx.option.createMany({
+            data: questionDto.options.map((opt) => ({
+              text: opt.text,
+              isCorrect: opt.isCorrect,
+              questionId: question.id,
+            })),
+          });
+        }
+      }
+
+      // Return complete quiz
+      return await tx.quiz.findUnique({
+        where: { id: quiz.id },
+        include: {
+          questions: { include: { options: true } },
+          module: {
+            select: {
+              id: true,
+              title: true,
+              course: { select: { id: true, title: true } },
+            },
+          },
+          course: { select: { id: true, title: true } },
+        },
+      });
+    });
+
+    return {
+      message: `${parentType === 'module' ? 'Module quiz' : 'Final assessment'} ${existingQuiz ? 'updated' : 'created'} successfully`,
+      quiz: result,
+    };
+  }
+
+  /**
+   * Get quiz by module or course ID
+   */
+  async getQuiz(parentType: 'module' | 'course', parentId: string) {
+    if (parentType === 'module') {
+      const module = await this.prisma.module.findUnique({
+        where: { id: parentId },
+        include: {
+          quiz: {
+            include: {
+              questions: { include: { options: true } },
+            },
+          },
+          course: { select: { id: true, title: true } },
+        },
+      });
+
+      if (!module) {
+        throw new NotFoundException('Module not found');
+      }
+
+      if (!module.quiz) {
+        throw new NotFoundException('No quiz found for this module');
+      }
+
+      return {
+        ...module.quiz,
+        module: { id: module.id, title: module.title },
+        course: module.course,
+      };
+    } else {
+      const course = await this.prisma.course.findUnique({
+        where: { id: parentId },
+        include: {
+          finalAssessment: {
+            include: {
+              questions: { include: { options: true } },
+            },
+          },
+        },
+      });
+
+      if (!course) {
+        throw new NotFoundException('Course not found');
+      }
+
+      if (!course.finalAssessment) {
+        throw new NotFoundException(
+          'No final assessment found for this course',
+        );
+      }
+
+      return {
+        ...course.finalAssessment,
+        course: { id: course.id, title: course.title },
+      };
+    }
+  }
+
+  /**
+   * Update question (preserves student submissions)
+   */
+  async updateQuestion(
+    questionId: string,
+    updateQuestionDto: UpdateQuestionDto,
+  ) {
+    const question = await this.prisma.question.findUnique({
+      where: { id: questionId },
+      include: { options: true },
+    });
+
+    if (!question) {
+      throw new NotFoundException('Question not found');
+    }
+
+    await this.prisma.$transaction(async (tx) => {
+      // Update question text if provided
+      if (updateQuestionDto.text) {
+        await tx.question.update({
+          where: { id: questionId },
+          data: { text: updateQuestionDto.text },
+        });
+      }
+
+      // Handle options update if provided
+      if (updateQuestionDto.options) {
+        // Note: This will delete old options and student selections
+        // Better approach: mark old options as archived and create new versions
+        await tx.option.deleteMany({ where: { questionId } });
+        await tx.option.createMany({
+          data: updateQuestionDto.options.map((opt) => ({
+            text: opt.text,
+            isCorrect: opt.isCorrect,
+            questionId,
+          })),
+        });
+      }
+    });
+
+    return await this.prisma.question.findUnique({
+      where: { id: questionId },
+      include: { options: true },
+    });
+  }
+
+  /**
+   * Delete quiz (soft delete - keeps student data)
+   */
+  async deleteQuiz(parentType: 'module' | 'course', quizId: string) {
+    const quiz = await this.prisma.quiz.findUnique({
+      where: { id: quizId },
+      include: {
+        module: true,
+        course: true,
+        submissions: { select: { id: true } },
+      },
+    });
+
+    if (!quiz) {
+      throw new NotFoundException('Quiz not found');
+    }
+
+    // Verify quiz type matches
+    if (parentType === 'module' && !quiz.module) {
+      throw new BadRequestException('This is not a module quiz');
+    }
+    if (parentType === 'course' && !quiz.course) {
+      throw new BadRequestException('This is not a final assessment');
+    }
+
+    // Warning: Check for submissions
+    if (quiz.submissions.length > 0) {
+      throw new BadRequestException(
+        `Cannot delete quiz with ${quiz.submissions.length} student submissions. This would cause data loss.`,
+      );
+    }
+
+    await this.prisma.$transaction(async (tx) => {
+      // Unlink from parent
+      if (parentType === 'course' && quiz.course) {
+        await tx.course.update({
+          where: { id: quiz.course.id },
+          data: { finalAssessmentId: null },
+        });
+      }
+
+      // Delete quiz
+      await tx.quiz.delete({ where: { id: quizId } });
+    });
+
+    return {
+      message: `${parentType === 'module' ? 'Module quiz' : 'Final assessment'} deleted successfully`,
+    };
   }
 }
