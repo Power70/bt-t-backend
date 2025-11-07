@@ -82,7 +82,7 @@ export class StudentController {
   @ApiOperation({
     summary: 'Get my enrollments',
     description:
-      'Returns a paginated list of all courses the student is enrolled in, with progress percentage for each course. Supports search by course title or description.',
+      'Returns a paginated list of all courses the student is enrolled in, with progress percentage for each course. Supports search by course title or description, and filtering by enrollment status (NotStarted, InProgress, Completed).',
   })
   @ApiResponse({
     status: 200,

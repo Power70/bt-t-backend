@@ -1,6 +1,7 @@
-import { IsInt, IsOptional, IsString, Min, Max } from 'class-validator';
+import { IsInt, IsOptional, IsString, Min, Max, IsEnum } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiPropertyOptional } from '@nestjs/swagger';
+import { Status } from '../../../generated/prisma';
 
 export class PaginatedFilterDto {
   @ApiPropertyOptional({
@@ -36,4 +37,13 @@ export class PaginatedFilterDto {
   @IsOptional()
   @IsString()
   search?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter enrollments by status',
+    enum: Status,
+    example: Status.InProgress,
+  })
+  @IsOptional()
+  @IsEnum(Status)
+  status?: Status;
 }

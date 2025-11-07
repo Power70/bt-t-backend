@@ -48,12 +48,10 @@ export class StudentService {
    * Returns enrollment stats and study time for the last 7 days
    */
   async getDashboardSummary(userId: string): Promise<DashboardSummaryDto> {
-    // Get total enrolled courses
     const totalEnrolled = await this.prisma.enrollment.count({
       where: { userId },
     });
 
-    // Get total completed courses
     const totalCompleted = await this.prisma.enrollment.count({
       where: {
         userId,
@@ -61,7 +59,6 @@ export class StudentService {
       },
     });
 
-    // Calculate total study time for last 7 days
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
@@ -81,9 +78,8 @@ export class StudentService {
       (sum, log) => sum + log.durationSeconds,
       0,
     );
-    const totalStudyTime = totalStudyTimeSeconds / 3600; // Convert to hours
+    const totalStudyTime = totalStudyTimeSeconds / 3600; 
 
-    // Calculate average completion percentage
     const enrollments = await this.prisma.enrollment.findMany({
       where: { userId },
       include: {
@@ -101,7 +97,6 @@ export class StudentService {
         enrollments.map(async (enrollment) => {
           const courseId = enrollment.course.id;
 
-          // Count total lessons in the course
           const totalLessons = await this.prisma.lesson.count({
             where: {
               module: {
@@ -112,7 +107,6 @@ export class StudentService {
 
           if (totalLessons === 0) return 0;
 
-          // Count completed lessons for this user
           const completedLessons = await this.prisma.userProgress.count({
             where: {
               userId,
@@ -137,8 +131,8 @@ export class StudentService {
     return {
       totalEnrolled,
       totalCompleted,
-      avgCompletion: Math.round(avgCompletion * 10) / 10, // Round to 1 decimal
-      totalStudyTime: Math.round(totalStudyTime * 10) / 10, // Round to 1 decimal
+      avgCompletion: Math.round(avgCompletion * 10) / 10, 
+      totalStudyTime: Math.round(totalStudyTime * 10) / 10,
     };
   }
 
@@ -146,19 +140,24 @@ export class StudentService {
   // ENROLLMENTS
   // ============================================
 
-  /**
+    /**
    * Get all enrollments for a student with progress percentage
-   * Supports pagination and search
+   * Supports pagination, search, and status filtering
    */
   async getMyEnrollments(
     userId: string,
     filterDto: PaginatedFilterDto,
   ): Promise<PaginatedResult<EnrollmentWithProgressDto>> {
-    const { page = 1, limit = 10, search } = filterDto;
+    const { page = 1, limit = 10, search, status } = filterDto;
     const skip = (page - 1) * limit;
 
     // Build where clause
     const where: any = { userId };
+
+    // Filter by status if provided
+    if (status) {
+      where.status = status;
+    }
 
     if (search) {
       where.course = {
@@ -179,10 +178,8 @@ export class StudentService {
       };
     }
 
-    // Get total count
     const total = await this.prisma.enrollment.count({ where });
 
-    // Get enrollments with course details
     const enrollments = await this.prisma.enrollment.findMany({
       where,
       skip,
@@ -217,7 +214,6 @@ export class StudentService {
         enrollments.map(async (enrollment) => {
           const courseId = enrollment.course.id;
 
-          // Count total lessons
           const totalLessons = await this.prisma.lesson.count({
             where: {
               module: {
@@ -226,7 +222,6 @@ export class StudentService {
             },
           });
 
-          // Count completed lessons
           const completedLessons = await this.prisma.userProgress.count({
             where: {
               userId,
@@ -259,7 +254,6 @@ export class StudentService {
     userId: string,
     courseId: string,
   ): Promise<CourseDetailsDto> {
-    // Verify enrollment
     const enrollment = await this.prisma.enrollment.findUnique({
       where: {
         userId_courseId: {
@@ -273,7 +267,6 @@ export class StudentService {
       throw new EnrollmentNotFoundException(userId, courseId);
     }
 
-    // Get course with all modules and lessons
     const course = await this.prisma.course.findUnique({
       where: { id: courseId },
       include: {
@@ -305,7 +298,6 @@ export class StudentService {
       throw new CourseNotFoundException(courseId);
     }
 
-    // Get all user progress for this course
     const userProgressList = await this.prisma.userProgress.findMany({
       where: {
         userId,
@@ -321,23 +313,19 @@ export class StudentService {
       },
     });
 
-    // Create a Set of completed lesson IDs for fast lookup
     const completedLessonIds = new Set(
       userProgressList.map((progress) => progress.lessonId),
     );
 
-    // Transform modules and lessons with progress
     let totalLessons = 0;
     let completedLessons = 0;
 
     const modulesWithProgress = course.modules.map((module) => {
-      // Calculate total module time
       const totalModuleTime = module.lessons.reduce<number>(
         (sum, lesson) => sum + (lesson.completionTime || 0),
         0,
       );
 
-      // Transform lessons with completion status
       const lessonsWithCompletion = module.lessons.map((lesson) => {
         totalLessons++;
         const isCompleted = completedLessonIds.has(lesson.id);
@@ -387,7 +375,6 @@ export class StudentService {
     userId: string,
     lessonId: string,
   ): Promise<LessonCompletionResultDto> {
-    // Find the lesson and its course
     const lesson = await this.prisma.lesson.findUnique({
       where: { id: lessonId },
       include: {
@@ -405,7 +392,6 @@ export class StudentService {
 
     const courseId = lesson.module.courseId;
 
-    // Find the enrollment
     const enrollment = await this.prisma.enrollment.findUnique({
       where: {
         userId_courseId: {
@@ -419,9 +405,7 @@ export class StudentService {
       throw new EnrollmentNotFoundException(userId, courseId);
     }
 
-    // Use a transaction to ensure atomicity
     const result = await this.prisma.$transaction(async (tx) => {
-      // Update enrollment status from NotStarted to InProgress if needed
       let updatedEnrollment = enrollment;
       if (enrollment.status === Status.NotStarted) {
         updatedEnrollment = await tx.enrollment.update({
@@ -437,7 +421,6 @@ export class StudentService {
         });
       }
 
-      // Create or update user progress
       await tx.userProgress.upsert({
         where: {
           userId_lessonId: {
@@ -457,7 +440,6 @@ export class StudentService {
         },
       });
 
-      // Check if all lessons are completed
       const totalLessons = await tx.lesson.count({
         where: {
           module: {
@@ -478,23 +460,9 @@ export class StudentService {
         },
       });
 
-      // If all lessons completed, mark course as completed and generate certificate
-      if (totalLessons === completedLessons && totalLessons > 0) {
-        updatedEnrollment = await tx.enrollment.update({
-          where: {
-            userId_courseId: {
-              userId,
-              courseId,
-            },
-          },
-          data: {
-            status: Status.Completed,
-          },
-        });
-
-        // Generate certificate if not exists
-        await this.generateCertificateInternal(userId, courseId, tx);
-      }
+      // Note: Course is NOT marked as completed here
+      // Completion only happens after passing all module quizzes and final assessment
+      // in submitFinalAssessment method
 
       return {
         enrollment: updatedEnrollment,
@@ -508,10 +476,7 @@ export class StudentService {
       newEnrollmentStatus: result.enrollment.status,
       completed: result.completed,
       total: result.total,
-      message:
-        result.enrollment.status === Status.Completed
-          ? 'Congratulations! You have completed the course. Your certificate is ready.'
-          : 'Lesson marked as completed',
+      message: 'Lesson marked as completed',
     };
   }
 
@@ -560,7 +525,6 @@ export class StudentService {
     userId: string,
     moduleId: string,
   ): Promise<ModuleQuizDetailsDto> {
-    // Verify module exists
     const module = await this.prisma.module.findUnique({
       where: { id: moduleId },
       include: {
@@ -576,7 +540,6 @@ export class StudentService {
       throw new ModuleNotFoundException(moduleId);
     }
 
-    // Verify enrollment
     const enrollment = await this.prisma.enrollment.findUnique({
       where: {
         userId_courseId: {
@@ -590,7 +553,6 @@ export class StudentService {
       throw new EnrollmentNotFoundException(userId, module.course.id);
     }
 
-    // Get quiz with questions and options (but not the isCorrect field)
     const quiz = await this.prisma.quiz.findUnique({
       where: { moduleId },
       include: {
@@ -600,7 +562,6 @@ export class StudentService {
               select: {
                 id: true,
                 text: true,
-                // Explicitly exclude isCorrect to prevent cheating
               },
             },
           },
@@ -631,7 +592,6 @@ export class StudentService {
   ): Promise<ModuleQuizSubmissionResultDto> {
     const { answers } = submitQuizDto;
 
-    // Get quiz with correct answers
     const quiz = await this.prisma.quiz.findUnique({
       where: { id: quizId },
       include: {
@@ -667,7 +627,6 @@ export class StudentService {
     const moduleId = quiz.module.id;
     const courseId = quiz.module.course.id;
 
-    // Verify enrollment
     const enrollment = await this.prisma.enrollment.findUnique({
       where: {
         userId_courseId: {
@@ -681,11 +640,10 @@ export class StudentService {
       throw new EnrollmentNotFoundException(userId, courseId);
     }
 
-    // Create a map of correct answers: questionId -> correctOptionId
     const correctAnswersMap = new Map<string, string>();
     quiz.questions.forEach(
       (question: { id: string; options: Array<{ id: string }> }) => {
-        const correctOption = question.options[0]; // There should be exactly one correct option
+        const correctOption = question.options[0]; // some questions can come with multiple correct options
         if (correctOption) {
           correctAnswersMap.set(question.id, correctOption.id);
         }
@@ -1131,7 +1089,6 @@ export class StudentService {
     });
 
     // Get all passed module quiz completions
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     const passedModuleQuizzes = await this.prisma.moduleQuizCompletion.findMany(
       {
         where: {
@@ -1148,7 +1105,6 @@ export class StudentService {
     );
 
     const passedModuleIds = new Set(
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
       passedModuleQuizzes.map((completion) => completion.moduleId),
     );
 
