@@ -26,7 +26,6 @@ import { PaginatedFilterDto } from './dto/paginated-filter.dto';
 import { LogActivityDto } from './dto/log-activity.dto';
 import { SubmitQuizDto } from './dto/submit-quiz.dto';
 import { DashboardSummaryDto } from './dto/responses/dashboard-summary.dto';
-import { EnrollmentWithProgressDto } from './dto/responses/enrollment-with-progress.dto';
 import { CourseDetailsDto } from './dto/responses/course-details.dto';
 import { LessonCompletionResultDto } from './dto/responses/lesson-completion-result.dto';
 import { ActivityLogResultDto } from './dto/responses/activity-log-result.dto';
