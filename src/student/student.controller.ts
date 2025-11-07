@@ -58,7 +58,6 @@ export class StudentController {
   @ApiResponse({
     status: 200,
     description: 'Dashboard summary retrieved successfully',
-    type: DashboardSummaryDto,
   })
   @ApiResponse({
     status: 401,
@@ -87,7 +86,6 @@ export class StudentController {
   @ApiResponse({
     status: 200,
     description: 'Enrollments retrieved successfully',
-    type: [EnrollmentWithProgressDto],
   })
   @ApiResponse({
     status: 401,
@@ -120,7 +118,6 @@ export class StudentController {
   @ApiResponse({
     status: 200,
     description: 'Course details retrieved successfully',
-    type: CourseDetailsDto,
   })
   @ApiResponse({
     status: 401,
@@ -161,7 +158,6 @@ export class StudentController {
   @ApiResponse({
     status: 200,
     description: 'Lesson marked as completed successfully',
-    type: LessonCompletionResultDto,
   })
   @ApiResponse({
     status: 401,
@@ -193,7 +189,6 @@ export class StudentController {
   @ApiResponse({
     status: 200,
     description: 'Activity logged successfully',
-    type: ActivityLogResultDto,
   })
   @ApiResponse({
     status: 400,
@@ -238,7 +233,6 @@ export class StudentController {
   @ApiResponse({
     status: 200,
     description: 'Module quiz details retrieved successfully',
-    type: ModuleQuizDetailsDto,
   })
   @ApiResponse({
     status: 401,
@@ -276,7 +270,6 @@ export class StudentController {
   @ApiResponse({
     status: 200,
     description: 'Module quiz submitted successfully',
-    type: ModuleQuizSubmissionResultDto,
   })
   @ApiResponse({
     status: 400,
@@ -323,7 +316,6 @@ export class StudentController {
   @ApiResponse({
     status: 200,
     description: 'Final assessment details retrieved successfully',
-    type: FinalAssessmentDetailsDto,
   })
   @ApiResponse({
     status: 400,
@@ -365,7 +357,6 @@ export class StudentController {
   @ApiResponse({
     status: 200,
     description: 'Final assessment submitted successfully',
-    type: FinalAssessmentSubmissionResultDto,
   })
   @ApiResponse({
     status: 400,
@@ -412,7 +403,6 @@ export class StudentController {
   @ApiResponse({
     status: 200,
     description: 'Certificates retrieved successfully',
-    type: [CertificateDto],
   })
   @ApiResponse({
     status: 401,
@@ -442,7 +432,6 @@ export class StudentController {
   @ApiResponse({
     status: 200,
     description: 'Certificate retrieved successfully',
-    type: CertificateDto,
   })
   @ApiResponse({
     status: 401,
