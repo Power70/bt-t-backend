@@ -38,23 +38,25 @@ enum Status {
 // CORE MODELS
 
 model User {
-  id               String            @id @default(cuid())
-  email            String            @unique
-  name             String
-  password         String
-  role             UserRole          @default(STUDENT)
-  createdAt        DateTime          @default(now())
-  updatedAt        DateTime          @updatedAt
-  isVerified       Boolean           @default(false)
-  otp_secret       String?
-  otp_count        Int?              @default(0)
-  otp_generated_at DateTime?
-  taughtCourses    Course[]          @relation("InstructorCourses")
-  enrollments      Enrollment[]
-  progress         UserProgress[]
-  quizSubmissions  QuizSubmission[]
-  certificates     Certificate[]
-  activityLogs     UserActivityLog[]
+  id                         String                      @id @default(cuid())
+  email                      String                      @unique
+  name                       String
+  password                   String
+  role                       UserRole                    @default(STUDENT)
+  createdAt                  DateTime                    @default(now())
+  updatedAt                  DateTime                    @updatedAt
+  isVerified                 Boolean                     @default(false)
+  otp_secret                 String?
+  otp_count                  Int?                        @default(0)
+  otp_generated_at           DateTime?
+  taughtCourses              Course[]                    @relation("InstructorCourses")
+  enrollments                Enrollment[]
+  progress                   UserProgress[]
+  quizSubmissions            QuizSubmission[]
+  certificates               Certificate[]
+  activityLogs               UserActivityLog[]
+  moduleQuizCompletions      ModuleQuizCompletion[]
+  finalAssessmentCompletions FinalAssessmentCompletion[]
 
   @@index([email])
 }
@@ -93,14 +95,16 @@ model Category {
 }
 
 model Module {
-  id        String   @id @default(cuid())
-  title     String
-  order     Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  courseId  String
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  lessons   Lesson[]
+  id              String                 @id @default(cuid())
+  title           String
+  order           Int
+  createdAt       DateTime               @default(now())
+  updatedAt       DateTime               @updatedAt
+  courseId        String
+  course          Course                 @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons         Lesson[]
+  quiz            Quiz?
+  quizCompletions ModuleQuizCompletion[]
 
   @@unique([courseId, order])
   @@index([courseId])
@@ -117,7 +121,6 @@ model Lesson {
   moduleId       String
   userProgress   UserProgress[]
   module         Module            @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  quiz           Quiz?
   activityLogs   UserActivityLog[]
 
   createdAt DateTime @default(now())
@@ -173,8 +176,8 @@ model Attachment {
 model Quiz {
   id String @id @default(cuid())
 
-  lessonId    String           @unique
-  lesson      Lesson           @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  moduleId    String?          @unique
+  module      Module?          @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   course      Course?          @relation("FinalCourseAssessment")
   questions   Question[]
   submissions QuizSubmission[]
@@ -218,7 +221,6 @@ model QuizSubmission {
 model UserAnswer {
   id String @id @default(cuid())
 
-  // Links a user's submission, the question, and the chosen option
   submissionId String
   questionId   String
   optionId     String
@@ -232,14 +234,14 @@ model UserAnswer {
 model Certificate {
   id         String   @id @default(cuid())
   issuedAt   DateTime @default(now())
-  uniqueCode String   @unique @default(cuid()) // For verification
-  pdfUrl     String? // URL to a generated PDF
+  uniqueCode String   @unique @default(cuid())
+  pdfUrl     String?
   userId     String
   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   courseId   String
   course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, courseId]) // A user gets one certificate per course
+  @@unique([userId, courseId])
   @@index([userId])
   @@index([courseId])
 }
@@ -254,4 +256,39 @@ model UserActivityLog {
   lesson          Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
   @@index([userId, loggedAt])
+}
+
+// Module Quiz Completion Tracking
+model ModuleQuizCompletion {
+  id          String   @id @default(cuid())
+  userId      String
+  moduleId    String
+  score       Float
+  percentage  Float
+  passed      Boolean
+  completedAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, moduleId])
+  @@index([userId])
+  @@index([moduleId])
+}
+
+// Final Assessment Completion Tracking
+model FinalAssessmentCompletion {
+  id          String   @id @default(cuid())
+  userId      String
+  courseId    String
+  score       Float
+  percentage  Float
+  passed      Boolean
+  completedAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
 }

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '../../generated/prisma';
@@ -13,10 +12,12 @@ import { DashboardSummaryDto } from './dto/responses/dashboard-summary.dto';
 import { EnrollmentWithProgressDto } from './dto/responses/enrollment-with-progress.dto';
 import { CourseDetailsDto } from './dto/responses/course-details.dto';
 import { LessonCompletionResultDto } from './dto/responses/lesson-completion-result.dto';
-import { QuizDetailsDto } from './dto/responses/quiz-details.dto';
-import { QuizSubmissionResultDto } from './dto/responses/quiz-submission-result.dto';
 import { ActivityLogResultDto } from './dto/responses/activity-log-result.dto';
 import { CertificateDto } from './dto/responses/certificate.dto';
+import { ModuleQuizDetailsDto } from './dto/responses/module-quiz-details.dto';
+import { ModuleQuizSubmissionResultDto } from './dto/responses/module-quiz-submission-result.dto';
+import { FinalAssessmentDetailsDto } from './dto/responses/final-assessment-details.dto';
+import { FinalAssessmentSubmissionResultDto } from './dto/responses/final-assessment-submission-result.dto';
 import { Status } from '../../generated/prisma';
 import {
   EnrollmentNotFoundException,
@@ -25,6 +26,11 @@ import {
   CertificateNotFoundException,
   InvalidQuizAnswersException,
   CourseNotFoundException,
+  ModuleNotFoundException,
+  ModuleQuizNotFoundException,
+  FinalAssessmentNotFoundException,
+  CertificateNotEligibleException,
+  FinalAssessmentNotPassedException,
 } from './exceptions/student.exceptions';
 
 @Injectable()
@@ -544,30 +550,30 @@ export class StudentService {
   }
 
   // ============================================
-  // QUIZ
+  // MODULE-BASED QUIZZES
   // ============================================
 
   /**
-   * Get quiz details for a lesson (without revealing correct answers)
+   * Get quiz details for a module (without revealing correct answers)
    */
-  async getQuizDetails(
+  async getModuleQuizDetails(
     userId: string,
-    lessonId: string,
-  ): Promise<QuizDetailsDto> {
-    // Verify lesson exists
-    const lesson = await this.prisma.lesson.findUnique({
-      where: { id: lessonId },
+    moduleId: string,
+  ): Promise<ModuleQuizDetailsDto> {
+    // Verify module exists
+    const module = await this.prisma.module.findUnique({
+      where: { id: moduleId },
       include: {
-        module: {
+        course: {
           select: {
-            courseId: true,
+            id: true,
           },
         },
       },
     });
 
-    if (!lesson) {
-      throw new LessonNotFoundException(lessonId);
+    if (!module) {
+      throw new ModuleNotFoundException(moduleId);
     }
 
     // Verify enrollment
@@ -575,18 +581,18 @@ export class StudentService {
       where: {
         userId_courseId: {
           userId,
-          courseId: lesson.module.courseId,
+          courseId: module.course.id,
         },
       },
     });
 
     if (!enrollment) {
-      throw new EnrollmentNotFoundException(userId, lesson.module.courseId);
+      throw new EnrollmentNotFoundException(userId, module.course.id);
     }
 
     // Get quiz with questions and options (but not the isCorrect field)
     const quiz = await this.prisma.quiz.findUnique({
-      where: { lessonId },
+      where: { moduleId },
       include: {
         questions: {
           include: {
@@ -603,36 +609,37 @@ export class StudentService {
     });
 
     if (!quiz) {
-      throw new QuizNotFoundException(undefined, lessonId);
+      throw new ModuleQuizNotFoundException(moduleId);
     }
 
     return {
       id: quiz.id,
-      lessonId: quiz.lessonId,
+      moduleId: module.id,
+      moduleTitle: module.title,
       questions: quiz.questions,
     };
   }
 
   /**
-   * Submit quiz answers and calculate score
-   * Automatically marks lesson as completed if score >= 80%
+   * Submit module quiz answers and calculate score
+   * Automatically marks module quiz as completed if score >= 80%
    */
-  async submitQuiz(
+  async submitModuleQuiz(
     userId: string,
     quizId: string,
     submitQuizDto: SubmitQuizDto,
-  ): Promise<QuizSubmissionResultDto> {
+  ): Promise<ModuleQuizSubmissionResultDto> {
     const { answers } = submitQuizDto;
 
     // Get quiz with correct answers
     const quiz = await this.prisma.quiz.findUnique({
       where: { id: quizId },
       include: {
-        lesson: {
+        module: {
           include: {
-            module: {
+            course: {
               select: {
-                courseId: true,
+                id: true,
               },
             },
           },
@@ -653,38 +660,42 @@ export class StudentService {
       },
     });
 
-    if (!quiz) {
+    if (!quiz || !quiz.module) {
       throw new QuizNotFoundException(quizId);
     }
+
+    const moduleId = quiz.module.id;
+    const courseId = quiz.module.course.id;
 
     // Verify enrollment
     const enrollment = await this.prisma.enrollment.findUnique({
       where: {
         userId_courseId: {
           userId,
-          courseId: quiz.lesson.module.courseId,
+          courseId,
         },
       },
     });
 
     if (!enrollment) {
-      throw new EnrollmentNotFoundException(
-        userId,
-        quiz.lesson.module.courseId,
-      );
+      throw new EnrollmentNotFoundException(userId, courseId);
     }
 
     // Create a map of correct answers: questionId -> correctOptionId
     const correctAnswersMap = new Map<string, string>();
-    quiz.questions.forEach((question) => {
-      const correctOption = question.options[0]; // There should be exactly one correct option
-      if (correctOption) {
-        correctAnswersMap.set(question.id, correctOption.id);
-      }
-    });
+    quiz.questions.forEach(
+      (question: { id: string; options: Array<{ id: string }> }) => {
+        const correctOption = question.options[0]; // There should be exactly one correct option
+        if (correctOption) {
+          correctAnswersMap.set(question.id, correctOption.id);
+        }
+      },
+    );
 
     // Validate that all questions have been answered
-    const allQuestionIds = new Set(quiz.questions.map((q) => q.id));
+    const allQuestionIds = new Set(
+      quiz.questions.map((q: { id: string }) => q.id),
+    );
     const answeredQuestionIds = new Set(answers.map((a) => a.questionId));
 
     if (allQuestionIds.size !== answeredQuestionIds.size) {
@@ -722,8 +733,8 @@ export class StudentService {
     const percentage = (score / total) * 100;
     const passed = percentage >= this.PASSING_THRESHOLD;
 
-    // Use transaction to save submission and mark lesson complete if passed
-    const submission = await this.prisma.$transaction(async (tx) => {
+    // Use transaction to save submission and mark module quiz complete if passed
+    const result = await this.prisma.$transaction(async (tx) => {
       // Create quiz submission
       const quizSubmission = await tx.quizSubmission.create({
         data: {
@@ -739,43 +750,59 @@ export class StudentService {
         },
       });
 
-      // If passed, mark the lesson as completed
+      let isLastModuleQuiz = false;
+
+      // If passed, save module quiz completion
       if (passed) {
-        await tx.userProgress.upsert({
+        await tx.moduleQuizCompletion.upsert({
           where: {
-            userId_lessonId: {
+            userId_moduleId: {
               userId,
-              lessonId: quiz.lessonId,
+              moduleId,
             },
           },
           create: {
             userId,
-            lessonId: quiz.lessonId,
-            isCompleted: true,
+            moduleId,
+            score,
+            percentage,
+            passed: true,
             completedAt: new Date(),
           },
           update: {
-            isCompleted: true,
+            score,
+            percentage,
+            passed: true,
             completedAt: new Date(),
           },
         });
 
-        // Update enrollment status if it was NotStarted
-        const currentEnrollment = await tx.enrollment.findUnique({
+        // Check if all module quizzes are completed
+        const totalModules = await tx.module.count({
           where: {
-            userId_courseId: {
-              userId,
-              courseId: quiz.lesson.module.courseId,
+            courseId,
+          },
+        });
+
+        const completedModuleQuizzes = await tx.moduleQuizCompletion.count({
+          where: {
+            userId,
+            passed: true,
+            module: {
+              courseId,
             },
           },
         });
 
-        if (currentEnrollment?.status === Status.NotStarted) {
+        isLastModuleQuiz = totalModules === completedModuleQuizzes;
+
+        // Update enrollment status if it was NotStarted
+        if (enrollment.status === Status.NotStarted) {
           await tx.enrollment.update({
             where: {
               userId_courseId: {
                 userId,
-                courseId: quiz.lesson.module.courseId,
+                courseId,
               },
             },
             data: {
@@ -783,64 +810,385 @@ export class StudentService {
             },
           });
         }
-
-        // Check if all lessons are completed
-        const totalLessons = await tx.lesson.count({
-          where: {
-            module: {
-              courseId: quiz.lesson.module.courseId,
-            },
-          },
-        });
-
-        const completedLessons = await tx.userProgress.count({
-          where: {
-            userId,
-            isCompleted: true,
-            lesson: {
-              module: {
-                courseId: quiz.lesson.module.courseId,
-              },
-            },
-          },
-        });
-
-        // If all lessons completed, mark course as completed and generate certificate
-        if (totalLessons === completedLessons && totalLessons > 0) {
-          await tx.enrollment.update({
-            where: {
-              userId_courseId: {
-                userId,
-                courseId: quiz.lesson.module.courseId,
-              },
-            },
-            data: {
-              status: Status.Completed,
-            },
-          });
-
-          // Generate certificate
-          await this.generateCertificateInternal(
-            userId,
-            quiz.lesson.module.courseId,
-            tx,
-          );
-        }
       }
 
-      return quizSubmission;
+      return {
+        quizSubmission,
+        isLastModuleQuiz,
+      };
     });
 
     return {
-      submissionId: submission.id,
+      submissionId: result.quizSubmission.id,
       score,
       total,
       percentage: Math.round(percentage * 10) / 10,
       passed,
+      moduleId,
+      isLastModuleQuiz: result.isLastModuleQuiz,
       message: passed
-        ? 'Quiz submitted successfully. You passed!'
+        ? result.isLastModuleQuiz
+          ? 'Congratulations! You have passed all module quizzes. You can now take the final assessment.'
+          : 'Quiz submitted successfully. You passed!'
         : `Quiz submitted. You scored ${percentage.toFixed(1)}%. You need ${this.PASSING_THRESHOLD}% to pass.`,
     };
+  }
+
+  // ============================================
+  // FINAL ASSESSMENT
+  // ============================================
+
+  /**
+   * Get final assessment details for a course (without revealing correct answers)
+   */
+  async getFinalAssessmentDetails(
+    userId: string,
+    courseId: string,
+  ): Promise<FinalAssessmentDetailsDto> {
+    // Verify course exists
+    const course = await this.prisma.course.findUnique({
+      where: { id: courseId },
+      include: {
+        finalAssessment: {
+          include: {
+            questions: {
+              include: {
+                options: {
+                  select: {
+                    id: true,
+                    text: true,
+                    // Explicitly exclude isCorrect to prevent cheating
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!course) {
+      throw new CourseNotFoundException(courseId);
+    }
+
+    // Verify enrollment
+    const enrollment = await this.prisma.enrollment.findUnique({
+      where: {
+        userId_courseId: {
+          userId,
+          courseId,
+        },
+      },
+    });
+
+    if (!enrollment) {
+      throw new EnrollmentNotFoundException(userId, courseId);
+    }
+
+    // Verify all module quizzes are completed
+    await this.verifyAllModuleQuizzesCompleted(userId, courseId);
+
+    if (!course.finalAssessment) {
+      throw new FinalAssessmentNotFoundException(courseId);
+    }
+
+    return {
+      id: course.finalAssessment.id,
+      courseId: course.id,
+      courseTitle: course.title,
+      questions: course.finalAssessment.questions,
+    };
+  }
+
+  /**
+   * Submit final assessment answers and calculate score
+   * Marks course as completed if score >= 80%
+   */
+  async submitFinalAssessment(
+    userId: string,
+    courseId: string,
+    submitQuizDto: SubmitQuizDto,
+  ): Promise<FinalAssessmentSubmissionResultDto> {
+    const { answers } = submitQuizDto;
+
+    // Verify all module quizzes are completed
+    await this.verifyAllModuleQuizzesCompleted(userId, courseId);
+
+    // Get course with final assessment
+    const course = await this.prisma.course.findUnique({
+      where: { id: courseId },
+      include: {
+        finalAssessment: {
+          include: {
+            questions: {
+              include: {
+                options: {
+                  where: {
+                    isCorrect: true,
+                  },
+                  select: {
+                    id: true,
+                    questionId: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!course) {
+      throw new CourseNotFoundException(courseId);
+    }
+
+    if (!course.finalAssessment) {
+      throw new FinalAssessmentNotFoundException(courseId);
+    }
+
+    // Verify enrollment
+    const enrollment = await this.prisma.enrollment.findUnique({
+      where: {
+        userId_courseId: {
+          userId,
+          courseId,
+        },
+      },
+    });
+
+    if (!enrollment) {
+      throw new EnrollmentNotFoundException(userId, courseId);
+    }
+
+    const quiz = course.finalAssessment;
+
+    // Create a map of correct answers: questionId -> correctOptionId
+    const correctAnswersMap = new Map<string, string>();
+    quiz.questions.forEach(
+      (question: { id: string; options: Array<{ id: string }> }) => {
+        const correctOption = question.options[0];
+        if (correctOption) {
+          correctAnswersMap.set(question.id, correctOption.id);
+        }
+      },
+    );
+
+    // Validate that all questions have been answered
+    const allQuestionIds = new Set(
+      quiz.questions.map((q: { id: string }) => q.id),
+    );
+    const answeredQuestionIds = new Set(answers.map((a) => a.questionId));
+
+    if (allQuestionIds.size !== answeredQuestionIds.size) {
+      throw new InvalidQuizAnswersException(
+        'You must answer all questions before submitting',
+      );
+    }
+
+    // Check for duplicate answers
+    if (answeredQuestionIds.size !== answers.length) {
+      throw new InvalidQuizAnswersException(
+        'Duplicate answers detected. Each question should be answered only once',
+      );
+    }
+
+    // Validate that all question IDs are valid
+    for (const answer of answers) {
+      if (!allQuestionIds.has(answer.questionId)) {
+        throw new InvalidQuizAnswersException(
+          `Invalid question ID: ${answer.questionId}`,
+        );
+      }
+    }
+
+    // Calculate score
+    let score = 0;
+    answers.forEach((answer) => {
+      const correctOptionId = correctAnswersMap.get(answer.questionId);
+      if (correctOptionId === answer.optionId) {
+        score++;
+      }
+    });
+
+    const total = quiz.questions.length;
+    const percentage = (score / total) * 100;
+    const passed = percentage >= this.PASSING_THRESHOLD;
+
+    // Use transaction to save submission and mark course complete if passed
+    const result = await this.prisma.$transaction(async (tx) => {
+      // Create quiz submission
+      const quizSubmission = await tx.quizSubmission.create({
+        data: {
+          userId,
+          quizId: quiz.id,
+          score,
+          userAnswers: {
+            create: answers.map((answer) => ({
+              questionId: answer.questionId,
+              optionId: answer.optionId,
+            })),
+          },
+        },
+      });
+
+      let certificateId: string | null = null;
+      let courseCompleted = false;
+
+      // If passed, save final assessment completion
+      if (passed) {
+        await tx.finalAssessmentCompletion.upsert({
+          where: {
+            userId_courseId: {
+              userId,
+              courseId,
+            },
+          },
+          create: {
+            userId,
+            courseId,
+            score,
+            percentage,
+            passed: true,
+            completedAt: new Date(),
+          },
+          update: {
+            score,
+            percentage,
+            passed: true,
+            completedAt: new Date(),
+          },
+        });
+
+        // Mark course as completed
+        await tx.enrollment.update({
+          where: {
+            userId_courseId: {
+              userId,
+              courseId,
+            },
+          },
+          data: {
+            status: Status.Completed,
+          },
+        });
+
+        courseCompleted = true;
+
+        // Generate certificate
+        const certificate = await this.generateCertificateInternal(
+          userId,
+          courseId,
+          tx,
+        );
+        certificateId = certificate?.id || null;
+      }
+
+      return {
+        quizSubmission,
+        certificateId,
+        courseCompleted,
+      };
+    });
+
+    return {
+      submissionId: result.quizSubmission.id,
+      score,
+      total,
+      percentage: Math.round(percentage * 10) / 10,
+      passed,
+      courseId,
+      courseCompleted: result.courseCompleted,
+      certificateId: result.certificateId,
+      message: passed
+        ? 'Congratulations! You have completed the course and your certificate is ready.'
+        : `Final assessment submitted. You scored ${percentage.toFixed(1)}%. You need ${this.PASSING_THRESHOLD}% to pass and complete the course.`,
+    };
+  }
+
+  // ============================================
+  // HELPER METHODS
+  // ============================================
+
+  /**
+   * Verify that all module quizzes have been completed with passing score
+   */
+  private async verifyAllModuleQuizzesCompleted(
+    userId: string,
+    courseId: string,
+  ): Promise<void> {
+    // Get all modules with quizzes
+    const modulesWithQuizzes = await this.prisma.module.findMany({
+      where: {
+        courseId,
+        quiz: {
+          isNot: null,
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+      },
+    });
+
+    // Get all passed module quiz completions
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    const passedModuleQuizzes = await this.prisma.moduleQuizCompletion.findMany(
+      {
+        where: {
+          userId,
+          passed: true,
+          module: {
+            courseId,
+          },
+        },
+        select: {
+          moduleId: true,
+        },
+      },
+    );
+
+    const passedModuleIds = new Set(
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
+      passedModuleQuizzes.map((completion) => completion.moduleId),
+    );
+
+    // Check if all modules with quizzes have been passed
+    const unpassedModules = modulesWithQuizzes.filter(
+      (module) => !passedModuleIds.has(module.id),
+    );
+
+    if (unpassedModules.length > 0) {
+      const moduleNames = unpassedModules.map((m) => m.title).join(', ');
+      throw new CertificateNotEligibleException(
+        `You must pass all module quizzes before accessing the final assessment. Remaining modules: ${moduleNames}`,
+      );
+    }
+  }
+
+  /**
+   * Check if student is eligible for certificate
+   */
+  private async checkCertificateEligibility(
+    userId: string,
+    courseId: string,
+  ): Promise<void> {
+    // Check all module quizzes passed
+    await this.verifyAllModuleQuizzesCompleted(userId, courseId);
+
+    // Check final assessment passed
+    const finalAssessmentCompletion =
+      await this.prisma.finalAssessmentCompletion.findUnique({
+        where: {
+          userId_courseId: {
+            userId,
+            courseId,
+          },
+        },
+      });
+
+    if (!finalAssessmentCompletion || !finalAssessmentCompletion.passed) {
+      throw new FinalAssessmentNotPassedException();
+    }
   }
 
   // ============================================
@@ -855,7 +1203,7 @@ export class StudentService {
     userId: string,
     courseId: string,
     tx: Prisma.TransactionClient,
-  ): Promise<void> {
+  ): Promise<{ id: string } | null> {
     // Check if certificate already exists
     const existingCertificate = await tx.certificate.findUnique({
       where: {
@@ -867,22 +1215,25 @@ export class StudentService {
     });
 
     if (existingCertificate) {
-      return; // Certificate already exists
+      return existingCertificate; // Certificate already exists
     }
 
     // Create certificate with placeholder PDF URL
     // TODO: Integrate PDF generation service (puppeteer/pdf-lib)
-    await tx.certificate.create({
+    const certificate = await tx.certificate.create({
       data: {
         userId,
         courseId,
         pdfUrl: null, // Placeholder: Will be generated by PDF service in the future
       },
     });
+
+    return certificate;
   }
 
   /**
    * Get all certificates for a student
+   * Only returns certificates for courses where student has completed all requirements
    */
   async getMyCertificates(userId: string): Promise<CertificateDto[]> {
     const certificates = await this.prisma.certificate.findMany({
@@ -908,11 +1259,24 @@ export class StudentService {
       },
     });
 
-    return certificates;
+    // Filter certificates to only include those that meet eligibility requirements
+    const eligibleCertificates: CertificateDto[] = [];
+    for (const certificate of certificates) {
+      try {
+        await this.checkCertificateEligibility(userId, certificate.courseId);
+        eligibleCertificates.push(certificate);
+      } catch {
+        // Skip certificates that don't meet eligibility requirements
+        continue;
+      }
+    }
+
+    return eligibleCertificates;
   }
 
   /**
    * Get a specific certificate for download
+   * Only accessible if student has completed all module quizzes and final assessment
    */
   async getCertificateForDownload(
     userId: string,
@@ -944,6 +1308,9 @@ export class StudentService {
     if (!certificate) {
       throw new CertificateNotFoundException(certificateId, userId);
     }
+
+    // Check certificate eligibility
+    await this.checkCertificateEligibility(userId, certificate.courseId);
 
     return certificate;
   }

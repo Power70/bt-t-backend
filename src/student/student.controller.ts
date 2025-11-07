@@ -29,10 +29,12 @@ import { DashboardSummaryDto } from './dto/responses/dashboard-summary.dto';
 import { EnrollmentWithProgressDto } from './dto/responses/enrollment-with-progress.dto';
 import { CourseDetailsDto } from './dto/responses/course-details.dto';
 import { LessonCompletionResultDto } from './dto/responses/lesson-completion-result.dto';
-import { QuizDetailsDto } from './dto/responses/quiz-details.dto';
-import { QuizSubmissionResultDto } from './dto/responses/quiz-submission-result.dto';
 import { ActivityLogResultDto } from './dto/responses/activity-log-result.dto';
 import { CertificateDto } from './dto/responses/certificate.dto';
+import { ModuleQuizDetailsDto } from './dto/responses/module-quiz-details.dto';
+import { ModuleQuizSubmissionResultDto } from './dto/responses/module-quiz-submission-result.dto';
+import { FinalAssessmentDetailsDto } from './dto/responses/final-assessment-details.dto';
+import { FinalAssessmentSubmissionResultDto } from './dto/responses/final-assessment-submission-result.dto';
 
 @ApiTags('Student')
 @Controller('student')
@@ -218,25 +220,25 @@ export class StudentController {
   }
 
   // ============================================
-  // QUIZ ENDPOINTS
+  // MODULE QUIZ ENDPOINTS
   // ============================================
 
-  @Get('quizzes/lesson/:lessonId')
+  @Get('quizzes/module/:moduleId')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Get quiz details',
+    summary: 'Get module quiz details',
     description:
-      'Returns quiz questions and options for a specific lesson. Correct answers are not included to prevent cheating. Only accessible if the student is enrolled in the course.',
+      'Returns quiz questions and options for a specific module. Correct answers are not included to prevent cheating. Only accessible if the student is enrolled in the course.',
   })
   @ApiParam({
-    name: 'lessonId',
-    description: 'ID of the lesson containing the quiz',
+    name: 'moduleId',
+    description: 'ID of the module containing the quiz',
     type: String,
   })
   @ApiResponse({
     status: 200,
-    description: 'Quiz details retrieved successfully',
-    type: QuizDetailsDto,
+    description: 'Module quiz details retrieved successfully',
+    type: ModuleQuizDetailsDto,
   })
   @ApiResponse({
     status: 401,
@@ -249,32 +251,32 @@ export class StudentController {
   @ApiResponse({
     status: 404,
     description:
-      'Not found - Lesson not found, quiz not found, or user not enrolled',
+      'Not found - Module not found, quiz not found, or user not enrolled',
   })
-  async getQuizDetails(
+  async getModuleQuizDetails(
     @Request() req: any,
-    @Param('lessonId') lessonId: string,
-  ): Promise<QuizDetailsDto> {
+    @Param('moduleId') moduleId: string,
+  ): Promise<ModuleQuizDetailsDto> {
     const userId = (req.user?.sub ?? req.user?.id) as string;
-    return this.studentService.getQuizDetails(userId, lessonId);
+    return this.studentService.getModuleQuizDetails(userId, moduleId);
   }
 
-  @Post('quizzes/:quizId/submit')
+  @Post('quizzes/module/:quizId/submit')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Submit quiz answers',
+    summary: 'Submit module quiz answers',
     description:
-      'Submits answers for a quiz and calculates the score. Automatically marks the lesson as completed if the score is 80% or higher. Updates enrollment status and generates certificate if all lessons are completed.',
+      'Submits answers for a module quiz and calculates the score. Records quiz completion if the score is 80% or higher. Students must pass all module quizzes before accessing the final assessment.',
   })
   @ApiParam({
     name: 'quizId',
-    description: 'ID of the quiz being submitted',
+    description: 'ID of the module quiz being submitted',
     type: String,
   })
   @ApiResponse({
     status: 200,
-    description: 'Quiz submitted successfully',
-    type: QuizSubmissionResultDto,
+    description: 'Module quiz submitted successfully',
+    type: ModuleQuizSubmissionResultDto,
   })
   @ApiResponse({
     status: 400,
@@ -293,13 +295,107 @@ export class StudentController {
     status: 404,
     description: 'Not found - Quiz not found or user not enrolled',
   })
-  async submitQuiz(
+  async submitModuleQuiz(
     @Request() req: any,
     @Param('quizId') quizId: string,
     @Body() submitQuizDto: SubmitQuizDto,
-  ): Promise<QuizSubmissionResultDto> {
+  ): Promise<ModuleQuizSubmissionResultDto> {
     const userId = (req.user?.sub ?? req.user?.id) as string;
-    return this.studentService.submitQuiz(userId, quizId, submitQuizDto);
+    return this.studentService.submitModuleQuiz(userId, quizId, submitQuizDto);
+  }
+
+  // ============================================
+  // FINAL ASSESSMENT ENDPOINTS
+  // ============================================
+
+  @Get('courses/:courseId/final-assessment')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Get final assessment details',
+    description:
+      'Returns final assessment questions and options for a course. Correct answers are not included to prevent cheating. Only accessible if the student has passed all module quizzes and is enrolled in the course.',
+  })
+  @ApiParam({
+    name: 'courseId',
+    description: 'ID of the course',
+    type: String,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Final assessment details retrieved successfully',
+    type: FinalAssessmentDetailsDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Bad request - Module quizzes not completed',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Invalid or missing JWT token',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - User is not a student',
+  })
+  @ApiResponse({
+    status: 404,
+    description:
+      'Not found - Course not found, final assessment not found, or user not enrolled',
+  })
+  async getFinalAssessmentDetails(
+    @Request() req: any,
+    @Param('courseId') courseId: string,
+  ): Promise<FinalAssessmentDetailsDto> {
+    const userId = (req.user?.sub ?? req.user?.id) as string;
+    return this.studentService.getFinalAssessmentDetails(userId, courseId);
+  }
+
+  @Post('courses/:courseId/final-assessment/submit')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Submit final assessment answers',
+    description:
+      'Submits answers for the final assessment and calculates the score. Marks the course as completed and generates a certificate if the score is 80% or higher. Students must pass all module quizzes before submitting the final assessment.',
+  })
+  @ApiParam({
+    name: 'courseId',
+    description: 'ID of the course',
+    type: String,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Final assessment submitted successfully',
+    type: FinalAssessmentSubmissionResultDto,
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Bad request - Invalid answers, missing questions, duplicate answers, or module quizzes not completed',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Invalid or missing JWT token',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - User is not a student',
+  })
+  @ApiResponse({
+    status: 404,
+    description:
+      'Not found - Course not found, final assessment not found, or user not enrolled',
+  })
+  async submitFinalAssessment(
+    @Request() req: any,
+    @Param('courseId') courseId: string,
+    @Body() submitQuizDto: SubmitQuizDto,
+  ): Promise<FinalAssessmentSubmissionResultDto> {
+    const userId = (req.user?.sub ?? req.user?.id) as string;
+    return this.studentService.submitFinalAssessment(
+      userId,
+      courseId,
+      submitQuizDto,
+    );
   }
 
   // ============================================

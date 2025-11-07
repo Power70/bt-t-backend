@@ -56,6 +56,8 @@ model User {
   quizSubmissions QuizSubmission[]
   certificates Certificate[]
   activityLogs UserActivityLog[]
+  moduleQuizCompletions ModuleQuizCompletion[]
+  finalAssessmentCompletions FinalAssessmentCompletion[]
 
   @@index([email])
 }
@@ -102,6 +104,8 @@ model Module {
   courseId String
   course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lessons Lesson[]
+  quiz Quiz?
+  quizCompletions ModuleQuizCompletion[]
 
   @@unique([courseId, order])
   @@index([courseId])
@@ -118,7 +122,6 @@ model Lesson {
   moduleId String
   userProgress UserProgress[]
   module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  quiz Quiz?
   activityLogs UserActivityLog[]
 
   createdAt  DateTime   @default(now())
@@ -175,8 +178,8 @@ model Attachment {
 model Quiz {
   id      String @id @default(cuid())
 
-  lessonId  String  @unique
-  lesson    Lesson  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  moduleId  String?  @unique
+  module    Module?  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   course    Course? @relation("FinalCourseAssessment")
   questions Question[]
   submissions QuizSubmission[]
@@ -252,4 +255,39 @@ model UserActivityLog {
   lessonId        String
   lesson          Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   @@index([userId, loggedAt])
+}
+
+// Module Quiz Completion Tracking
+model ModuleQuizCompletion {
+  id          String   @id @default(cuid())
+  userId      String
+  moduleId    String
+  score       Float
+  percentage  Float
+  passed      Boolean
+  completedAt DateTime @default(now())
+  
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  module Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, moduleId])
+  @@index([userId])
+  @@index([moduleId])
+}
+
+// Final Assessment Completion Tracking
+model FinalAssessmentCompletion {
+  id          String   @id @default(cuid())
+  userId      String
+  courseId    String
+  score       Float
+  percentage  Float
+  passed      Boolean
+  completedAt DateTime @default(now())
+  
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([userId])
+  @@index([courseId])
 }

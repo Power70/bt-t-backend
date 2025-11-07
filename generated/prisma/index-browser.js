@@ -204,7 +204,7 @@ exports.Prisma.AttachmentScalarFieldEnum = {
 
 exports.Prisma.QuizScalarFieldEnum = {
   id: 'id',
-  lessonId: 'lessonId'
+  moduleId: 'moduleId'
 };
 
 exports.Prisma.QuestionScalarFieldEnum = {
@@ -250,6 +250,26 @@ exports.Prisma.UserActivityLogScalarFieldEnum = {
   durationSeconds: 'durationSeconds',
   userId: 'userId',
   lessonId: 'lessonId'
+};
+
+exports.Prisma.ModuleQuizCompletionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  moduleId: 'moduleId',
+  score: 'score',
+  percentage: 'percentage',
+  passed: 'passed',
+  completedAt: 'completedAt'
+};
+
+exports.Prisma.FinalAssessmentCompletionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  score: 'score',
+  percentage: 'percentage',
+  passed: 'passed',
+  completedAt: 'completedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -299,7 +319,9 @@ exports.Prisma.ModelName = {
   QuizSubmission: 'QuizSubmission',
   UserAnswer: 'UserAnswer',
   Certificate: 'Certificate',
-  UserActivityLog: 'UserActivityLog'
+  UserActivityLog: 'UserActivityLog',
+  ModuleQuizCompletion: 'ModuleQuizCompletion',
+  FinalAssessmentCompletion: 'FinalAssessmentCompletion'
 };
 
 /**

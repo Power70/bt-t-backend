@@ -88,6 +88,16 @@ export type Certificate = $Result.DefaultSelection<Prisma.$CertificatePayload>
  * 
  */
 export type UserActivityLog = $Result.DefaultSelection<Prisma.$UserActivityLogPayload>
+/**
+ * Model ModuleQuizCompletion
+ * 
+ */
+export type ModuleQuizCompletion = $Result.DefaultSelection<Prisma.$ModuleQuizCompletionPayload>
+/**
+ * Model FinalAssessmentCompletion
+ * 
+ */
+export type FinalAssessmentCompletion = $Result.DefaultSelection<Prisma.$FinalAssessmentCompletionPayload>
 
 /**
  * Enums
@@ -400,6 +410,26 @@ export class PrismaClient<
     * ```
     */
   get userActivityLog(): Prisma.UserActivityLogDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.moduleQuizCompletion`: Exposes CRUD operations for the **ModuleQuizCompletion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ModuleQuizCompletions
+    * const moduleQuizCompletions = await prisma.moduleQuizCompletion.findMany()
+    * ```
+    */
+  get moduleQuizCompletion(): Prisma.ModuleQuizCompletionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.finalAssessmentCompletion`: Exposes CRUD operations for the **FinalAssessmentCompletion** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FinalAssessmentCompletions
+    * const finalAssessmentCompletions = await prisma.finalAssessmentCompletion.findMany()
+    * ```
+    */
+  get finalAssessmentCompletion(): Prisma.FinalAssessmentCompletionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -855,7 +885,9 @@ export namespace Prisma {
     QuizSubmission: 'QuizSubmission',
     UserAnswer: 'UserAnswer',
     Certificate: 'Certificate',
-    UserActivityLog: 'UserActivityLog'
+    UserActivityLog: 'UserActivityLog',
+    ModuleQuizCompletion: 'ModuleQuizCompletion',
+    FinalAssessmentCompletion: 'FinalAssessmentCompletion'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -874,7 +906,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "course" | "category" | "module" | "lesson" | "enrollment" | "userProgress" | "attachment" | "quiz" | "question" | "option" | "quizSubmission" | "userAnswer" | "certificate" | "userActivityLog"
+      modelProps: "user" | "course" | "category" | "module" | "lesson" | "enrollment" | "userProgress" | "attachment" | "quiz" | "question" | "option" | "quizSubmission" | "userAnswer" | "certificate" | "userActivityLog" | "moduleQuizCompletion" | "finalAssessmentCompletion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1988,6 +2020,154 @@ export namespace Prisma {
           }
         }
       }
+      ModuleQuizCompletion: {
+        payload: Prisma.$ModuleQuizCompletionPayload<ExtArgs>
+        fields: Prisma.ModuleQuizCompletionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ModuleQuizCompletionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ModuleQuizCompletionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ModuleQuizCompletionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ModuleQuizCompletionPayload>
+          }
+          findFirst: {
+            args: Prisma.ModuleQuizCompletionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ModuleQuizCompletionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ModuleQuizCompletionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ModuleQuizCompletionPayload>
+          }
+          findMany: {
+            args: Prisma.ModuleQuizCompletionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ModuleQuizCompletionPayload>[]
+          }
+          create: {
+            args: Prisma.ModuleQuizCompletionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ModuleQuizCompletionPayload>
+          }
+          createMany: {
+            args: Prisma.ModuleQuizCompletionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ModuleQuizCompletionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ModuleQuizCompletionPayload>[]
+          }
+          delete: {
+            args: Prisma.ModuleQuizCompletionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ModuleQuizCompletionPayload>
+          }
+          update: {
+            args: Prisma.ModuleQuizCompletionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ModuleQuizCompletionPayload>
+          }
+          deleteMany: {
+            args: Prisma.ModuleQuizCompletionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ModuleQuizCompletionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ModuleQuizCompletionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ModuleQuizCompletionPayload>[]
+          }
+          upsert: {
+            args: Prisma.ModuleQuizCompletionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ModuleQuizCompletionPayload>
+          }
+          aggregate: {
+            args: Prisma.ModuleQuizCompletionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateModuleQuizCompletion>
+          }
+          groupBy: {
+            args: Prisma.ModuleQuizCompletionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ModuleQuizCompletionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ModuleQuizCompletionCountArgs<ExtArgs>
+            result: $Utils.Optional<ModuleQuizCompletionCountAggregateOutputType> | number
+          }
+        }
+      }
+      FinalAssessmentCompletion: {
+        payload: Prisma.$FinalAssessmentCompletionPayload<ExtArgs>
+        fields: Prisma.FinalAssessmentCompletionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FinalAssessmentCompletionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinalAssessmentCompletionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FinalAssessmentCompletionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinalAssessmentCompletionPayload>
+          }
+          findFirst: {
+            args: Prisma.FinalAssessmentCompletionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinalAssessmentCompletionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FinalAssessmentCompletionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinalAssessmentCompletionPayload>
+          }
+          findMany: {
+            args: Prisma.FinalAssessmentCompletionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinalAssessmentCompletionPayload>[]
+          }
+          create: {
+            args: Prisma.FinalAssessmentCompletionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinalAssessmentCompletionPayload>
+          }
+          createMany: {
+            args: Prisma.FinalAssessmentCompletionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FinalAssessmentCompletionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinalAssessmentCompletionPayload>[]
+          }
+          delete: {
+            args: Prisma.FinalAssessmentCompletionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinalAssessmentCompletionPayload>
+          }
+          update: {
+            args: Prisma.FinalAssessmentCompletionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinalAssessmentCompletionPayload>
+          }
+          deleteMany: {
+            args: Prisma.FinalAssessmentCompletionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FinalAssessmentCompletionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FinalAssessmentCompletionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinalAssessmentCompletionPayload>[]
+          }
+          upsert: {
+            args: Prisma.FinalAssessmentCompletionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FinalAssessmentCompletionPayload>
+          }
+          aggregate: {
+            args: Prisma.FinalAssessmentCompletionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFinalAssessmentCompletion>
+          }
+          groupBy: {
+            args: Prisma.FinalAssessmentCompletionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FinalAssessmentCompletionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FinalAssessmentCompletionCountArgs<ExtArgs>
+            result: $Utils.Optional<FinalAssessmentCompletionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2099,6 +2279,8 @@ export namespace Prisma {
     userAnswer?: UserAnswerOmit
     certificate?: CertificateOmit
     userActivityLog?: UserActivityLogOmit
+    moduleQuizCompletion?: ModuleQuizCompletionOmit
+    finalAssessmentCompletion?: FinalAssessmentCompletionOmit
   }
 
   /* Types for Logging */
@@ -2185,6 +2367,8 @@ export namespace Prisma {
     quizSubmissions: number
     certificates: number
     activityLogs: number
+    moduleQuizCompletions: number
+    finalAssessmentCompletions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2194,6 +2378,8 @@ export namespace Prisma {
     quizSubmissions?: boolean | UserCountOutputTypeCountQuizSubmissionsArgs
     certificates?: boolean | UserCountOutputTypeCountCertificatesArgs
     activityLogs?: boolean | UserCountOutputTypeCountActivityLogsArgs
+    moduleQuizCompletions?: boolean | UserCountOutputTypeCountModuleQuizCompletionsArgs
+    finalAssessmentCompletions?: boolean | UserCountOutputTypeCountFinalAssessmentCompletionsArgs
   }
 
   // Custom InputTypes
@@ -2247,6 +2433,20 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountActivityLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserActivityLogWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountModuleQuizCompletionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ModuleQuizCompletionWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountFinalAssessmentCompletionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FinalAssessmentCompletionWhereInput
   }
 
 
@@ -2345,10 +2545,12 @@ export namespace Prisma {
 
   export type ModuleCountOutputType = {
     lessons: number
+    quizCompletions: number
   }
 
   export type ModuleCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     lessons?: boolean | ModuleCountOutputTypeCountLessonsArgs
+    quizCompletions?: boolean | ModuleCountOutputTypeCountQuizCompletionsArgs
   }
 
   // Custom InputTypes
@@ -2367,6 +2569,13 @@ export namespace Prisma {
    */
   export type ModuleCountOutputTypeCountLessonsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: LessonWhereInput
+  }
+
+  /**
+   * ModuleCountOutputType without action
+   */
+  export type ModuleCountOutputTypeCountQuizCompletionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ModuleQuizCompletionWhereInput
   }
 
 
@@ -2808,6 +3017,8 @@ export namespace Prisma {
     quizSubmissions?: boolean | User$quizSubmissionsArgs<ExtArgs>
     certificates?: boolean | User$certificatesArgs<ExtArgs>
     activityLogs?: boolean | User$activityLogsArgs<ExtArgs>
+    moduleQuizCompletions?: boolean | User$moduleQuizCompletionsArgs<ExtArgs>
+    finalAssessmentCompletions?: boolean | User$finalAssessmentCompletionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2861,6 +3072,8 @@ export namespace Prisma {
     quizSubmissions?: boolean | User$quizSubmissionsArgs<ExtArgs>
     certificates?: boolean | User$certificatesArgs<ExtArgs>
     activityLogs?: boolean | User$activityLogsArgs<ExtArgs>
+    moduleQuizCompletions?: boolean | User$moduleQuizCompletionsArgs<ExtArgs>
+    finalAssessmentCompletions?: boolean | User$finalAssessmentCompletionsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -2875,6 +3088,8 @@ export namespace Prisma {
       quizSubmissions: Prisma.$QuizSubmissionPayload<ExtArgs>[]
       certificates: Prisma.$CertificatePayload<ExtArgs>[]
       activityLogs: Prisma.$UserActivityLogPayload<ExtArgs>[]
+      moduleQuizCompletions: Prisma.$ModuleQuizCompletionPayload<ExtArgs>[]
+      finalAssessmentCompletions: Prisma.$FinalAssessmentCompletionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3288,6 +3503,8 @@ export namespace Prisma {
     quizSubmissions<T extends User$quizSubmissionsArgs<ExtArgs> = {}>(args?: Subset<T, User$quizSubmissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuizSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     certificates<T extends User$certificatesArgs<ExtArgs> = {}>(args?: Subset<T, User$certificatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CertificatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     activityLogs<T extends User$activityLogsArgs<ExtArgs> = {}>(args?: Subset<T, User$activityLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    moduleQuizCompletions<T extends User$moduleQuizCompletionsArgs<ExtArgs> = {}>(args?: Subset<T, User$moduleQuizCompletionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ModuleQuizCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    finalAssessmentCompletions<T extends User$finalAssessmentCompletionsArgs<ExtArgs> = {}>(args?: Subset<T, User$finalAssessmentCompletionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinalAssessmentCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3857,6 +4074,54 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserActivityLogScalarFieldEnum | UserActivityLogScalarFieldEnum[]
+  }
+
+  /**
+   * User.moduleQuizCompletions
+   */
+  export type User$moduleQuizCompletionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleQuizCompletion
+     */
+    select?: ModuleQuizCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleQuizCompletion
+     */
+    omit?: ModuleQuizCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleQuizCompletionInclude<ExtArgs> | null
+    where?: ModuleQuizCompletionWhereInput
+    orderBy?: ModuleQuizCompletionOrderByWithRelationInput | ModuleQuizCompletionOrderByWithRelationInput[]
+    cursor?: ModuleQuizCompletionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ModuleQuizCompletionScalarFieldEnum | ModuleQuizCompletionScalarFieldEnum[]
+  }
+
+  /**
+   * User.finalAssessmentCompletions
+   */
+  export type User$finalAssessmentCompletionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinalAssessmentCompletion
+     */
+    select?: FinalAssessmentCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinalAssessmentCompletion
+     */
+    omit?: FinalAssessmentCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinalAssessmentCompletionInclude<ExtArgs> | null
+    where?: FinalAssessmentCompletionWhereInput
+    orderBy?: FinalAssessmentCompletionOrderByWithRelationInput | FinalAssessmentCompletionOrderByWithRelationInput[]
+    cursor?: FinalAssessmentCompletionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FinalAssessmentCompletionScalarFieldEnum | FinalAssessmentCompletionScalarFieldEnum[]
   }
 
   /**
@@ -6466,6 +6731,8 @@ export namespace Prisma {
     courseId?: boolean
     course?: boolean | CourseDefaultArgs<ExtArgs>
     lessons?: boolean | Module$lessonsArgs<ExtArgs>
+    quiz?: boolean | Module$quizArgs<ExtArgs>
+    quizCompletions?: boolean | Module$quizCompletionsArgs<ExtArgs>
     _count?: boolean | ModuleCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["module"]>
 
@@ -6502,6 +6769,8 @@ export namespace Prisma {
   export type ModuleInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     course?: boolean | CourseDefaultArgs<ExtArgs>
     lessons?: boolean | Module$lessonsArgs<ExtArgs>
+    quiz?: boolean | Module$quizArgs<ExtArgs>
+    quizCompletions?: boolean | Module$quizCompletionsArgs<ExtArgs>
     _count?: boolean | ModuleCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ModuleIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6516,6 +6785,8 @@ export namespace Prisma {
     objects: {
       course: Prisma.$CoursePayload<ExtArgs>
       lessons: Prisma.$LessonPayload<ExtArgs>[]
+      quiz: Prisma.$QuizPayload<ExtArgs> | null
+      quizCompletions: Prisma.$ModuleQuizCompletionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6920,6 +7191,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     course<T extends CourseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CourseDefaultArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     lessons<T extends Module$lessonsArgs<ExtArgs> = {}>(args?: Subset<T, Module$lessonsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    quiz<T extends Module$quizArgs<ExtArgs> = {}>(args?: Subset<T, Module$quizArgs<ExtArgs>>): Prisma__QuizClient<$Result.GetResult<Prisma.$QuizPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    quizCompletions<T extends Module$quizCompletionsArgs<ExtArgs> = {}>(args?: Subset<T, Module$quizCompletionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ModuleQuizCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7375,6 +7648,49 @@ export namespace Prisma {
   }
 
   /**
+   * Module.quiz
+   */
+  export type Module$quizArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Quiz
+     */
+    select?: QuizSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Quiz
+     */
+    omit?: QuizOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: QuizInclude<ExtArgs> | null
+    where?: QuizWhereInput
+  }
+
+  /**
+   * Module.quizCompletions
+   */
+  export type Module$quizCompletionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleQuizCompletion
+     */
+    select?: ModuleQuizCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleQuizCompletion
+     */
+    omit?: ModuleQuizCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleQuizCompletionInclude<ExtArgs> | null
+    where?: ModuleQuizCompletionWhereInput
+    orderBy?: ModuleQuizCompletionOrderByWithRelationInput | ModuleQuizCompletionOrderByWithRelationInput[]
+    cursor?: ModuleQuizCompletionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ModuleQuizCompletionScalarFieldEnum | ModuleQuizCompletionScalarFieldEnum[]
+  }
+
+  /**
    * Module without action
    */
   export type ModuleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7637,7 +7953,6 @@ export namespace Prisma {
     updatedAt?: boolean
     userProgress?: boolean | Lesson$userProgressArgs<ExtArgs>
     module?: boolean | ModuleDefaultArgs<ExtArgs>
-    quiz?: boolean | Lesson$quizArgs<ExtArgs>
     activityLogs?: boolean | Lesson$activityLogsArgs<ExtArgs>
     _count?: boolean | LessonCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["lesson"]>
@@ -7687,7 +8002,6 @@ export namespace Prisma {
   export type LessonInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     userProgress?: boolean | Lesson$userProgressArgs<ExtArgs>
     module?: boolean | ModuleDefaultArgs<ExtArgs>
-    quiz?: boolean | Lesson$quizArgs<ExtArgs>
     activityLogs?: boolean | Lesson$activityLogsArgs<ExtArgs>
     _count?: boolean | LessonCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -7703,7 +8017,6 @@ export namespace Prisma {
     objects: {
       userProgress: Prisma.$UserProgressPayload<ExtArgs>[]
       module: Prisma.$ModulePayload<ExtArgs>
-      quiz: Prisma.$QuizPayload<ExtArgs> | null
       activityLogs: Prisma.$UserActivityLogPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -8113,7 +8426,6 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     userProgress<T extends Lesson$userProgressArgs<ExtArgs> = {}>(args?: Subset<T, Lesson$userProgressArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     module<T extends ModuleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ModuleDefaultArgs<ExtArgs>>): Prisma__ModuleClient<$Result.GetResult<Prisma.$ModulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    quiz<T extends Lesson$quizArgs<ExtArgs> = {}>(args?: Subset<T, Lesson$quizArgs<ExtArgs>>): Prisma__QuizClient<$Result.GetResult<Prisma.$QuizPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     activityLogs<T extends Lesson$activityLogsArgs<ExtArgs> = {}>(args?: Subset<T, Lesson$activityLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserActivityLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -8571,25 +8883,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserProgressScalarFieldEnum | UserProgressScalarFieldEnum[]
-  }
-
-  /**
-   * Lesson.quiz
-   */
-  export type Lesson$quizArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Quiz
-     */
-    select?: QuizSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Quiz
-     */
-    omit?: QuizOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: QuizInclude<ExtArgs> | null
-    where?: QuizWhereInput
   }
 
   /**
@@ -11837,34 +12130,34 @@ export namespace Prisma {
 
   export type QuizMinAggregateOutputType = {
     id: string | null
-    lessonId: string | null
+    moduleId: string | null
   }
 
   export type QuizMaxAggregateOutputType = {
     id: string | null
-    lessonId: string | null
+    moduleId: string | null
   }
 
   export type QuizCountAggregateOutputType = {
     id: number
-    lessonId: number
+    moduleId: number
     _all: number
   }
 
 
   export type QuizMinAggregateInputType = {
     id?: true
-    lessonId?: true
+    moduleId?: true
   }
 
   export type QuizMaxAggregateInputType = {
     id?: true
-    lessonId?: true
+    moduleId?: true
   }
 
   export type QuizCountAggregateInputType = {
     id?: true
-    lessonId?: true
+    moduleId?: true
     _all?: true
   }
 
@@ -11942,7 +12235,7 @@ export namespace Prisma {
 
   export type QuizGroupByOutputType = {
     id: string
-    lessonId: string
+    moduleId: string | null
     _count: QuizCountAggregateOutputType | null
     _min: QuizMinAggregateOutputType | null
     _max: QuizMaxAggregateOutputType | null
@@ -11964,8 +12257,8 @@ export namespace Prisma {
 
   export type QuizSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    lessonId?: boolean
-    lesson?: boolean | LessonDefaultArgs<ExtArgs>
+    moduleId?: boolean
+    module?: boolean | Quiz$moduleArgs<ExtArgs>
     course?: boolean | Quiz$courseArgs<ExtArgs>
     questions?: boolean | Quiz$questionsArgs<ExtArgs>
     submissions?: boolean | Quiz$submissionsArgs<ExtArgs>
@@ -11974,47 +12267,47 @@ export namespace Prisma {
 
   export type QuizSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    lessonId?: boolean
-    lesson?: boolean | LessonDefaultArgs<ExtArgs>
+    moduleId?: boolean
+    module?: boolean | Quiz$moduleArgs<ExtArgs>
   }, ExtArgs["result"]["quiz"]>
 
   export type QuizSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    lessonId?: boolean
-    lesson?: boolean | LessonDefaultArgs<ExtArgs>
+    moduleId?: boolean
+    module?: boolean | Quiz$moduleArgs<ExtArgs>
   }, ExtArgs["result"]["quiz"]>
 
   export type QuizSelectScalar = {
     id?: boolean
-    lessonId?: boolean
+    moduleId?: boolean
   }
 
-  export type QuizOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "lessonId", ExtArgs["result"]["quiz"]>
+  export type QuizOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "moduleId", ExtArgs["result"]["quiz"]>
   export type QuizInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lesson?: boolean | LessonDefaultArgs<ExtArgs>
+    module?: boolean | Quiz$moduleArgs<ExtArgs>
     course?: boolean | Quiz$courseArgs<ExtArgs>
     questions?: boolean | Quiz$questionsArgs<ExtArgs>
     submissions?: boolean | Quiz$submissionsArgs<ExtArgs>
     _count?: boolean | QuizCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type QuizIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lesson?: boolean | LessonDefaultArgs<ExtArgs>
+    module?: boolean | Quiz$moduleArgs<ExtArgs>
   }
   export type QuizIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    lesson?: boolean | LessonDefaultArgs<ExtArgs>
+    module?: boolean | Quiz$moduleArgs<ExtArgs>
   }
 
   export type $QuizPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Quiz"
     objects: {
-      lesson: Prisma.$LessonPayload<ExtArgs>
+      module: Prisma.$ModulePayload<ExtArgs> | null
       course: Prisma.$CoursePayload<ExtArgs> | null
       questions: Prisma.$QuestionPayload<ExtArgs>[]
       submissions: Prisma.$QuizSubmissionPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      lessonId: string
+      moduleId: string | null
     }, ExtArgs["result"]["quiz"]>
     composites: {}
   }
@@ -12409,7 +12702,7 @@ export namespace Prisma {
    */
   export interface Prisma__QuizClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    lesson<T extends LessonDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LessonDefaultArgs<ExtArgs>>): Prisma__LessonClient<$Result.GetResult<Prisma.$LessonPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    module<T extends Quiz$moduleArgs<ExtArgs> = {}>(args?: Subset<T, Quiz$moduleArgs<ExtArgs>>): Prisma__ModuleClient<$Result.GetResult<Prisma.$ModulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     course<T extends Quiz$courseArgs<ExtArgs> = {}>(args?: Subset<T, Quiz$courseArgs<ExtArgs>>): Prisma__CourseClient<$Result.GetResult<Prisma.$CoursePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     questions<T extends Quiz$questionsArgs<ExtArgs> = {}>(args?: Subset<T, Quiz$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     submissions<T extends Quiz$submissionsArgs<ExtArgs> = {}>(args?: Subset<T, Quiz$submissionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$QuizSubmissionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -12443,7 +12736,7 @@ export namespace Prisma {
    */
   interface QuizFieldRefs {
     readonly id: FieldRef<"Quiz", 'String'>
-    readonly lessonId: FieldRef<"Quiz", 'String'>
+    readonly moduleId: FieldRef<"Quiz", 'String'>
   }
     
 
@@ -12662,7 +12955,7 @@ export namespace Prisma {
     /**
      * The data needed to create a Quiz.
      */
-    data: XOR<QuizCreateInput, QuizUncheckedCreateInput>
+    data?: XOR<QuizCreateInput, QuizUncheckedCreateInput>
   }
 
   /**
@@ -12837,6 +13130,25 @@ export namespace Prisma {
      * Limit how many Quizzes to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Quiz.module
+   */
+  export type Quiz$moduleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Module
+     */
+    select?: ModuleSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Module
+     */
+    omit?: ModuleOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleInclude<ExtArgs> | null
+    where?: ModuleWhereInput
   }
 
   /**
@@ -19461,6 +19773,2258 @@ export namespace Prisma {
 
 
   /**
+   * Model ModuleQuizCompletion
+   */
+
+  export type AggregateModuleQuizCompletion = {
+    _count: ModuleQuizCompletionCountAggregateOutputType | null
+    _avg: ModuleQuizCompletionAvgAggregateOutputType | null
+    _sum: ModuleQuizCompletionSumAggregateOutputType | null
+    _min: ModuleQuizCompletionMinAggregateOutputType | null
+    _max: ModuleQuizCompletionMaxAggregateOutputType | null
+  }
+
+  export type ModuleQuizCompletionAvgAggregateOutputType = {
+    score: number | null
+    percentage: number | null
+  }
+
+  export type ModuleQuizCompletionSumAggregateOutputType = {
+    score: number | null
+    percentage: number | null
+  }
+
+  export type ModuleQuizCompletionMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    moduleId: string | null
+    score: number | null
+    percentage: number | null
+    passed: boolean | null
+    completedAt: Date | null
+  }
+
+  export type ModuleQuizCompletionMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    moduleId: string | null
+    score: number | null
+    percentage: number | null
+    passed: boolean | null
+    completedAt: Date | null
+  }
+
+  export type ModuleQuizCompletionCountAggregateOutputType = {
+    id: number
+    userId: number
+    moduleId: number
+    score: number
+    percentage: number
+    passed: number
+    completedAt: number
+    _all: number
+  }
+
+
+  export type ModuleQuizCompletionAvgAggregateInputType = {
+    score?: true
+    percentage?: true
+  }
+
+  export type ModuleQuizCompletionSumAggregateInputType = {
+    score?: true
+    percentage?: true
+  }
+
+  export type ModuleQuizCompletionMinAggregateInputType = {
+    id?: true
+    userId?: true
+    moduleId?: true
+    score?: true
+    percentage?: true
+    passed?: true
+    completedAt?: true
+  }
+
+  export type ModuleQuizCompletionMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    moduleId?: true
+    score?: true
+    percentage?: true
+    passed?: true
+    completedAt?: true
+  }
+
+  export type ModuleQuizCompletionCountAggregateInputType = {
+    id?: true
+    userId?: true
+    moduleId?: true
+    score?: true
+    percentage?: true
+    passed?: true
+    completedAt?: true
+    _all?: true
+  }
+
+  export type ModuleQuizCompletionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ModuleQuizCompletion to aggregate.
+     */
+    where?: ModuleQuizCompletionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ModuleQuizCompletions to fetch.
+     */
+    orderBy?: ModuleQuizCompletionOrderByWithRelationInput | ModuleQuizCompletionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ModuleQuizCompletionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ModuleQuizCompletions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ModuleQuizCompletions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ModuleQuizCompletions
+    **/
+    _count?: true | ModuleQuizCompletionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ModuleQuizCompletionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ModuleQuizCompletionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ModuleQuizCompletionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ModuleQuizCompletionMaxAggregateInputType
+  }
+
+  export type GetModuleQuizCompletionAggregateType<T extends ModuleQuizCompletionAggregateArgs> = {
+        [P in keyof T & keyof AggregateModuleQuizCompletion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateModuleQuizCompletion[P]>
+      : GetScalarType<T[P], AggregateModuleQuizCompletion[P]>
+  }
+
+
+
+
+  export type ModuleQuizCompletionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ModuleQuizCompletionWhereInput
+    orderBy?: ModuleQuizCompletionOrderByWithAggregationInput | ModuleQuizCompletionOrderByWithAggregationInput[]
+    by: ModuleQuizCompletionScalarFieldEnum[] | ModuleQuizCompletionScalarFieldEnum
+    having?: ModuleQuizCompletionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ModuleQuizCompletionCountAggregateInputType | true
+    _avg?: ModuleQuizCompletionAvgAggregateInputType
+    _sum?: ModuleQuizCompletionSumAggregateInputType
+    _min?: ModuleQuizCompletionMinAggregateInputType
+    _max?: ModuleQuizCompletionMaxAggregateInputType
+  }
+
+  export type ModuleQuizCompletionGroupByOutputType = {
+    id: string
+    userId: string
+    moduleId: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt: Date
+    _count: ModuleQuizCompletionCountAggregateOutputType | null
+    _avg: ModuleQuizCompletionAvgAggregateOutputType | null
+    _sum: ModuleQuizCompletionSumAggregateOutputType | null
+    _min: ModuleQuizCompletionMinAggregateOutputType | null
+    _max: ModuleQuizCompletionMaxAggregateOutputType | null
+  }
+
+  type GetModuleQuizCompletionGroupByPayload<T extends ModuleQuizCompletionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ModuleQuizCompletionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ModuleQuizCompletionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ModuleQuizCompletionGroupByOutputType[P]>
+            : GetScalarType<T[P], ModuleQuizCompletionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ModuleQuizCompletionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    moduleId?: boolean
+    score?: boolean
+    percentage?: boolean
+    passed?: boolean
+    completedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    module?: boolean | ModuleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["moduleQuizCompletion"]>
+
+  export type ModuleQuizCompletionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    moduleId?: boolean
+    score?: boolean
+    percentage?: boolean
+    passed?: boolean
+    completedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    module?: boolean | ModuleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["moduleQuizCompletion"]>
+
+  export type ModuleQuizCompletionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    moduleId?: boolean
+    score?: boolean
+    percentage?: boolean
+    passed?: boolean
+    completedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    module?: boolean | ModuleDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["moduleQuizCompletion"]>
+
+  export type ModuleQuizCompletionSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    moduleId?: boolean
+    score?: boolean
+    percentage?: boolean
+    passed?: boolean
+    completedAt?: boolean
+  }
+
+  export type ModuleQuizCompletionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "moduleId" | "score" | "percentage" | "passed" | "completedAt", ExtArgs["result"]["moduleQuizCompletion"]>
+  export type ModuleQuizCompletionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    module?: boolean | ModuleDefaultArgs<ExtArgs>
+  }
+  export type ModuleQuizCompletionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    module?: boolean | ModuleDefaultArgs<ExtArgs>
+  }
+  export type ModuleQuizCompletionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    module?: boolean | ModuleDefaultArgs<ExtArgs>
+  }
+
+  export type $ModuleQuizCompletionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ModuleQuizCompletion"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      module: Prisma.$ModulePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      moduleId: string
+      score: number
+      percentage: number
+      passed: boolean
+      completedAt: Date
+    }, ExtArgs["result"]["moduleQuizCompletion"]>
+    composites: {}
+  }
+
+  type ModuleQuizCompletionGetPayload<S extends boolean | null | undefined | ModuleQuizCompletionDefaultArgs> = $Result.GetResult<Prisma.$ModuleQuizCompletionPayload, S>
+
+  type ModuleQuizCompletionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ModuleQuizCompletionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ModuleQuizCompletionCountAggregateInputType | true
+    }
+
+  export interface ModuleQuizCompletionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ModuleQuizCompletion'], meta: { name: 'ModuleQuizCompletion' } }
+    /**
+     * Find zero or one ModuleQuizCompletion that matches the filter.
+     * @param {ModuleQuizCompletionFindUniqueArgs} args - Arguments to find a ModuleQuizCompletion
+     * @example
+     * // Get one ModuleQuizCompletion
+     * const moduleQuizCompletion = await prisma.moduleQuizCompletion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ModuleQuizCompletionFindUniqueArgs>(args: SelectSubset<T, ModuleQuizCompletionFindUniqueArgs<ExtArgs>>): Prisma__ModuleQuizCompletionClient<$Result.GetResult<Prisma.$ModuleQuizCompletionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ModuleQuizCompletion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ModuleQuizCompletionFindUniqueOrThrowArgs} args - Arguments to find a ModuleQuizCompletion
+     * @example
+     * // Get one ModuleQuizCompletion
+     * const moduleQuizCompletion = await prisma.moduleQuizCompletion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ModuleQuizCompletionFindUniqueOrThrowArgs>(args: SelectSubset<T, ModuleQuizCompletionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ModuleQuizCompletionClient<$Result.GetResult<Prisma.$ModuleQuizCompletionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ModuleQuizCompletion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ModuleQuizCompletionFindFirstArgs} args - Arguments to find a ModuleQuizCompletion
+     * @example
+     * // Get one ModuleQuizCompletion
+     * const moduleQuizCompletion = await prisma.moduleQuizCompletion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ModuleQuizCompletionFindFirstArgs>(args?: SelectSubset<T, ModuleQuizCompletionFindFirstArgs<ExtArgs>>): Prisma__ModuleQuizCompletionClient<$Result.GetResult<Prisma.$ModuleQuizCompletionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ModuleQuizCompletion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ModuleQuizCompletionFindFirstOrThrowArgs} args - Arguments to find a ModuleQuizCompletion
+     * @example
+     * // Get one ModuleQuizCompletion
+     * const moduleQuizCompletion = await prisma.moduleQuizCompletion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ModuleQuizCompletionFindFirstOrThrowArgs>(args?: SelectSubset<T, ModuleQuizCompletionFindFirstOrThrowArgs<ExtArgs>>): Prisma__ModuleQuizCompletionClient<$Result.GetResult<Prisma.$ModuleQuizCompletionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ModuleQuizCompletions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ModuleQuizCompletionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ModuleQuizCompletions
+     * const moduleQuizCompletions = await prisma.moduleQuizCompletion.findMany()
+     * 
+     * // Get first 10 ModuleQuizCompletions
+     * const moduleQuizCompletions = await prisma.moduleQuizCompletion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const moduleQuizCompletionWithIdOnly = await prisma.moduleQuizCompletion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ModuleQuizCompletionFindManyArgs>(args?: SelectSubset<T, ModuleQuizCompletionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ModuleQuizCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ModuleQuizCompletion.
+     * @param {ModuleQuizCompletionCreateArgs} args - Arguments to create a ModuleQuizCompletion.
+     * @example
+     * // Create one ModuleQuizCompletion
+     * const ModuleQuizCompletion = await prisma.moduleQuizCompletion.create({
+     *   data: {
+     *     // ... data to create a ModuleQuizCompletion
+     *   }
+     * })
+     * 
+     */
+    create<T extends ModuleQuizCompletionCreateArgs>(args: SelectSubset<T, ModuleQuizCompletionCreateArgs<ExtArgs>>): Prisma__ModuleQuizCompletionClient<$Result.GetResult<Prisma.$ModuleQuizCompletionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ModuleQuizCompletions.
+     * @param {ModuleQuizCompletionCreateManyArgs} args - Arguments to create many ModuleQuizCompletions.
+     * @example
+     * // Create many ModuleQuizCompletions
+     * const moduleQuizCompletion = await prisma.moduleQuizCompletion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ModuleQuizCompletionCreateManyArgs>(args?: SelectSubset<T, ModuleQuizCompletionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ModuleQuizCompletions and returns the data saved in the database.
+     * @param {ModuleQuizCompletionCreateManyAndReturnArgs} args - Arguments to create many ModuleQuizCompletions.
+     * @example
+     * // Create many ModuleQuizCompletions
+     * const moduleQuizCompletion = await prisma.moduleQuizCompletion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ModuleQuizCompletions and only return the `id`
+     * const moduleQuizCompletionWithIdOnly = await prisma.moduleQuizCompletion.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ModuleQuizCompletionCreateManyAndReturnArgs>(args?: SelectSubset<T, ModuleQuizCompletionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ModuleQuizCompletionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ModuleQuizCompletion.
+     * @param {ModuleQuizCompletionDeleteArgs} args - Arguments to delete one ModuleQuizCompletion.
+     * @example
+     * // Delete one ModuleQuizCompletion
+     * const ModuleQuizCompletion = await prisma.moduleQuizCompletion.delete({
+     *   where: {
+     *     // ... filter to delete one ModuleQuizCompletion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ModuleQuizCompletionDeleteArgs>(args: SelectSubset<T, ModuleQuizCompletionDeleteArgs<ExtArgs>>): Prisma__ModuleQuizCompletionClient<$Result.GetResult<Prisma.$ModuleQuizCompletionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ModuleQuizCompletion.
+     * @param {ModuleQuizCompletionUpdateArgs} args - Arguments to update one ModuleQuizCompletion.
+     * @example
+     * // Update one ModuleQuizCompletion
+     * const moduleQuizCompletion = await prisma.moduleQuizCompletion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ModuleQuizCompletionUpdateArgs>(args: SelectSubset<T, ModuleQuizCompletionUpdateArgs<ExtArgs>>): Prisma__ModuleQuizCompletionClient<$Result.GetResult<Prisma.$ModuleQuizCompletionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ModuleQuizCompletions.
+     * @param {ModuleQuizCompletionDeleteManyArgs} args - Arguments to filter ModuleQuizCompletions to delete.
+     * @example
+     * // Delete a few ModuleQuizCompletions
+     * const { count } = await prisma.moduleQuizCompletion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ModuleQuizCompletionDeleteManyArgs>(args?: SelectSubset<T, ModuleQuizCompletionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ModuleQuizCompletions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ModuleQuizCompletionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ModuleQuizCompletions
+     * const moduleQuizCompletion = await prisma.moduleQuizCompletion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ModuleQuizCompletionUpdateManyArgs>(args: SelectSubset<T, ModuleQuizCompletionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ModuleQuizCompletions and returns the data updated in the database.
+     * @param {ModuleQuizCompletionUpdateManyAndReturnArgs} args - Arguments to update many ModuleQuizCompletions.
+     * @example
+     * // Update many ModuleQuizCompletions
+     * const moduleQuizCompletion = await prisma.moduleQuizCompletion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ModuleQuizCompletions and only return the `id`
+     * const moduleQuizCompletionWithIdOnly = await prisma.moduleQuizCompletion.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ModuleQuizCompletionUpdateManyAndReturnArgs>(args: SelectSubset<T, ModuleQuizCompletionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ModuleQuizCompletionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ModuleQuizCompletion.
+     * @param {ModuleQuizCompletionUpsertArgs} args - Arguments to update or create a ModuleQuizCompletion.
+     * @example
+     * // Update or create a ModuleQuizCompletion
+     * const moduleQuizCompletion = await prisma.moduleQuizCompletion.upsert({
+     *   create: {
+     *     // ... data to create a ModuleQuizCompletion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ModuleQuizCompletion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ModuleQuizCompletionUpsertArgs>(args: SelectSubset<T, ModuleQuizCompletionUpsertArgs<ExtArgs>>): Prisma__ModuleQuizCompletionClient<$Result.GetResult<Prisma.$ModuleQuizCompletionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ModuleQuizCompletions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ModuleQuizCompletionCountArgs} args - Arguments to filter ModuleQuizCompletions to count.
+     * @example
+     * // Count the number of ModuleQuizCompletions
+     * const count = await prisma.moduleQuizCompletion.count({
+     *   where: {
+     *     // ... the filter for the ModuleQuizCompletions we want to count
+     *   }
+     * })
+    **/
+    count<T extends ModuleQuizCompletionCountArgs>(
+      args?: Subset<T, ModuleQuizCompletionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ModuleQuizCompletionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ModuleQuizCompletion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ModuleQuizCompletionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ModuleQuizCompletionAggregateArgs>(args: Subset<T, ModuleQuizCompletionAggregateArgs>): Prisma.PrismaPromise<GetModuleQuizCompletionAggregateType<T>>
+
+    /**
+     * Group by ModuleQuizCompletion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ModuleQuizCompletionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ModuleQuizCompletionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ModuleQuizCompletionGroupByArgs['orderBy'] }
+        : { orderBy?: ModuleQuizCompletionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ModuleQuizCompletionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetModuleQuizCompletionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ModuleQuizCompletion model
+   */
+  readonly fields: ModuleQuizCompletionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ModuleQuizCompletion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ModuleQuizCompletionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    module<T extends ModuleDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ModuleDefaultArgs<ExtArgs>>): Prisma__ModuleClient<$Result.GetResult<Prisma.$ModulePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ModuleQuizCompletion model
+   */
+  interface ModuleQuizCompletionFieldRefs {
+    readonly id: FieldRef<"ModuleQuizCompletion", 'String'>
+    readonly userId: FieldRef<"ModuleQuizCompletion", 'String'>
+    readonly moduleId: FieldRef<"ModuleQuizCompletion", 'String'>
+    readonly score: FieldRef<"ModuleQuizCompletion", 'Float'>
+    readonly percentage: FieldRef<"ModuleQuizCompletion", 'Float'>
+    readonly passed: FieldRef<"ModuleQuizCompletion", 'Boolean'>
+    readonly completedAt: FieldRef<"ModuleQuizCompletion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ModuleQuizCompletion findUnique
+   */
+  export type ModuleQuizCompletionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleQuizCompletion
+     */
+    select?: ModuleQuizCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleQuizCompletion
+     */
+    omit?: ModuleQuizCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleQuizCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which ModuleQuizCompletion to fetch.
+     */
+    where: ModuleQuizCompletionWhereUniqueInput
+  }
+
+  /**
+   * ModuleQuizCompletion findUniqueOrThrow
+   */
+  export type ModuleQuizCompletionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleQuizCompletion
+     */
+    select?: ModuleQuizCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleQuizCompletion
+     */
+    omit?: ModuleQuizCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleQuizCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which ModuleQuizCompletion to fetch.
+     */
+    where: ModuleQuizCompletionWhereUniqueInput
+  }
+
+  /**
+   * ModuleQuizCompletion findFirst
+   */
+  export type ModuleQuizCompletionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleQuizCompletion
+     */
+    select?: ModuleQuizCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleQuizCompletion
+     */
+    omit?: ModuleQuizCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleQuizCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which ModuleQuizCompletion to fetch.
+     */
+    where?: ModuleQuizCompletionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ModuleQuizCompletions to fetch.
+     */
+    orderBy?: ModuleQuizCompletionOrderByWithRelationInput | ModuleQuizCompletionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ModuleQuizCompletions.
+     */
+    cursor?: ModuleQuizCompletionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ModuleQuizCompletions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ModuleQuizCompletions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ModuleQuizCompletions.
+     */
+    distinct?: ModuleQuizCompletionScalarFieldEnum | ModuleQuizCompletionScalarFieldEnum[]
+  }
+
+  /**
+   * ModuleQuizCompletion findFirstOrThrow
+   */
+  export type ModuleQuizCompletionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleQuizCompletion
+     */
+    select?: ModuleQuizCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleQuizCompletion
+     */
+    omit?: ModuleQuizCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleQuizCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which ModuleQuizCompletion to fetch.
+     */
+    where?: ModuleQuizCompletionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ModuleQuizCompletions to fetch.
+     */
+    orderBy?: ModuleQuizCompletionOrderByWithRelationInput | ModuleQuizCompletionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ModuleQuizCompletions.
+     */
+    cursor?: ModuleQuizCompletionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ModuleQuizCompletions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ModuleQuizCompletions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ModuleQuizCompletions.
+     */
+    distinct?: ModuleQuizCompletionScalarFieldEnum | ModuleQuizCompletionScalarFieldEnum[]
+  }
+
+  /**
+   * ModuleQuizCompletion findMany
+   */
+  export type ModuleQuizCompletionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleQuizCompletion
+     */
+    select?: ModuleQuizCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleQuizCompletion
+     */
+    omit?: ModuleQuizCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleQuizCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which ModuleQuizCompletions to fetch.
+     */
+    where?: ModuleQuizCompletionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ModuleQuizCompletions to fetch.
+     */
+    orderBy?: ModuleQuizCompletionOrderByWithRelationInput | ModuleQuizCompletionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ModuleQuizCompletions.
+     */
+    cursor?: ModuleQuizCompletionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ModuleQuizCompletions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ModuleQuizCompletions.
+     */
+    skip?: number
+    distinct?: ModuleQuizCompletionScalarFieldEnum | ModuleQuizCompletionScalarFieldEnum[]
+  }
+
+  /**
+   * ModuleQuizCompletion create
+   */
+  export type ModuleQuizCompletionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleQuizCompletion
+     */
+    select?: ModuleQuizCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleQuizCompletion
+     */
+    omit?: ModuleQuizCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleQuizCompletionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ModuleQuizCompletion.
+     */
+    data: XOR<ModuleQuizCompletionCreateInput, ModuleQuizCompletionUncheckedCreateInput>
+  }
+
+  /**
+   * ModuleQuizCompletion createMany
+   */
+  export type ModuleQuizCompletionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ModuleQuizCompletions.
+     */
+    data: ModuleQuizCompletionCreateManyInput | ModuleQuizCompletionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ModuleQuizCompletion createManyAndReturn
+   */
+  export type ModuleQuizCompletionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleQuizCompletion
+     */
+    select?: ModuleQuizCompletionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleQuizCompletion
+     */
+    omit?: ModuleQuizCompletionOmit<ExtArgs> | null
+    /**
+     * The data used to create many ModuleQuizCompletions.
+     */
+    data: ModuleQuizCompletionCreateManyInput | ModuleQuizCompletionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleQuizCompletionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ModuleQuizCompletion update
+   */
+  export type ModuleQuizCompletionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleQuizCompletion
+     */
+    select?: ModuleQuizCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleQuizCompletion
+     */
+    omit?: ModuleQuizCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleQuizCompletionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ModuleQuizCompletion.
+     */
+    data: XOR<ModuleQuizCompletionUpdateInput, ModuleQuizCompletionUncheckedUpdateInput>
+    /**
+     * Choose, which ModuleQuizCompletion to update.
+     */
+    where: ModuleQuizCompletionWhereUniqueInput
+  }
+
+  /**
+   * ModuleQuizCompletion updateMany
+   */
+  export type ModuleQuizCompletionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ModuleQuizCompletions.
+     */
+    data: XOR<ModuleQuizCompletionUpdateManyMutationInput, ModuleQuizCompletionUncheckedUpdateManyInput>
+    /**
+     * Filter which ModuleQuizCompletions to update
+     */
+    where?: ModuleQuizCompletionWhereInput
+    /**
+     * Limit how many ModuleQuizCompletions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ModuleQuizCompletion updateManyAndReturn
+   */
+  export type ModuleQuizCompletionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleQuizCompletion
+     */
+    select?: ModuleQuizCompletionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleQuizCompletion
+     */
+    omit?: ModuleQuizCompletionOmit<ExtArgs> | null
+    /**
+     * The data used to update ModuleQuizCompletions.
+     */
+    data: XOR<ModuleQuizCompletionUpdateManyMutationInput, ModuleQuizCompletionUncheckedUpdateManyInput>
+    /**
+     * Filter which ModuleQuizCompletions to update
+     */
+    where?: ModuleQuizCompletionWhereInput
+    /**
+     * Limit how many ModuleQuizCompletions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleQuizCompletionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ModuleQuizCompletion upsert
+   */
+  export type ModuleQuizCompletionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleQuizCompletion
+     */
+    select?: ModuleQuizCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleQuizCompletion
+     */
+    omit?: ModuleQuizCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleQuizCompletionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ModuleQuizCompletion to update in case it exists.
+     */
+    where: ModuleQuizCompletionWhereUniqueInput
+    /**
+     * In case the ModuleQuizCompletion found by the `where` argument doesn't exist, create a new ModuleQuizCompletion with this data.
+     */
+    create: XOR<ModuleQuizCompletionCreateInput, ModuleQuizCompletionUncheckedCreateInput>
+    /**
+     * In case the ModuleQuizCompletion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ModuleQuizCompletionUpdateInput, ModuleQuizCompletionUncheckedUpdateInput>
+  }
+
+  /**
+   * ModuleQuizCompletion delete
+   */
+  export type ModuleQuizCompletionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleQuizCompletion
+     */
+    select?: ModuleQuizCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleQuizCompletion
+     */
+    omit?: ModuleQuizCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleQuizCompletionInclude<ExtArgs> | null
+    /**
+     * Filter which ModuleQuizCompletion to delete.
+     */
+    where: ModuleQuizCompletionWhereUniqueInput
+  }
+
+  /**
+   * ModuleQuizCompletion deleteMany
+   */
+  export type ModuleQuizCompletionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ModuleQuizCompletions to delete
+     */
+    where?: ModuleQuizCompletionWhereInput
+    /**
+     * Limit how many ModuleQuizCompletions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ModuleQuizCompletion without action
+   */
+  export type ModuleQuizCompletionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ModuleQuizCompletion
+     */
+    select?: ModuleQuizCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ModuleQuizCompletion
+     */
+    omit?: ModuleQuizCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ModuleQuizCompletionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model FinalAssessmentCompletion
+   */
+
+  export type AggregateFinalAssessmentCompletion = {
+    _count: FinalAssessmentCompletionCountAggregateOutputType | null
+    _avg: FinalAssessmentCompletionAvgAggregateOutputType | null
+    _sum: FinalAssessmentCompletionSumAggregateOutputType | null
+    _min: FinalAssessmentCompletionMinAggregateOutputType | null
+    _max: FinalAssessmentCompletionMaxAggregateOutputType | null
+  }
+
+  export type FinalAssessmentCompletionAvgAggregateOutputType = {
+    score: number | null
+    percentage: number | null
+  }
+
+  export type FinalAssessmentCompletionSumAggregateOutputType = {
+    score: number | null
+    percentage: number | null
+  }
+
+  export type FinalAssessmentCompletionMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    courseId: string | null
+    score: number | null
+    percentage: number | null
+    passed: boolean | null
+    completedAt: Date | null
+  }
+
+  export type FinalAssessmentCompletionMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    courseId: string | null
+    score: number | null
+    percentage: number | null
+    passed: boolean | null
+    completedAt: Date | null
+  }
+
+  export type FinalAssessmentCompletionCountAggregateOutputType = {
+    id: number
+    userId: number
+    courseId: number
+    score: number
+    percentage: number
+    passed: number
+    completedAt: number
+    _all: number
+  }
+
+
+  export type FinalAssessmentCompletionAvgAggregateInputType = {
+    score?: true
+    percentage?: true
+  }
+
+  export type FinalAssessmentCompletionSumAggregateInputType = {
+    score?: true
+    percentage?: true
+  }
+
+  export type FinalAssessmentCompletionMinAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    score?: true
+    percentage?: true
+    passed?: true
+    completedAt?: true
+  }
+
+  export type FinalAssessmentCompletionMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    score?: true
+    percentage?: true
+    passed?: true
+    completedAt?: true
+  }
+
+  export type FinalAssessmentCompletionCountAggregateInputType = {
+    id?: true
+    userId?: true
+    courseId?: true
+    score?: true
+    percentage?: true
+    passed?: true
+    completedAt?: true
+    _all?: true
+  }
+
+  export type FinalAssessmentCompletionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FinalAssessmentCompletion to aggregate.
+     */
+    where?: FinalAssessmentCompletionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinalAssessmentCompletions to fetch.
+     */
+    orderBy?: FinalAssessmentCompletionOrderByWithRelationInput | FinalAssessmentCompletionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FinalAssessmentCompletionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinalAssessmentCompletions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinalAssessmentCompletions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FinalAssessmentCompletions
+    **/
+    _count?: true | FinalAssessmentCompletionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FinalAssessmentCompletionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FinalAssessmentCompletionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FinalAssessmentCompletionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FinalAssessmentCompletionMaxAggregateInputType
+  }
+
+  export type GetFinalAssessmentCompletionAggregateType<T extends FinalAssessmentCompletionAggregateArgs> = {
+        [P in keyof T & keyof AggregateFinalAssessmentCompletion]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFinalAssessmentCompletion[P]>
+      : GetScalarType<T[P], AggregateFinalAssessmentCompletion[P]>
+  }
+
+
+
+
+  export type FinalAssessmentCompletionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FinalAssessmentCompletionWhereInput
+    orderBy?: FinalAssessmentCompletionOrderByWithAggregationInput | FinalAssessmentCompletionOrderByWithAggregationInput[]
+    by: FinalAssessmentCompletionScalarFieldEnum[] | FinalAssessmentCompletionScalarFieldEnum
+    having?: FinalAssessmentCompletionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FinalAssessmentCompletionCountAggregateInputType | true
+    _avg?: FinalAssessmentCompletionAvgAggregateInputType
+    _sum?: FinalAssessmentCompletionSumAggregateInputType
+    _min?: FinalAssessmentCompletionMinAggregateInputType
+    _max?: FinalAssessmentCompletionMaxAggregateInputType
+  }
+
+  export type FinalAssessmentCompletionGroupByOutputType = {
+    id: string
+    userId: string
+    courseId: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt: Date
+    _count: FinalAssessmentCompletionCountAggregateOutputType | null
+    _avg: FinalAssessmentCompletionAvgAggregateOutputType | null
+    _sum: FinalAssessmentCompletionSumAggregateOutputType | null
+    _min: FinalAssessmentCompletionMinAggregateOutputType | null
+    _max: FinalAssessmentCompletionMaxAggregateOutputType | null
+  }
+
+  type GetFinalAssessmentCompletionGroupByPayload<T extends FinalAssessmentCompletionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FinalAssessmentCompletionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FinalAssessmentCompletionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FinalAssessmentCompletionGroupByOutputType[P]>
+            : GetScalarType<T[P], FinalAssessmentCompletionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FinalAssessmentCompletionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    score?: boolean
+    percentage?: boolean
+    passed?: boolean
+    completedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["finalAssessmentCompletion"]>
+
+  export type FinalAssessmentCompletionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    score?: boolean
+    percentage?: boolean
+    passed?: boolean
+    completedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["finalAssessmentCompletion"]>
+
+  export type FinalAssessmentCompletionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    score?: boolean
+    percentage?: boolean
+    passed?: boolean
+    completedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["finalAssessmentCompletion"]>
+
+  export type FinalAssessmentCompletionSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    courseId?: boolean
+    score?: boolean
+    percentage?: boolean
+    passed?: boolean
+    completedAt?: boolean
+  }
+
+  export type FinalAssessmentCompletionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "courseId" | "score" | "percentage" | "passed" | "completedAt", ExtArgs["result"]["finalAssessmentCompletion"]>
+  export type FinalAssessmentCompletionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type FinalAssessmentCompletionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type FinalAssessmentCompletionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $FinalAssessmentCompletionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FinalAssessmentCompletion"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      courseId: string
+      score: number
+      percentage: number
+      passed: boolean
+      completedAt: Date
+    }, ExtArgs["result"]["finalAssessmentCompletion"]>
+    composites: {}
+  }
+
+  type FinalAssessmentCompletionGetPayload<S extends boolean | null | undefined | FinalAssessmentCompletionDefaultArgs> = $Result.GetResult<Prisma.$FinalAssessmentCompletionPayload, S>
+
+  type FinalAssessmentCompletionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FinalAssessmentCompletionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FinalAssessmentCompletionCountAggregateInputType | true
+    }
+
+  export interface FinalAssessmentCompletionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FinalAssessmentCompletion'], meta: { name: 'FinalAssessmentCompletion' } }
+    /**
+     * Find zero or one FinalAssessmentCompletion that matches the filter.
+     * @param {FinalAssessmentCompletionFindUniqueArgs} args - Arguments to find a FinalAssessmentCompletion
+     * @example
+     * // Get one FinalAssessmentCompletion
+     * const finalAssessmentCompletion = await prisma.finalAssessmentCompletion.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FinalAssessmentCompletionFindUniqueArgs>(args: SelectSubset<T, FinalAssessmentCompletionFindUniqueArgs<ExtArgs>>): Prisma__FinalAssessmentCompletionClient<$Result.GetResult<Prisma.$FinalAssessmentCompletionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FinalAssessmentCompletion that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FinalAssessmentCompletionFindUniqueOrThrowArgs} args - Arguments to find a FinalAssessmentCompletion
+     * @example
+     * // Get one FinalAssessmentCompletion
+     * const finalAssessmentCompletion = await prisma.finalAssessmentCompletion.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FinalAssessmentCompletionFindUniqueOrThrowArgs>(args: SelectSubset<T, FinalAssessmentCompletionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FinalAssessmentCompletionClient<$Result.GetResult<Prisma.$FinalAssessmentCompletionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FinalAssessmentCompletion that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinalAssessmentCompletionFindFirstArgs} args - Arguments to find a FinalAssessmentCompletion
+     * @example
+     * // Get one FinalAssessmentCompletion
+     * const finalAssessmentCompletion = await prisma.finalAssessmentCompletion.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FinalAssessmentCompletionFindFirstArgs>(args?: SelectSubset<T, FinalAssessmentCompletionFindFirstArgs<ExtArgs>>): Prisma__FinalAssessmentCompletionClient<$Result.GetResult<Prisma.$FinalAssessmentCompletionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FinalAssessmentCompletion that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinalAssessmentCompletionFindFirstOrThrowArgs} args - Arguments to find a FinalAssessmentCompletion
+     * @example
+     * // Get one FinalAssessmentCompletion
+     * const finalAssessmentCompletion = await prisma.finalAssessmentCompletion.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FinalAssessmentCompletionFindFirstOrThrowArgs>(args?: SelectSubset<T, FinalAssessmentCompletionFindFirstOrThrowArgs<ExtArgs>>): Prisma__FinalAssessmentCompletionClient<$Result.GetResult<Prisma.$FinalAssessmentCompletionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FinalAssessmentCompletions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinalAssessmentCompletionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FinalAssessmentCompletions
+     * const finalAssessmentCompletions = await prisma.finalAssessmentCompletion.findMany()
+     * 
+     * // Get first 10 FinalAssessmentCompletions
+     * const finalAssessmentCompletions = await prisma.finalAssessmentCompletion.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const finalAssessmentCompletionWithIdOnly = await prisma.finalAssessmentCompletion.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FinalAssessmentCompletionFindManyArgs>(args?: SelectSubset<T, FinalAssessmentCompletionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinalAssessmentCompletionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FinalAssessmentCompletion.
+     * @param {FinalAssessmentCompletionCreateArgs} args - Arguments to create a FinalAssessmentCompletion.
+     * @example
+     * // Create one FinalAssessmentCompletion
+     * const FinalAssessmentCompletion = await prisma.finalAssessmentCompletion.create({
+     *   data: {
+     *     // ... data to create a FinalAssessmentCompletion
+     *   }
+     * })
+     * 
+     */
+    create<T extends FinalAssessmentCompletionCreateArgs>(args: SelectSubset<T, FinalAssessmentCompletionCreateArgs<ExtArgs>>): Prisma__FinalAssessmentCompletionClient<$Result.GetResult<Prisma.$FinalAssessmentCompletionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FinalAssessmentCompletions.
+     * @param {FinalAssessmentCompletionCreateManyArgs} args - Arguments to create many FinalAssessmentCompletions.
+     * @example
+     * // Create many FinalAssessmentCompletions
+     * const finalAssessmentCompletion = await prisma.finalAssessmentCompletion.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FinalAssessmentCompletionCreateManyArgs>(args?: SelectSubset<T, FinalAssessmentCompletionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FinalAssessmentCompletions and returns the data saved in the database.
+     * @param {FinalAssessmentCompletionCreateManyAndReturnArgs} args - Arguments to create many FinalAssessmentCompletions.
+     * @example
+     * // Create many FinalAssessmentCompletions
+     * const finalAssessmentCompletion = await prisma.finalAssessmentCompletion.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FinalAssessmentCompletions and only return the `id`
+     * const finalAssessmentCompletionWithIdOnly = await prisma.finalAssessmentCompletion.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FinalAssessmentCompletionCreateManyAndReturnArgs>(args?: SelectSubset<T, FinalAssessmentCompletionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinalAssessmentCompletionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FinalAssessmentCompletion.
+     * @param {FinalAssessmentCompletionDeleteArgs} args - Arguments to delete one FinalAssessmentCompletion.
+     * @example
+     * // Delete one FinalAssessmentCompletion
+     * const FinalAssessmentCompletion = await prisma.finalAssessmentCompletion.delete({
+     *   where: {
+     *     // ... filter to delete one FinalAssessmentCompletion
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FinalAssessmentCompletionDeleteArgs>(args: SelectSubset<T, FinalAssessmentCompletionDeleteArgs<ExtArgs>>): Prisma__FinalAssessmentCompletionClient<$Result.GetResult<Prisma.$FinalAssessmentCompletionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FinalAssessmentCompletion.
+     * @param {FinalAssessmentCompletionUpdateArgs} args - Arguments to update one FinalAssessmentCompletion.
+     * @example
+     * // Update one FinalAssessmentCompletion
+     * const finalAssessmentCompletion = await prisma.finalAssessmentCompletion.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FinalAssessmentCompletionUpdateArgs>(args: SelectSubset<T, FinalAssessmentCompletionUpdateArgs<ExtArgs>>): Prisma__FinalAssessmentCompletionClient<$Result.GetResult<Prisma.$FinalAssessmentCompletionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FinalAssessmentCompletions.
+     * @param {FinalAssessmentCompletionDeleteManyArgs} args - Arguments to filter FinalAssessmentCompletions to delete.
+     * @example
+     * // Delete a few FinalAssessmentCompletions
+     * const { count } = await prisma.finalAssessmentCompletion.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FinalAssessmentCompletionDeleteManyArgs>(args?: SelectSubset<T, FinalAssessmentCompletionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FinalAssessmentCompletions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinalAssessmentCompletionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FinalAssessmentCompletions
+     * const finalAssessmentCompletion = await prisma.finalAssessmentCompletion.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FinalAssessmentCompletionUpdateManyArgs>(args: SelectSubset<T, FinalAssessmentCompletionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FinalAssessmentCompletions and returns the data updated in the database.
+     * @param {FinalAssessmentCompletionUpdateManyAndReturnArgs} args - Arguments to update many FinalAssessmentCompletions.
+     * @example
+     * // Update many FinalAssessmentCompletions
+     * const finalAssessmentCompletion = await prisma.finalAssessmentCompletion.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FinalAssessmentCompletions and only return the `id`
+     * const finalAssessmentCompletionWithIdOnly = await prisma.finalAssessmentCompletion.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FinalAssessmentCompletionUpdateManyAndReturnArgs>(args: SelectSubset<T, FinalAssessmentCompletionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FinalAssessmentCompletionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FinalAssessmentCompletion.
+     * @param {FinalAssessmentCompletionUpsertArgs} args - Arguments to update or create a FinalAssessmentCompletion.
+     * @example
+     * // Update or create a FinalAssessmentCompletion
+     * const finalAssessmentCompletion = await prisma.finalAssessmentCompletion.upsert({
+     *   create: {
+     *     // ... data to create a FinalAssessmentCompletion
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FinalAssessmentCompletion we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FinalAssessmentCompletionUpsertArgs>(args: SelectSubset<T, FinalAssessmentCompletionUpsertArgs<ExtArgs>>): Prisma__FinalAssessmentCompletionClient<$Result.GetResult<Prisma.$FinalAssessmentCompletionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FinalAssessmentCompletions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinalAssessmentCompletionCountArgs} args - Arguments to filter FinalAssessmentCompletions to count.
+     * @example
+     * // Count the number of FinalAssessmentCompletions
+     * const count = await prisma.finalAssessmentCompletion.count({
+     *   where: {
+     *     // ... the filter for the FinalAssessmentCompletions we want to count
+     *   }
+     * })
+    **/
+    count<T extends FinalAssessmentCompletionCountArgs>(
+      args?: Subset<T, FinalAssessmentCompletionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FinalAssessmentCompletionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FinalAssessmentCompletion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinalAssessmentCompletionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FinalAssessmentCompletionAggregateArgs>(args: Subset<T, FinalAssessmentCompletionAggregateArgs>): Prisma.PrismaPromise<GetFinalAssessmentCompletionAggregateType<T>>
+
+    /**
+     * Group by FinalAssessmentCompletion.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FinalAssessmentCompletionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FinalAssessmentCompletionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FinalAssessmentCompletionGroupByArgs['orderBy'] }
+        : { orderBy?: FinalAssessmentCompletionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FinalAssessmentCompletionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFinalAssessmentCompletionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FinalAssessmentCompletion model
+   */
+  readonly fields: FinalAssessmentCompletionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FinalAssessmentCompletion.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FinalAssessmentCompletionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FinalAssessmentCompletion model
+   */
+  interface FinalAssessmentCompletionFieldRefs {
+    readonly id: FieldRef<"FinalAssessmentCompletion", 'String'>
+    readonly userId: FieldRef<"FinalAssessmentCompletion", 'String'>
+    readonly courseId: FieldRef<"FinalAssessmentCompletion", 'String'>
+    readonly score: FieldRef<"FinalAssessmentCompletion", 'Float'>
+    readonly percentage: FieldRef<"FinalAssessmentCompletion", 'Float'>
+    readonly passed: FieldRef<"FinalAssessmentCompletion", 'Boolean'>
+    readonly completedAt: FieldRef<"FinalAssessmentCompletion", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FinalAssessmentCompletion findUnique
+   */
+  export type FinalAssessmentCompletionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinalAssessmentCompletion
+     */
+    select?: FinalAssessmentCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinalAssessmentCompletion
+     */
+    omit?: FinalAssessmentCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinalAssessmentCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which FinalAssessmentCompletion to fetch.
+     */
+    where: FinalAssessmentCompletionWhereUniqueInput
+  }
+
+  /**
+   * FinalAssessmentCompletion findUniqueOrThrow
+   */
+  export type FinalAssessmentCompletionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinalAssessmentCompletion
+     */
+    select?: FinalAssessmentCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinalAssessmentCompletion
+     */
+    omit?: FinalAssessmentCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinalAssessmentCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which FinalAssessmentCompletion to fetch.
+     */
+    where: FinalAssessmentCompletionWhereUniqueInput
+  }
+
+  /**
+   * FinalAssessmentCompletion findFirst
+   */
+  export type FinalAssessmentCompletionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinalAssessmentCompletion
+     */
+    select?: FinalAssessmentCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinalAssessmentCompletion
+     */
+    omit?: FinalAssessmentCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinalAssessmentCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which FinalAssessmentCompletion to fetch.
+     */
+    where?: FinalAssessmentCompletionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinalAssessmentCompletions to fetch.
+     */
+    orderBy?: FinalAssessmentCompletionOrderByWithRelationInput | FinalAssessmentCompletionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FinalAssessmentCompletions.
+     */
+    cursor?: FinalAssessmentCompletionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinalAssessmentCompletions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinalAssessmentCompletions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FinalAssessmentCompletions.
+     */
+    distinct?: FinalAssessmentCompletionScalarFieldEnum | FinalAssessmentCompletionScalarFieldEnum[]
+  }
+
+  /**
+   * FinalAssessmentCompletion findFirstOrThrow
+   */
+  export type FinalAssessmentCompletionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinalAssessmentCompletion
+     */
+    select?: FinalAssessmentCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinalAssessmentCompletion
+     */
+    omit?: FinalAssessmentCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinalAssessmentCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which FinalAssessmentCompletion to fetch.
+     */
+    where?: FinalAssessmentCompletionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinalAssessmentCompletions to fetch.
+     */
+    orderBy?: FinalAssessmentCompletionOrderByWithRelationInput | FinalAssessmentCompletionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FinalAssessmentCompletions.
+     */
+    cursor?: FinalAssessmentCompletionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinalAssessmentCompletions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinalAssessmentCompletions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FinalAssessmentCompletions.
+     */
+    distinct?: FinalAssessmentCompletionScalarFieldEnum | FinalAssessmentCompletionScalarFieldEnum[]
+  }
+
+  /**
+   * FinalAssessmentCompletion findMany
+   */
+  export type FinalAssessmentCompletionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinalAssessmentCompletion
+     */
+    select?: FinalAssessmentCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinalAssessmentCompletion
+     */
+    omit?: FinalAssessmentCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinalAssessmentCompletionInclude<ExtArgs> | null
+    /**
+     * Filter, which FinalAssessmentCompletions to fetch.
+     */
+    where?: FinalAssessmentCompletionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FinalAssessmentCompletions to fetch.
+     */
+    orderBy?: FinalAssessmentCompletionOrderByWithRelationInput | FinalAssessmentCompletionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FinalAssessmentCompletions.
+     */
+    cursor?: FinalAssessmentCompletionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FinalAssessmentCompletions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FinalAssessmentCompletions.
+     */
+    skip?: number
+    distinct?: FinalAssessmentCompletionScalarFieldEnum | FinalAssessmentCompletionScalarFieldEnum[]
+  }
+
+  /**
+   * FinalAssessmentCompletion create
+   */
+  export type FinalAssessmentCompletionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinalAssessmentCompletion
+     */
+    select?: FinalAssessmentCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinalAssessmentCompletion
+     */
+    omit?: FinalAssessmentCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinalAssessmentCompletionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FinalAssessmentCompletion.
+     */
+    data: XOR<FinalAssessmentCompletionCreateInput, FinalAssessmentCompletionUncheckedCreateInput>
+  }
+
+  /**
+   * FinalAssessmentCompletion createMany
+   */
+  export type FinalAssessmentCompletionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FinalAssessmentCompletions.
+     */
+    data: FinalAssessmentCompletionCreateManyInput | FinalAssessmentCompletionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FinalAssessmentCompletion createManyAndReturn
+   */
+  export type FinalAssessmentCompletionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinalAssessmentCompletion
+     */
+    select?: FinalAssessmentCompletionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinalAssessmentCompletion
+     */
+    omit?: FinalAssessmentCompletionOmit<ExtArgs> | null
+    /**
+     * The data used to create many FinalAssessmentCompletions.
+     */
+    data: FinalAssessmentCompletionCreateManyInput | FinalAssessmentCompletionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinalAssessmentCompletionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FinalAssessmentCompletion update
+   */
+  export type FinalAssessmentCompletionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinalAssessmentCompletion
+     */
+    select?: FinalAssessmentCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinalAssessmentCompletion
+     */
+    omit?: FinalAssessmentCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinalAssessmentCompletionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FinalAssessmentCompletion.
+     */
+    data: XOR<FinalAssessmentCompletionUpdateInput, FinalAssessmentCompletionUncheckedUpdateInput>
+    /**
+     * Choose, which FinalAssessmentCompletion to update.
+     */
+    where: FinalAssessmentCompletionWhereUniqueInput
+  }
+
+  /**
+   * FinalAssessmentCompletion updateMany
+   */
+  export type FinalAssessmentCompletionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FinalAssessmentCompletions.
+     */
+    data: XOR<FinalAssessmentCompletionUpdateManyMutationInput, FinalAssessmentCompletionUncheckedUpdateManyInput>
+    /**
+     * Filter which FinalAssessmentCompletions to update
+     */
+    where?: FinalAssessmentCompletionWhereInput
+    /**
+     * Limit how many FinalAssessmentCompletions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FinalAssessmentCompletion updateManyAndReturn
+   */
+  export type FinalAssessmentCompletionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinalAssessmentCompletion
+     */
+    select?: FinalAssessmentCompletionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinalAssessmentCompletion
+     */
+    omit?: FinalAssessmentCompletionOmit<ExtArgs> | null
+    /**
+     * The data used to update FinalAssessmentCompletions.
+     */
+    data: XOR<FinalAssessmentCompletionUpdateManyMutationInput, FinalAssessmentCompletionUncheckedUpdateManyInput>
+    /**
+     * Filter which FinalAssessmentCompletions to update
+     */
+    where?: FinalAssessmentCompletionWhereInput
+    /**
+     * Limit how many FinalAssessmentCompletions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinalAssessmentCompletionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FinalAssessmentCompletion upsert
+   */
+  export type FinalAssessmentCompletionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinalAssessmentCompletion
+     */
+    select?: FinalAssessmentCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinalAssessmentCompletion
+     */
+    omit?: FinalAssessmentCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinalAssessmentCompletionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FinalAssessmentCompletion to update in case it exists.
+     */
+    where: FinalAssessmentCompletionWhereUniqueInput
+    /**
+     * In case the FinalAssessmentCompletion found by the `where` argument doesn't exist, create a new FinalAssessmentCompletion with this data.
+     */
+    create: XOR<FinalAssessmentCompletionCreateInput, FinalAssessmentCompletionUncheckedCreateInput>
+    /**
+     * In case the FinalAssessmentCompletion was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FinalAssessmentCompletionUpdateInput, FinalAssessmentCompletionUncheckedUpdateInput>
+  }
+
+  /**
+   * FinalAssessmentCompletion delete
+   */
+  export type FinalAssessmentCompletionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinalAssessmentCompletion
+     */
+    select?: FinalAssessmentCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinalAssessmentCompletion
+     */
+    omit?: FinalAssessmentCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinalAssessmentCompletionInclude<ExtArgs> | null
+    /**
+     * Filter which FinalAssessmentCompletion to delete.
+     */
+    where: FinalAssessmentCompletionWhereUniqueInput
+  }
+
+  /**
+   * FinalAssessmentCompletion deleteMany
+   */
+  export type FinalAssessmentCompletionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FinalAssessmentCompletions to delete
+     */
+    where?: FinalAssessmentCompletionWhereInput
+    /**
+     * Limit how many FinalAssessmentCompletions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FinalAssessmentCompletion without action
+   */
+  export type FinalAssessmentCompletionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FinalAssessmentCompletion
+     */
+    select?: FinalAssessmentCompletionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FinalAssessmentCompletion
+     */
+    omit?: FinalAssessmentCompletionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FinalAssessmentCompletionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -19581,7 +22145,7 @@ export namespace Prisma {
 
   export const QuizScalarFieldEnum: {
     id: 'id',
-    lessonId: 'lessonId'
+    moduleId: 'moduleId'
   };
 
   export type QuizScalarFieldEnum = (typeof QuizScalarFieldEnum)[keyof typeof QuizScalarFieldEnum]
@@ -19648,6 +22212,32 @@ export namespace Prisma {
   };
 
   export type UserActivityLogScalarFieldEnum = (typeof UserActivityLogScalarFieldEnum)[keyof typeof UserActivityLogScalarFieldEnum]
+
+
+  export const ModuleQuizCompletionScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    moduleId: 'moduleId',
+    score: 'score',
+    percentage: 'percentage',
+    passed: 'passed',
+    completedAt: 'completedAt'
+  };
+
+  export type ModuleQuizCompletionScalarFieldEnum = (typeof ModuleQuizCompletionScalarFieldEnum)[keyof typeof ModuleQuizCompletionScalarFieldEnum]
+
+
+  export const FinalAssessmentCompletionScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    courseId: 'courseId',
+    score: 'score',
+    percentage: 'percentage',
+    passed: 'passed',
+    completedAt: 'completedAt'
+  };
+
+  export type FinalAssessmentCompletionScalarFieldEnum = (typeof FinalAssessmentCompletionScalarFieldEnum)[keyof typeof FinalAssessmentCompletionScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -19808,6 +22398,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionListRelationFilter
     certificates?: CertificateListRelationFilter
     activityLogs?: UserActivityLogListRelationFilter
+    moduleQuizCompletions?: ModuleQuizCompletionListRelationFilter
+    finalAssessmentCompletions?: FinalAssessmentCompletionListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -19828,6 +22420,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionOrderByRelationAggregateInput
     certificates?: CertificateOrderByRelationAggregateInput
     activityLogs?: UserActivityLogOrderByRelationAggregateInput
+    moduleQuizCompletions?: ModuleQuizCompletionOrderByRelationAggregateInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -19851,6 +22445,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionListRelationFilter
     certificates?: CertificateListRelationFilter
     activityLogs?: UserActivityLogListRelationFilter
+    moduleQuizCompletions?: ModuleQuizCompletionListRelationFilter
+    finalAssessmentCompletions?: FinalAssessmentCompletionListRelationFilter
   }, "id" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -20056,6 +22652,8 @@ export namespace Prisma {
     courseId?: StringFilter<"Module"> | string
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     lessons?: LessonListRelationFilter
+    quiz?: XOR<QuizNullableScalarRelationFilter, QuizWhereInput> | null
+    quizCompletions?: ModuleQuizCompletionListRelationFilter
   }
 
   export type ModuleOrderByWithRelationInput = {
@@ -20067,6 +22665,8 @@ export namespace Prisma {
     courseId?: SortOrder
     course?: CourseOrderByWithRelationInput
     lessons?: LessonOrderByRelationAggregateInput
+    quiz?: QuizOrderByWithRelationInput
+    quizCompletions?: ModuleQuizCompletionOrderByRelationAggregateInput
   }
 
   export type ModuleWhereUniqueInput = Prisma.AtLeast<{
@@ -20082,6 +22682,8 @@ export namespace Prisma {
     courseId?: StringFilter<"Module"> | string
     course?: XOR<CourseScalarRelationFilter, CourseWhereInput>
     lessons?: LessonListRelationFilter
+    quiz?: XOR<QuizNullableScalarRelationFilter, QuizWhereInput> | null
+    quizCompletions?: ModuleQuizCompletionListRelationFilter
   }, "id" | "courseId_order">
 
   export type ModuleOrderByWithAggregationInput = {
@@ -20126,7 +22728,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Lesson"> | Date | string
     userProgress?: UserProgressListRelationFilter
     module?: XOR<ModuleScalarRelationFilter, ModuleWhereInput>
-    quiz?: XOR<QuizNullableScalarRelationFilter, QuizWhereInput> | null
     activityLogs?: UserActivityLogListRelationFilter
   }
 
@@ -20143,7 +22744,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
     userProgress?: UserProgressOrderByRelationAggregateInput
     module?: ModuleOrderByWithRelationInput
-    quiz?: QuizOrderByWithRelationInput
     activityLogs?: UserActivityLogOrderByRelationAggregateInput
   }
 
@@ -20164,7 +22764,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Lesson"> | Date | string
     userProgress?: UserProgressListRelationFilter
     module?: XOR<ModuleScalarRelationFilter, ModuleWhereInput>
-    quiz?: XOR<QuizNullableScalarRelationFilter, QuizWhereInput> | null
     activityLogs?: UserActivityLogListRelationFilter
   }, "id" | "moduleId_order">
 
@@ -20380,8 +22979,8 @@ export namespace Prisma {
     OR?: QuizWhereInput[]
     NOT?: QuizWhereInput | QuizWhereInput[]
     id?: StringFilter<"Quiz"> | string
-    lessonId?: StringFilter<"Quiz"> | string
-    lesson?: XOR<LessonScalarRelationFilter, LessonWhereInput>
+    moduleId?: StringNullableFilter<"Quiz"> | string | null
+    module?: XOR<ModuleNullableScalarRelationFilter, ModuleWhereInput> | null
     course?: XOR<CourseNullableScalarRelationFilter, CourseWhereInput> | null
     questions?: QuestionListRelationFilter
     submissions?: QuizSubmissionListRelationFilter
@@ -20389,8 +22988,8 @@ export namespace Prisma {
 
   export type QuizOrderByWithRelationInput = {
     id?: SortOrder
-    lessonId?: SortOrder
-    lesson?: LessonOrderByWithRelationInput
+    moduleId?: SortOrderInput | SortOrder
+    module?: ModuleOrderByWithRelationInput
     course?: CourseOrderByWithRelationInput
     questions?: QuestionOrderByRelationAggregateInput
     submissions?: QuizSubmissionOrderByRelationAggregateInput
@@ -20398,19 +22997,19 @@ export namespace Prisma {
 
   export type QuizWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    lessonId?: string
+    moduleId?: string
     AND?: QuizWhereInput | QuizWhereInput[]
     OR?: QuizWhereInput[]
     NOT?: QuizWhereInput | QuizWhereInput[]
-    lesson?: XOR<LessonScalarRelationFilter, LessonWhereInput>
+    module?: XOR<ModuleNullableScalarRelationFilter, ModuleWhereInput> | null
     course?: XOR<CourseNullableScalarRelationFilter, CourseWhereInput> | null
     questions?: QuestionListRelationFilter
     submissions?: QuizSubmissionListRelationFilter
-  }, "id" | "lessonId">
+  }, "id" | "moduleId">
 
   export type QuizOrderByWithAggregationInput = {
     id?: SortOrder
-    lessonId?: SortOrder
+    moduleId?: SortOrderInput | SortOrder
     _count?: QuizCountOrderByAggregateInput
     _max?: QuizMaxOrderByAggregateInput
     _min?: QuizMinOrderByAggregateInput
@@ -20421,7 +23020,7 @@ export namespace Prisma {
     OR?: QuizScalarWhereWithAggregatesInput[]
     NOT?: QuizScalarWhereWithAggregatesInput | QuizScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Quiz"> | string
-    lessonId?: StringWithAggregatesFilter<"Quiz"> | string
+    moduleId?: StringNullableWithAggregatesFilter<"Quiz"> | string | null
   }
 
   export type QuestionWhereInput = {
@@ -20772,6 +23371,145 @@ export namespace Prisma {
     lessonId?: StringWithAggregatesFilter<"UserActivityLog"> | string
   }
 
+  export type ModuleQuizCompletionWhereInput = {
+    AND?: ModuleQuizCompletionWhereInput | ModuleQuizCompletionWhereInput[]
+    OR?: ModuleQuizCompletionWhereInput[]
+    NOT?: ModuleQuizCompletionWhereInput | ModuleQuizCompletionWhereInput[]
+    id?: StringFilter<"ModuleQuizCompletion"> | string
+    userId?: StringFilter<"ModuleQuizCompletion"> | string
+    moduleId?: StringFilter<"ModuleQuizCompletion"> | string
+    score?: FloatFilter<"ModuleQuizCompletion"> | number
+    percentage?: FloatFilter<"ModuleQuizCompletion"> | number
+    passed?: BoolFilter<"ModuleQuizCompletion"> | boolean
+    completedAt?: DateTimeFilter<"ModuleQuizCompletion"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    module?: XOR<ModuleScalarRelationFilter, ModuleWhereInput>
+  }
+
+  export type ModuleQuizCompletionOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    moduleId?: SortOrder
+    score?: SortOrder
+    percentage?: SortOrder
+    passed?: SortOrder
+    completedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    module?: ModuleOrderByWithRelationInput
+  }
+
+  export type ModuleQuizCompletionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_moduleId?: ModuleQuizCompletionUserIdModuleIdCompoundUniqueInput
+    AND?: ModuleQuizCompletionWhereInput | ModuleQuizCompletionWhereInput[]
+    OR?: ModuleQuizCompletionWhereInput[]
+    NOT?: ModuleQuizCompletionWhereInput | ModuleQuizCompletionWhereInput[]
+    userId?: StringFilter<"ModuleQuizCompletion"> | string
+    moduleId?: StringFilter<"ModuleQuizCompletion"> | string
+    score?: FloatFilter<"ModuleQuizCompletion"> | number
+    percentage?: FloatFilter<"ModuleQuizCompletion"> | number
+    passed?: BoolFilter<"ModuleQuizCompletion"> | boolean
+    completedAt?: DateTimeFilter<"ModuleQuizCompletion"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    module?: XOR<ModuleScalarRelationFilter, ModuleWhereInput>
+  }, "id" | "userId_moduleId">
+
+  export type ModuleQuizCompletionOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    moduleId?: SortOrder
+    score?: SortOrder
+    percentage?: SortOrder
+    passed?: SortOrder
+    completedAt?: SortOrder
+    _count?: ModuleQuizCompletionCountOrderByAggregateInput
+    _avg?: ModuleQuizCompletionAvgOrderByAggregateInput
+    _max?: ModuleQuizCompletionMaxOrderByAggregateInput
+    _min?: ModuleQuizCompletionMinOrderByAggregateInput
+    _sum?: ModuleQuizCompletionSumOrderByAggregateInput
+  }
+
+  export type ModuleQuizCompletionScalarWhereWithAggregatesInput = {
+    AND?: ModuleQuizCompletionScalarWhereWithAggregatesInput | ModuleQuizCompletionScalarWhereWithAggregatesInput[]
+    OR?: ModuleQuizCompletionScalarWhereWithAggregatesInput[]
+    NOT?: ModuleQuizCompletionScalarWhereWithAggregatesInput | ModuleQuizCompletionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ModuleQuizCompletion"> | string
+    userId?: StringWithAggregatesFilter<"ModuleQuizCompletion"> | string
+    moduleId?: StringWithAggregatesFilter<"ModuleQuizCompletion"> | string
+    score?: FloatWithAggregatesFilter<"ModuleQuizCompletion"> | number
+    percentage?: FloatWithAggregatesFilter<"ModuleQuizCompletion"> | number
+    passed?: BoolWithAggregatesFilter<"ModuleQuizCompletion"> | boolean
+    completedAt?: DateTimeWithAggregatesFilter<"ModuleQuizCompletion"> | Date | string
+  }
+
+  export type FinalAssessmentCompletionWhereInput = {
+    AND?: FinalAssessmentCompletionWhereInput | FinalAssessmentCompletionWhereInput[]
+    OR?: FinalAssessmentCompletionWhereInput[]
+    NOT?: FinalAssessmentCompletionWhereInput | FinalAssessmentCompletionWhereInput[]
+    id?: StringFilter<"FinalAssessmentCompletion"> | string
+    userId?: StringFilter<"FinalAssessmentCompletion"> | string
+    courseId?: StringFilter<"FinalAssessmentCompletion"> | string
+    score?: FloatFilter<"FinalAssessmentCompletion"> | number
+    percentage?: FloatFilter<"FinalAssessmentCompletion"> | number
+    passed?: BoolFilter<"FinalAssessmentCompletion"> | boolean
+    completedAt?: DateTimeFilter<"FinalAssessmentCompletion"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type FinalAssessmentCompletionOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    score?: SortOrder
+    percentage?: SortOrder
+    passed?: SortOrder
+    completedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type FinalAssessmentCompletionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId_courseId?: FinalAssessmentCompletionUserIdCourseIdCompoundUniqueInput
+    AND?: FinalAssessmentCompletionWhereInput | FinalAssessmentCompletionWhereInput[]
+    OR?: FinalAssessmentCompletionWhereInput[]
+    NOT?: FinalAssessmentCompletionWhereInput | FinalAssessmentCompletionWhereInput[]
+    userId?: StringFilter<"FinalAssessmentCompletion"> | string
+    courseId?: StringFilter<"FinalAssessmentCompletion"> | string
+    score?: FloatFilter<"FinalAssessmentCompletion"> | number
+    percentage?: FloatFilter<"FinalAssessmentCompletion"> | number
+    passed?: BoolFilter<"FinalAssessmentCompletion"> | boolean
+    completedAt?: DateTimeFilter<"FinalAssessmentCompletion"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId_courseId">
+
+  export type FinalAssessmentCompletionOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    score?: SortOrder
+    percentage?: SortOrder
+    passed?: SortOrder
+    completedAt?: SortOrder
+    _count?: FinalAssessmentCompletionCountOrderByAggregateInput
+    _avg?: FinalAssessmentCompletionAvgOrderByAggregateInput
+    _max?: FinalAssessmentCompletionMaxOrderByAggregateInput
+    _min?: FinalAssessmentCompletionMinOrderByAggregateInput
+    _sum?: FinalAssessmentCompletionSumOrderByAggregateInput
+  }
+
+  export type FinalAssessmentCompletionScalarWhereWithAggregatesInput = {
+    AND?: FinalAssessmentCompletionScalarWhereWithAggregatesInput | FinalAssessmentCompletionScalarWhereWithAggregatesInput[]
+    OR?: FinalAssessmentCompletionScalarWhereWithAggregatesInput[]
+    NOT?: FinalAssessmentCompletionScalarWhereWithAggregatesInput | FinalAssessmentCompletionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FinalAssessmentCompletion"> | string
+    userId?: StringWithAggregatesFilter<"FinalAssessmentCompletion"> | string
+    courseId?: StringWithAggregatesFilter<"FinalAssessmentCompletion"> | string
+    score?: FloatWithAggregatesFilter<"FinalAssessmentCompletion"> | number
+    percentage?: FloatWithAggregatesFilter<"FinalAssessmentCompletion"> | number
+    passed?: BoolWithAggregatesFilter<"FinalAssessmentCompletion"> | boolean
+    completedAt?: DateTimeWithAggregatesFilter<"FinalAssessmentCompletion"> | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     email: string
@@ -20790,6 +23528,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionCreateNestedManyWithoutUserInput
     certificates?: CertificateCreateNestedManyWithoutUserInput
     activityLogs?: UserActivityLogCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -20810,6 +23550,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionUncheckedCreateNestedManyWithoutUserInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
     activityLogs?: UserActivityLogUncheckedCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -20830,6 +23572,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionUpdateManyWithoutUserNestedInput
     certificates?: CertificateUpdateManyWithoutUserNestedInput
     activityLogs?: UserActivityLogUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -20850,6 +23594,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionUncheckedUpdateManyWithoutUserNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
     activityLogs?: UserActivityLogUncheckedUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -21066,6 +23812,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     course: CourseCreateNestedOneWithoutModulesInput
     lessons?: LessonCreateNestedManyWithoutModuleInput
+    quiz?: QuizCreateNestedOneWithoutModuleInput
+    quizCompletions?: ModuleQuizCompletionCreateNestedManyWithoutModuleInput
   }
 
   export type ModuleUncheckedCreateInput = {
@@ -21076,6 +23824,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     courseId: string
     lessons?: LessonUncheckedCreateNestedManyWithoutModuleInput
+    quiz?: QuizUncheckedCreateNestedOneWithoutModuleInput
+    quizCompletions?: ModuleQuizCompletionUncheckedCreateNestedManyWithoutModuleInput
   }
 
   export type ModuleUpdateInput = {
@@ -21086,6 +23836,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutModulesNestedInput
     lessons?: LessonUpdateManyWithoutModuleNestedInput
+    quiz?: QuizUpdateOneWithoutModuleNestedInput
+    quizCompletions?: ModuleQuizCompletionUpdateManyWithoutModuleNestedInput
   }
 
   export type ModuleUncheckedUpdateInput = {
@@ -21096,6 +23848,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     courseId?: StringFieldUpdateOperationsInput | string
     lessons?: LessonUncheckedUpdateManyWithoutModuleNestedInput
+    quiz?: QuizUncheckedUpdateOneWithoutModuleNestedInput
+    quizCompletions?: ModuleQuizCompletionUncheckedUpdateManyWithoutModuleNestedInput
   }
 
   export type ModuleCreateManyInput = {
@@ -21136,7 +23890,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     userProgress?: UserProgressCreateNestedManyWithoutLessonInput
     module: ModuleCreateNestedOneWithoutLessonsInput
-    quiz?: QuizCreateNestedOneWithoutLessonInput
     activityLogs?: UserActivityLogCreateNestedManyWithoutLessonInput
   }
 
@@ -21152,7 +23905,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userProgress?: UserProgressUncheckedCreateNestedManyWithoutLessonInput
-    quiz?: QuizUncheckedCreateNestedOneWithoutLessonInput
     activityLogs?: UserActivityLogUncheckedCreateNestedManyWithoutLessonInput
   }
 
@@ -21168,7 +23920,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userProgress?: UserProgressUpdateManyWithoutLessonNestedInput
     module?: ModuleUpdateOneRequiredWithoutLessonsNestedInput
-    quiz?: QuizUpdateOneWithoutLessonNestedInput
     activityLogs?: UserActivityLogUpdateManyWithoutLessonNestedInput
   }
 
@@ -21184,7 +23935,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userProgress?: UserProgressUncheckedUpdateManyWithoutLessonNestedInput
-    quiz?: QuizUncheckedUpdateOneWithoutLessonNestedInput
     activityLogs?: UserActivityLogUncheckedUpdateManyWithoutLessonNestedInput
   }
 
@@ -21391,7 +24141,7 @@ export namespace Prisma {
 
   export type QuizCreateInput = {
     id?: string
-    lesson: LessonCreateNestedOneWithoutQuizInput
+    module?: ModuleCreateNestedOneWithoutQuizInput
     course?: CourseCreateNestedOneWithoutFinalAssessmentInput
     questions?: QuestionCreateNestedManyWithoutQuizInput
     submissions?: QuizSubmissionCreateNestedManyWithoutQuizInput
@@ -21399,7 +24149,7 @@ export namespace Prisma {
 
   export type QuizUncheckedCreateInput = {
     id?: string
-    lessonId: string
+    moduleId?: string | null
     course?: CourseUncheckedCreateNestedOneWithoutFinalAssessmentInput
     questions?: QuestionUncheckedCreateNestedManyWithoutQuizInput
     submissions?: QuizSubmissionUncheckedCreateNestedManyWithoutQuizInput
@@ -21407,7 +24157,7 @@ export namespace Prisma {
 
   export type QuizUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    lesson?: LessonUpdateOneRequiredWithoutQuizNestedInput
+    module?: ModuleUpdateOneWithoutQuizNestedInput
     course?: CourseUpdateOneWithoutFinalAssessmentNestedInput
     questions?: QuestionUpdateManyWithoutQuizNestedInput
     submissions?: QuizSubmissionUpdateManyWithoutQuizNestedInput
@@ -21415,7 +24165,7 @@ export namespace Prisma {
 
   export type QuizUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    lessonId?: StringFieldUpdateOperationsInput | string
+    moduleId?: NullableStringFieldUpdateOperationsInput | string | null
     course?: CourseUncheckedUpdateOneWithoutFinalAssessmentNestedInput
     questions?: QuestionUncheckedUpdateManyWithoutQuizNestedInput
     submissions?: QuizSubmissionUncheckedUpdateManyWithoutQuizNestedInput
@@ -21423,7 +24173,7 @@ export namespace Prisma {
 
   export type QuizCreateManyInput = {
     id?: string
-    lessonId: string
+    moduleId?: string | null
   }
 
   export type QuizUpdateManyMutationInput = {
@@ -21432,7 +24182,7 @@ export namespace Prisma {
 
   export type QuizUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    lessonId?: StringFieldUpdateOperationsInput | string
+    moduleId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type QuestionCreateInput = {
@@ -21755,6 +24505,143 @@ export namespace Prisma {
     lessonId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type ModuleQuizCompletionCreateInput = {
+    id?: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
+    user: UserCreateNestedOneWithoutModuleQuizCompletionsInput
+    module: ModuleCreateNestedOneWithoutQuizCompletionsInput
+  }
+
+  export type ModuleQuizCompletionUncheckedCreateInput = {
+    id?: string
+    userId: string
+    moduleId: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
+  }
+
+  export type ModuleQuizCompletionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutModuleQuizCompletionsNestedInput
+    module?: ModuleUpdateOneRequiredWithoutQuizCompletionsNestedInput
+  }
+
+  export type ModuleQuizCompletionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    moduleId?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ModuleQuizCompletionCreateManyInput = {
+    id?: string
+    userId: string
+    moduleId: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
+  }
+
+  export type ModuleQuizCompletionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ModuleQuizCompletionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    moduleId?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinalAssessmentCompletionCreateInput = {
+    id?: string
+    courseId: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
+    user: UserCreateNestedOneWithoutFinalAssessmentCompletionsInput
+  }
+
+  export type FinalAssessmentCompletionUncheckedCreateInput = {
+    id?: string
+    userId: string
+    courseId: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
+  }
+
+  export type FinalAssessmentCompletionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutFinalAssessmentCompletionsNestedInput
+  }
+
+  export type FinalAssessmentCompletionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinalAssessmentCompletionCreateManyInput = {
+    id?: string
+    userId: string
+    courseId: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
+  }
+
+  export type FinalAssessmentCompletionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinalAssessmentCompletionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -21866,6 +24753,18 @@ export namespace Prisma {
     none?: UserActivityLogWhereInput
   }
 
+  export type ModuleQuizCompletionListRelationFilter = {
+    every?: ModuleQuizCompletionWhereInput
+    some?: ModuleQuizCompletionWhereInput
+    none?: ModuleQuizCompletionWhereInput
+  }
+
+  export type FinalAssessmentCompletionListRelationFilter = {
+    every?: FinalAssessmentCompletionWhereInput
+    some?: FinalAssessmentCompletionWhereInput
+    none?: FinalAssessmentCompletionWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -21892,6 +24791,14 @@ export namespace Prisma {
   }
 
   export type UserActivityLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ModuleQuizCompletionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FinalAssessmentCompletionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -22440,6 +25347,11 @@ export namespace Prisma {
     courseId?: SortOrder
   }
 
+  export type ModuleNullableScalarRelationFilter = {
+    is?: ModuleWhereInput | null
+    isNot?: ModuleWhereInput | null
+  }
+
   export type CourseNullableScalarRelationFilter = {
     is?: CourseWhereInput | null
     isNot?: CourseWhereInput | null
@@ -22457,17 +25369,17 @@ export namespace Prisma {
 
   export type QuizCountOrderByAggregateInput = {
     id?: SortOrder
-    lessonId?: SortOrder
+    moduleId?: SortOrder
   }
 
   export type QuizMaxOrderByAggregateInput = {
     id?: SortOrder
-    lessonId?: SortOrder
+    moduleId?: SortOrder
   }
 
   export type QuizMinOrderByAggregateInput = {
     id?: SortOrder
-    lessonId?: SortOrder
+    moduleId?: SortOrder
   }
 
   export type QuizScalarRelationFilter = {
@@ -22671,6 +25583,96 @@ export namespace Prisma {
     durationSeconds?: SortOrder
   }
 
+  export type ModuleQuizCompletionUserIdModuleIdCompoundUniqueInput = {
+    userId: string
+    moduleId: string
+  }
+
+  export type ModuleQuizCompletionCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    moduleId?: SortOrder
+    score?: SortOrder
+    percentage?: SortOrder
+    passed?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type ModuleQuizCompletionAvgOrderByAggregateInput = {
+    score?: SortOrder
+    percentage?: SortOrder
+  }
+
+  export type ModuleQuizCompletionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    moduleId?: SortOrder
+    score?: SortOrder
+    percentage?: SortOrder
+    passed?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type ModuleQuizCompletionMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    moduleId?: SortOrder
+    score?: SortOrder
+    percentage?: SortOrder
+    passed?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type ModuleQuizCompletionSumOrderByAggregateInput = {
+    score?: SortOrder
+    percentage?: SortOrder
+  }
+
+  export type FinalAssessmentCompletionUserIdCourseIdCompoundUniqueInput = {
+    userId: string
+    courseId: string
+  }
+
+  export type FinalAssessmentCompletionCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    score?: SortOrder
+    percentage?: SortOrder
+    passed?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type FinalAssessmentCompletionAvgOrderByAggregateInput = {
+    score?: SortOrder
+    percentage?: SortOrder
+  }
+
+  export type FinalAssessmentCompletionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    score?: SortOrder
+    percentage?: SortOrder
+    passed?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type FinalAssessmentCompletionMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    courseId?: SortOrder
+    score?: SortOrder
+    percentage?: SortOrder
+    passed?: SortOrder
+    completedAt?: SortOrder
+  }
+
+  export type FinalAssessmentCompletionSumOrderByAggregateInput = {
+    score?: SortOrder
+    percentage?: SortOrder
+  }
+
   export type CourseCreateNestedManyWithoutInstructorInput = {
     create?: XOR<CourseCreateWithoutInstructorInput, CourseUncheckedCreateWithoutInstructorInput> | CourseCreateWithoutInstructorInput[] | CourseUncheckedCreateWithoutInstructorInput[]
     connectOrCreate?: CourseCreateOrConnectWithoutInstructorInput | CourseCreateOrConnectWithoutInstructorInput[]
@@ -22713,6 +25715,20 @@ export namespace Prisma {
     connect?: UserActivityLogWhereUniqueInput | UserActivityLogWhereUniqueInput[]
   }
 
+  export type ModuleQuizCompletionCreateNestedManyWithoutUserInput = {
+    create?: XOR<ModuleQuizCompletionCreateWithoutUserInput, ModuleQuizCompletionUncheckedCreateWithoutUserInput> | ModuleQuizCompletionCreateWithoutUserInput[] | ModuleQuizCompletionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ModuleQuizCompletionCreateOrConnectWithoutUserInput | ModuleQuizCompletionCreateOrConnectWithoutUserInput[]
+    createMany?: ModuleQuizCompletionCreateManyUserInputEnvelope
+    connect?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+  }
+
+  export type FinalAssessmentCompletionCreateNestedManyWithoutUserInput = {
+    create?: XOR<FinalAssessmentCompletionCreateWithoutUserInput, FinalAssessmentCompletionUncheckedCreateWithoutUserInput> | FinalAssessmentCompletionCreateWithoutUserInput[] | FinalAssessmentCompletionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: FinalAssessmentCompletionCreateOrConnectWithoutUserInput | FinalAssessmentCompletionCreateOrConnectWithoutUserInput[]
+    createMany?: FinalAssessmentCompletionCreateManyUserInputEnvelope
+    connect?: FinalAssessmentCompletionWhereUniqueInput | FinalAssessmentCompletionWhereUniqueInput[]
+  }
+
   export type CourseUncheckedCreateNestedManyWithoutInstructorInput = {
     create?: XOR<CourseCreateWithoutInstructorInput, CourseUncheckedCreateWithoutInstructorInput> | CourseCreateWithoutInstructorInput[] | CourseUncheckedCreateWithoutInstructorInput[]
     connectOrCreate?: CourseCreateOrConnectWithoutInstructorInput | CourseCreateOrConnectWithoutInstructorInput[]
@@ -22753,6 +25769,20 @@ export namespace Prisma {
     connectOrCreate?: UserActivityLogCreateOrConnectWithoutUserInput | UserActivityLogCreateOrConnectWithoutUserInput[]
     createMany?: UserActivityLogCreateManyUserInputEnvelope
     connect?: UserActivityLogWhereUniqueInput | UserActivityLogWhereUniqueInput[]
+  }
+
+  export type ModuleQuizCompletionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ModuleQuizCompletionCreateWithoutUserInput, ModuleQuizCompletionUncheckedCreateWithoutUserInput> | ModuleQuizCompletionCreateWithoutUserInput[] | ModuleQuizCompletionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ModuleQuizCompletionCreateOrConnectWithoutUserInput | ModuleQuizCompletionCreateOrConnectWithoutUserInput[]
+    createMany?: ModuleQuizCompletionCreateManyUserInputEnvelope
+    connect?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+  }
+
+  export type FinalAssessmentCompletionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<FinalAssessmentCompletionCreateWithoutUserInput, FinalAssessmentCompletionUncheckedCreateWithoutUserInput> | FinalAssessmentCompletionCreateWithoutUserInput[] | FinalAssessmentCompletionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: FinalAssessmentCompletionCreateOrConnectWithoutUserInput | FinalAssessmentCompletionCreateOrConnectWithoutUserInput[]
+    createMany?: FinalAssessmentCompletionCreateManyUserInputEnvelope
+    connect?: FinalAssessmentCompletionWhereUniqueInput | FinalAssessmentCompletionWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -22871,6 +25901,34 @@ export namespace Prisma {
     deleteMany?: UserActivityLogScalarWhereInput | UserActivityLogScalarWhereInput[]
   }
 
+  export type ModuleQuizCompletionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ModuleQuizCompletionCreateWithoutUserInput, ModuleQuizCompletionUncheckedCreateWithoutUserInput> | ModuleQuizCompletionCreateWithoutUserInput[] | ModuleQuizCompletionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ModuleQuizCompletionCreateOrConnectWithoutUserInput | ModuleQuizCompletionCreateOrConnectWithoutUserInput[]
+    upsert?: ModuleQuizCompletionUpsertWithWhereUniqueWithoutUserInput | ModuleQuizCompletionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ModuleQuizCompletionCreateManyUserInputEnvelope
+    set?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    disconnect?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    delete?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    connect?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    update?: ModuleQuizCompletionUpdateWithWhereUniqueWithoutUserInput | ModuleQuizCompletionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ModuleQuizCompletionUpdateManyWithWhereWithoutUserInput | ModuleQuizCompletionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ModuleQuizCompletionScalarWhereInput | ModuleQuizCompletionScalarWhereInput[]
+  }
+
+  export type FinalAssessmentCompletionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<FinalAssessmentCompletionCreateWithoutUserInput, FinalAssessmentCompletionUncheckedCreateWithoutUserInput> | FinalAssessmentCompletionCreateWithoutUserInput[] | FinalAssessmentCompletionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: FinalAssessmentCompletionCreateOrConnectWithoutUserInput | FinalAssessmentCompletionCreateOrConnectWithoutUserInput[]
+    upsert?: FinalAssessmentCompletionUpsertWithWhereUniqueWithoutUserInput | FinalAssessmentCompletionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: FinalAssessmentCompletionCreateManyUserInputEnvelope
+    set?: FinalAssessmentCompletionWhereUniqueInput | FinalAssessmentCompletionWhereUniqueInput[]
+    disconnect?: FinalAssessmentCompletionWhereUniqueInput | FinalAssessmentCompletionWhereUniqueInput[]
+    delete?: FinalAssessmentCompletionWhereUniqueInput | FinalAssessmentCompletionWhereUniqueInput[]
+    connect?: FinalAssessmentCompletionWhereUniqueInput | FinalAssessmentCompletionWhereUniqueInput[]
+    update?: FinalAssessmentCompletionUpdateWithWhereUniqueWithoutUserInput | FinalAssessmentCompletionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: FinalAssessmentCompletionUpdateManyWithWhereWithoutUserInput | FinalAssessmentCompletionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: FinalAssessmentCompletionScalarWhereInput | FinalAssessmentCompletionScalarWhereInput[]
+  }
+
   export type CourseUncheckedUpdateManyWithoutInstructorNestedInput = {
     create?: XOR<CourseCreateWithoutInstructorInput, CourseUncheckedCreateWithoutInstructorInput> | CourseCreateWithoutInstructorInput[] | CourseUncheckedCreateWithoutInstructorInput[]
     connectOrCreate?: CourseCreateOrConnectWithoutInstructorInput | CourseCreateOrConnectWithoutInstructorInput[]
@@ -22953,6 +26011,34 @@ export namespace Prisma {
     update?: UserActivityLogUpdateWithWhereUniqueWithoutUserInput | UserActivityLogUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: UserActivityLogUpdateManyWithWhereWithoutUserInput | UserActivityLogUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: UserActivityLogScalarWhereInput | UserActivityLogScalarWhereInput[]
+  }
+
+  export type ModuleQuizCompletionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ModuleQuizCompletionCreateWithoutUserInput, ModuleQuizCompletionUncheckedCreateWithoutUserInput> | ModuleQuizCompletionCreateWithoutUserInput[] | ModuleQuizCompletionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ModuleQuizCompletionCreateOrConnectWithoutUserInput | ModuleQuizCompletionCreateOrConnectWithoutUserInput[]
+    upsert?: ModuleQuizCompletionUpsertWithWhereUniqueWithoutUserInput | ModuleQuizCompletionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ModuleQuizCompletionCreateManyUserInputEnvelope
+    set?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    disconnect?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    delete?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    connect?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    update?: ModuleQuizCompletionUpdateWithWhereUniqueWithoutUserInput | ModuleQuizCompletionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ModuleQuizCompletionUpdateManyWithWhereWithoutUserInput | ModuleQuizCompletionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ModuleQuizCompletionScalarWhereInput | ModuleQuizCompletionScalarWhereInput[]
+  }
+
+  export type FinalAssessmentCompletionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<FinalAssessmentCompletionCreateWithoutUserInput, FinalAssessmentCompletionUncheckedCreateWithoutUserInput> | FinalAssessmentCompletionCreateWithoutUserInput[] | FinalAssessmentCompletionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: FinalAssessmentCompletionCreateOrConnectWithoutUserInput | FinalAssessmentCompletionCreateOrConnectWithoutUserInput[]
+    upsert?: FinalAssessmentCompletionUpsertWithWhereUniqueWithoutUserInput | FinalAssessmentCompletionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: FinalAssessmentCompletionCreateManyUserInputEnvelope
+    set?: FinalAssessmentCompletionWhereUniqueInput | FinalAssessmentCompletionWhereUniqueInput[]
+    disconnect?: FinalAssessmentCompletionWhereUniqueInput | FinalAssessmentCompletionWhereUniqueInput[]
+    delete?: FinalAssessmentCompletionWhereUniqueInput | FinalAssessmentCompletionWhereUniqueInput[]
+    connect?: FinalAssessmentCompletionWhereUniqueInput | FinalAssessmentCompletionWhereUniqueInput[]
+    update?: FinalAssessmentCompletionUpdateWithWhereUniqueWithoutUserInput | FinalAssessmentCompletionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: FinalAssessmentCompletionUpdateManyWithWhereWithoutUserInput | FinalAssessmentCompletionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: FinalAssessmentCompletionScalarWhereInput | FinalAssessmentCompletionScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutTaughtCoursesInput = {
@@ -23230,11 +26316,37 @@ export namespace Prisma {
     connect?: LessonWhereUniqueInput | LessonWhereUniqueInput[]
   }
 
+  export type QuizCreateNestedOneWithoutModuleInput = {
+    create?: XOR<QuizCreateWithoutModuleInput, QuizUncheckedCreateWithoutModuleInput>
+    connectOrCreate?: QuizCreateOrConnectWithoutModuleInput
+    connect?: QuizWhereUniqueInput
+  }
+
+  export type ModuleQuizCompletionCreateNestedManyWithoutModuleInput = {
+    create?: XOR<ModuleQuizCompletionCreateWithoutModuleInput, ModuleQuizCompletionUncheckedCreateWithoutModuleInput> | ModuleQuizCompletionCreateWithoutModuleInput[] | ModuleQuizCompletionUncheckedCreateWithoutModuleInput[]
+    connectOrCreate?: ModuleQuizCompletionCreateOrConnectWithoutModuleInput | ModuleQuizCompletionCreateOrConnectWithoutModuleInput[]
+    createMany?: ModuleQuizCompletionCreateManyModuleInputEnvelope
+    connect?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+  }
+
   export type LessonUncheckedCreateNestedManyWithoutModuleInput = {
     create?: XOR<LessonCreateWithoutModuleInput, LessonUncheckedCreateWithoutModuleInput> | LessonCreateWithoutModuleInput[] | LessonUncheckedCreateWithoutModuleInput[]
     connectOrCreate?: LessonCreateOrConnectWithoutModuleInput | LessonCreateOrConnectWithoutModuleInput[]
     createMany?: LessonCreateManyModuleInputEnvelope
     connect?: LessonWhereUniqueInput | LessonWhereUniqueInput[]
+  }
+
+  export type QuizUncheckedCreateNestedOneWithoutModuleInput = {
+    create?: XOR<QuizCreateWithoutModuleInput, QuizUncheckedCreateWithoutModuleInput>
+    connectOrCreate?: QuizCreateOrConnectWithoutModuleInput
+    connect?: QuizWhereUniqueInput
+  }
+
+  export type ModuleQuizCompletionUncheckedCreateNestedManyWithoutModuleInput = {
+    create?: XOR<ModuleQuizCompletionCreateWithoutModuleInput, ModuleQuizCompletionUncheckedCreateWithoutModuleInput> | ModuleQuizCompletionCreateWithoutModuleInput[] | ModuleQuizCompletionUncheckedCreateWithoutModuleInput[]
+    connectOrCreate?: ModuleQuizCompletionCreateOrConnectWithoutModuleInput | ModuleQuizCompletionCreateOrConnectWithoutModuleInput[]
+    createMany?: ModuleQuizCompletionCreateManyModuleInputEnvelope
+    connect?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -23267,6 +26379,30 @@ export namespace Prisma {
     deleteMany?: LessonScalarWhereInput | LessonScalarWhereInput[]
   }
 
+  export type QuizUpdateOneWithoutModuleNestedInput = {
+    create?: XOR<QuizCreateWithoutModuleInput, QuizUncheckedCreateWithoutModuleInput>
+    connectOrCreate?: QuizCreateOrConnectWithoutModuleInput
+    upsert?: QuizUpsertWithoutModuleInput
+    disconnect?: QuizWhereInput | boolean
+    delete?: QuizWhereInput | boolean
+    connect?: QuizWhereUniqueInput
+    update?: XOR<XOR<QuizUpdateToOneWithWhereWithoutModuleInput, QuizUpdateWithoutModuleInput>, QuizUncheckedUpdateWithoutModuleInput>
+  }
+
+  export type ModuleQuizCompletionUpdateManyWithoutModuleNestedInput = {
+    create?: XOR<ModuleQuizCompletionCreateWithoutModuleInput, ModuleQuizCompletionUncheckedCreateWithoutModuleInput> | ModuleQuizCompletionCreateWithoutModuleInput[] | ModuleQuizCompletionUncheckedCreateWithoutModuleInput[]
+    connectOrCreate?: ModuleQuizCompletionCreateOrConnectWithoutModuleInput | ModuleQuizCompletionCreateOrConnectWithoutModuleInput[]
+    upsert?: ModuleQuizCompletionUpsertWithWhereUniqueWithoutModuleInput | ModuleQuizCompletionUpsertWithWhereUniqueWithoutModuleInput[]
+    createMany?: ModuleQuizCompletionCreateManyModuleInputEnvelope
+    set?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    disconnect?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    delete?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    connect?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    update?: ModuleQuizCompletionUpdateWithWhereUniqueWithoutModuleInput | ModuleQuizCompletionUpdateWithWhereUniqueWithoutModuleInput[]
+    updateMany?: ModuleQuizCompletionUpdateManyWithWhereWithoutModuleInput | ModuleQuizCompletionUpdateManyWithWhereWithoutModuleInput[]
+    deleteMany?: ModuleQuizCompletionScalarWhereInput | ModuleQuizCompletionScalarWhereInput[]
+  }
+
   export type LessonUncheckedUpdateManyWithoutModuleNestedInput = {
     create?: XOR<LessonCreateWithoutModuleInput, LessonUncheckedCreateWithoutModuleInput> | LessonCreateWithoutModuleInput[] | LessonUncheckedCreateWithoutModuleInput[]
     connectOrCreate?: LessonCreateOrConnectWithoutModuleInput | LessonCreateOrConnectWithoutModuleInput[]
@@ -23279,6 +26415,30 @@ export namespace Prisma {
     update?: LessonUpdateWithWhereUniqueWithoutModuleInput | LessonUpdateWithWhereUniqueWithoutModuleInput[]
     updateMany?: LessonUpdateManyWithWhereWithoutModuleInput | LessonUpdateManyWithWhereWithoutModuleInput[]
     deleteMany?: LessonScalarWhereInput | LessonScalarWhereInput[]
+  }
+
+  export type QuizUncheckedUpdateOneWithoutModuleNestedInput = {
+    create?: XOR<QuizCreateWithoutModuleInput, QuizUncheckedCreateWithoutModuleInput>
+    connectOrCreate?: QuizCreateOrConnectWithoutModuleInput
+    upsert?: QuizUpsertWithoutModuleInput
+    disconnect?: QuizWhereInput | boolean
+    delete?: QuizWhereInput | boolean
+    connect?: QuizWhereUniqueInput
+    update?: XOR<XOR<QuizUpdateToOneWithWhereWithoutModuleInput, QuizUpdateWithoutModuleInput>, QuizUncheckedUpdateWithoutModuleInput>
+  }
+
+  export type ModuleQuizCompletionUncheckedUpdateManyWithoutModuleNestedInput = {
+    create?: XOR<ModuleQuizCompletionCreateWithoutModuleInput, ModuleQuizCompletionUncheckedCreateWithoutModuleInput> | ModuleQuizCompletionCreateWithoutModuleInput[] | ModuleQuizCompletionUncheckedCreateWithoutModuleInput[]
+    connectOrCreate?: ModuleQuizCompletionCreateOrConnectWithoutModuleInput | ModuleQuizCompletionCreateOrConnectWithoutModuleInput[]
+    upsert?: ModuleQuizCompletionUpsertWithWhereUniqueWithoutModuleInput | ModuleQuizCompletionUpsertWithWhereUniqueWithoutModuleInput[]
+    createMany?: ModuleQuizCompletionCreateManyModuleInputEnvelope
+    set?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    disconnect?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    delete?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    connect?: ModuleQuizCompletionWhereUniqueInput | ModuleQuizCompletionWhereUniqueInput[]
+    update?: ModuleQuizCompletionUpdateWithWhereUniqueWithoutModuleInput | ModuleQuizCompletionUpdateWithWhereUniqueWithoutModuleInput[]
+    updateMany?: ModuleQuizCompletionUpdateManyWithWhereWithoutModuleInput | ModuleQuizCompletionUpdateManyWithWhereWithoutModuleInput[]
+    deleteMany?: ModuleQuizCompletionScalarWhereInput | ModuleQuizCompletionScalarWhereInput[]
   }
 
   export type UserProgressCreateNestedManyWithoutLessonInput = {
@@ -23294,12 +26454,6 @@ export namespace Prisma {
     connect?: ModuleWhereUniqueInput
   }
 
-  export type QuizCreateNestedOneWithoutLessonInput = {
-    create?: XOR<QuizCreateWithoutLessonInput, QuizUncheckedCreateWithoutLessonInput>
-    connectOrCreate?: QuizCreateOrConnectWithoutLessonInput
-    connect?: QuizWhereUniqueInput
-  }
-
   export type UserActivityLogCreateNestedManyWithoutLessonInput = {
     create?: XOR<UserActivityLogCreateWithoutLessonInput, UserActivityLogUncheckedCreateWithoutLessonInput> | UserActivityLogCreateWithoutLessonInput[] | UserActivityLogUncheckedCreateWithoutLessonInput[]
     connectOrCreate?: UserActivityLogCreateOrConnectWithoutLessonInput | UserActivityLogCreateOrConnectWithoutLessonInput[]
@@ -23312,12 +26466,6 @@ export namespace Prisma {
     connectOrCreate?: UserProgressCreateOrConnectWithoutLessonInput | UserProgressCreateOrConnectWithoutLessonInput[]
     createMany?: UserProgressCreateManyLessonInputEnvelope
     connect?: UserProgressWhereUniqueInput | UserProgressWhereUniqueInput[]
-  }
-
-  export type QuizUncheckedCreateNestedOneWithoutLessonInput = {
-    create?: XOR<QuizCreateWithoutLessonInput, QuizUncheckedCreateWithoutLessonInput>
-    connectOrCreate?: QuizCreateOrConnectWithoutLessonInput
-    connect?: QuizWhereUniqueInput
   }
 
   export type UserActivityLogUncheckedCreateNestedManyWithoutLessonInput = {
@@ -23353,16 +26501,6 @@ export namespace Prisma {
     update?: XOR<XOR<ModuleUpdateToOneWithWhereWithoutLessonsInput, ModuleUpdateWithoutLessonsInput>, ModuleUncheckedUpdateWithoutLessonsInput>
   }
 
-  export type QuizUpdateOneWithoutLessonNestedInput = {
-    create?: XOR<QuizCreateWithoutLessonInput, QuizUncheckedCreateWithoutLessonInput>
-    connectOrCreate?: QuizCreateOrConnectWithoutLessonInput
-    upsert?: QuizUpsertWithoutLessonInput
-    disconnect?: QuizWhereInput | boolean
-    delete?: QuizWhereInput | boolean
-    connect?: QuizWhereUniqueInput
-    update?: XOR<XOR<QuizUpdateToOneWithWhereWithoutLessonInput, QuizUpdateWithoutLessonInput>, QuizUncheckedUpdateWithoutLessonInput>
-  }
-
   export type UserActivityLogUpdateManyWithoutLessonNestedInput = {
     create?: XOR<UserActivityLogCreateWithoutLessonInput, UserActivityLogUncheckedCreateWithoutLessonInput> | UserActivityLogCreateWithoutLessonInput[] | UserActivityLogUncheckedCreateWithoutLessonInput[]
     connectOrCreate?: UserActivityLogCreateOrConnectWithoutLessonInput | UserActivityLogCreateOrConnectWithoutLessonInput[]
@@ -23389,16 +26527,6 @@ export namespace Prisma {
     update?: UserProgressUpdateWithWhereUniqueWithoutLessonInput | UserProgressUpdateWithWhereUniqueWithoutLessonInput[]
     updateMany?: UserProgressUpdateManyWithWhereWithoutLessonInput | UserProgressUpdateManyWithWhereWithoutLessonInput[]
     deleteMany?: UserProgressScalarWhereInput | UserProgressScalarWhereInput[]
-  }
-
-  export type QuizUncheckedUpdateOneWithoutLessonNestedInput = {
-    create?: XOR<QuizCreateWithoutLessonInput, QuizUncheckedCreateWithoutLessonInput>
-    connectOrCreate?: QuizCreateOrConnectWithoutLessonInput
-    upsert?: QuizUpsertWithoutLessonInput
-    disconnect?: QuizWhereInput | boolean
-    delete?: QuizWhereInput | boolean
-    connect?: QuizWhereUniqueInput
-    update?: XOR<XOR<QuizUpdateToOneWithWhereWithoutLessonInput, QuizUpdateWithoutLessonInput>, QuizUncheckedUpdateWithoutLessonInput>
   }
 
   export type UserActivityLogUncheckedUpdateManyWithoutLessonNestedInput = {
@@ -23489,10 +26617,10 @@ export namespace Prisma {
     update?: XOR<XOR<CourseUpdateToOneWithWhereWithoutAttachmentsInput, CourseUpdateWithoutAttachmentsInput>, CourseUncheckedUpdateWithoutAttachmentsInput>
   }
 
-  export type LessonCreateNestedOneWithoutQuizInput = {
-    create?: XOR<LessonCreateWithoutQuizInput, LessonUncheckedCreateWithoutQuizInput>
-    connectOrCreate?: LessonCreateOrConnectWithoutQuizInput
-    connect?: LessonWhereUniqueInput
+  export type ModuleCreateNestedOneWithoutQuizInput = {
+    create?: XOR<ModuleCreateWithoutQuizInput, ModuleUncheckedCreateWithoutQuizInput>
+    connectOrCreate?: ModuleCreateOrConnectWithoutQuizInput
+    connect?: ModuleWhereUniqueInput
   }
 
   export type CourseCreateNestedOneWithoutFinalAssessmentInput = {
@@ -23535,12 +26663,14 @@ export namespace Prisma {
     connect?: QuizSubmissionWhereUniqueInput | QuizSubmissionWhereUniqueInput[]
   }
 
-  export type LessonUpdateOneRequiredWithoutQuizNestedInput = {
-    create?: XOR<LessonCreateWithoutQuizInput, LessonUncheckedCreateWithoutQuizInput>
-    connectOrCreate?: LessonCreateOrConnectWithoutQuizInput
-    upsert?: LessonUpsertWithoutQuizInput
-    connect?: LessonWhereUniqueInput
-    update?: XOR<XOR<LessonUpdateToOneWithWhereWithoutQuizInput, LessonUpdateWithoutQuizInput>, LessonUncheckedUpdateWithoutQuizInput>
+  export type ModuleUpdateOneWithoutQuizNestedInput = {
+    create?: XOR<ModuleCreateWithoutQuizInput, ModuleUncheckedCreateWithoutQuizInput>
+    connectOrCreate?: ModuleCreateOrConnectWithoutQuizInput
+    upsert?: ModuleUpsertWithoutQuizInput
+    disconnect?: ModuleWhereInput | boolean
+    delete?: ModuleWhereInput | boolean
+    connect?: ModuleWhereUniqueInput
+    update?: XOR<XOR<ModuleUpdateToOneWithWhereWithoutQuizInput, ModuleUpdateWithoutQuizInput>, ModuleUncheckedUpdateWithoutQuizInput>
   }
 
   export type CourseUpdateOneWithoutFinalAssessmentNestedInput = {
@@ -23939,6 +27069,48 @@ export namespace Prisma {
     upsert?: LessonUpsertWithoutActivityLogsInput
     connect?: LessonWhereUniqueInput
     update?: XOR<XOR<LessonUpdateToOneWithWhereWithoutActivityLogsInput, LessonUpdateWithoutActivityLogsInput>, LessonUncheckedUpdateWithoutActivityLogsInput>
+  }
+
+  export type UserCreateNestedOneWithoutModuleQuizCompletionsInput = {
+    create?: XOR<UserCreateWithoutModuleQuizCompletionsInput, UserUncheckedCreateWithoutModuleQuizCompletionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutModuleQuizCompletionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ModuleCreateNestedOneWithoutQuizCompletionsInput = {
+    create?: XOR<ModuleCreateWithoutQuizCompletionsInput, ModuleUncheckedCreateWithoutQuizCompletionsInput>
+    connectOrCreate?: ModuleCreateOrConnectWithoutQuizCompletionsInput
+    connect?: ModuleWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutModuleQuizCompletionsNestedInput = {
+    create?: XOR<UserCreateWithoutModuleQuizCompletionsInput, UserUncheckedCreateWithoutModuleQuizCompletionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutModuleQuizCompletionsInput
+    upsert?: UserUpsertWithoutModuleQuizCompletionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutModuleQuizCompletionsInput, UserUpdateWithoutModuleQuizCompletionsInput>, UserUncheckedUpdateWithoutModuleQuizCompletionsInput>
+  }
+
+  export type ModuleUpdateOneRequiredWithoutQuizCompletionsNestedInput = {
+    create?: XOR<ModuleCreateWithoutQuizCompletionsInput, ModuleUncheckedCreateWithoutQuizCompletionsInput>
+    connectOrCreate?: ModuleCreateOrConnectWithoutQuizCompletionsInput
+    upsert?: ModuleUpsertWithoutQuizCompletionsInput
+    connect?: ModuleWhereUniqueInput
+    update?: XOR<XOR<ModuleUpdateToOneWithWhereWithoutQuizCompletionsInput, ModuleUpdateWithoutQuizCompletionsInput>, ModuleUncheckedUpdateWithoutQuizCompletionsInput>
+  }
+
+  export type UserCreateNestedOneWithoutFinalAssessmentCompletionsInput = {
+    create?: XOR<UserCreateWithoutFinalAssessmentCompletionsInput, UserUncheckedCreateWithoutFinalAssessmentCompletionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFinalAssessmentCompletionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutFinalAssessmentCompletionsNestedInput = {
+    create?: XOR<UserCreateWithoutFinalAssessmentCompletionsInput, UserUncheckedCreateWithoutFinalAssessmentCompletionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutFinalAssessmentCompletionsInput
+    upsert?: UserUpsertWithoutFinalAssessmentCompletionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutFinalAssessmentCompletionsInput, UserUpdateWithoutFinalAssessmentCompletionsInput>, UserUncheckedUpdateWithoutFinalAssessmentCompletionsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -24381,6 +27553,62 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ModuleQuizCompletionCreateWithoutUserInput = {
+    id?: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
+    module: ModuleCreateNestedOneWithoutQuizCompletionsInput
+  }
+
+  export type ModuleQuizCompletionUncheckedCreateWithoutUserInput = {
+    id?: string
+    moduleId: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
+  }
+
+  export type ModuleQuizCompletionCreateOrConnectWithoutUserInput = {
+    where: ModuleQuizCompletionWhereUniqueInput
+    create: XOR<ModuleQuizCompletionCreateWithoutUserInput, ModuleQuizCompletionUncheckedCreateWithoutUserInput>
+  }
+
+  export type ModuleQuizCompletionCreateManyUserInputEnvelope = {
+    data: ModuleQuizCompletionCreateManyUserInput | ModuleQuizCompletionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FinalAssessmentCompletionCreateWithoutUserInput = {
+    id?: string
+    courseId: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
+  }
+
+  export type FinalAssessmentCompletionUncheckedCreateWithoutUserInput = {
+    id?: string
+    courseId: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
+  }
+
+  export type FinalAssessmentCompletionCreateOrConnectWithoutUserInput = {
+    where: FinalAssessmentCompletionWhereUniqueInput
+    create: XOR<FinalAssessmentCompletionCreateWithoutUserInput, FinalAssessmentCompletionUncheckedCreateWithoutUserInput>
+  }
+
+  export type FinalAssessmentCompletionCreateManyUserInputEnvelope = {
+    data: FinalAssessmentCompletionCreateManyUserInput | FinalAssessmentCompletionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
   export type CourseUpsertWithWhereUniqueWithoutInstructorInput = {
     where: CourseWhereUniqueInput
     update: XOR<CourseUpdateWithoutInstructorInput, CourseUncheckedUpdateWithoutInstructorInput>
@@ -24552,6 +27780,64 @@ export namespace Prisma {
     lessonId?: StringFilter<"UserActivityLog"> | string
   }
 
+  export type ModuleQuizCompletionUpsertWithWhereUniqueWithoutUserInput = {
+    where: ModuleQuizCompletionWhereUniqueInput
+    update: XOR<ModuleQuizCompletionUpdateWithoutUserInput, ModuleQuizCompletionUncheckedUpdateWithoutUserInput>
+    create: XOR<ModuleQuizCompletionCreateWithoutUserInput, ModuleQuizCompletionUncheckedCreateWithoutUserInput>
+  }
+
+  export type ModuleQuizCompletionUpdateWithWhereUniqueWithoutUserInput = {
+    where: ModuleQuizCompletionWhereUniqueInput
+    data: XOR<ModuleQuizCompletionUpdateWithoutUserInput, ModuleQuizCompletionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ModuleQuizCompletionUpdateManyWithWhereWithoutUserInput = {
+    where: ModuleQuizCompletionScalarWhereInput
+    data: XOR<ModuleQuizCompletionUpdateManyMutationInput, ModuleQuizCompletionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ModuleQuizCompletionScalarWhereInput = {
+    AND?: ModuleQuizCompletionScalarWhereInput | ModuleQuizCompletionScalarWhereInput[]
+    OR?: ModuleQuizCompletionScalarWhereInput[]
+    NOT?: ModuleQuizCompletionScalarWhereInput | ModuleQuizCompletionScalarWhereInput[]
+    id?: StringFilter<"ModuleQuizCompletion"> | string
+    userId?: StringFilter<"ModuleQuizCompletion"> | string
+    moduleId?: StringFilter<"ModuleQuizCompletion"> | string
+    score?: FloatFilter<"ModuleQuizCompletion"> | number
+    percentage?: FloatFilter<"ModuleQuizCompletion"> | number
+    passed?: BoolFilter<"ModuleQuizCompletion"> | boolean
+    completedAt?: DateTimeFilter<"ModuleQuizCompletion"> | Date | string
+  }
+
+  export type FinalAssessmentCompletionUpsertWithWhereUniqueWithoutUserInput = {
+    where: FinalAssessmentCompletionWhereUniqueInput
+    update: XOR<FinalAssessmentCompletionUpdateWithoutUserInput, FinalAssessmentCompletionUncheckedUpdateWithoutUserInput>
+    create: XOR<FinalAssessmentCompletionCreateWithoutUserInput, FinalAssessmentCompletionUncheckedCreateWithoutUserInput>
+  }
+
+  export type FinalAssessmentCompletionUpdateWithWhereUniqueWithoutUserInput = {
+    where: FinalAssessmentCompletionWhereUniqueInput
+    data: XOR<FinalAssessmentCompletionUpdateWithoutUserInput, FinalAssessmentCompletionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type FinalAssessmentCompletionUpdateManyWithWhereWithoutUserInput = {
+    where: FinalAssessmentCompletionScalarWhereInput
+    data: XOR<FinalAssessmentCompletionUpdateManyMutationInput, FinalAssessmentCompletionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type FinalAssessmentCompletionScalarWhereInput = {
+    AND?: FinalAssessmentCompletionScalarWhereInput | FinalAssessmentCompletionScalarWhereInput[]
+    OR?: FinalAssessmentCompletionScalarWhereInput[]
+    NOT?: FinalAssessmentCompletionScalarWhereInput | FinalAssessmentCompletionScalarWhereInput[]
+    id?: StringFilter<"FinalAssessmentCompletion"> | string
+    userId?: StringFilter<"FinalAssessmentCompletion"> | string
+    courseId?: StringFilter<"FinalAssessmentCompletion"> | string
+    score?: FloatFilter<"FinalAssessmentCompletion"> | number
+    percentage?: FloatFilter<"FinalAssessmentCompletion"> | number
+    passed?: BoolFilter<"FinalAssessmentCompletion"> | boolean
+    completedAt?: DateTimeFilter<"FinalAssessmentCompletion"> | Date | string
+  }
+
   export type UserCreateWithoutTaughtCoursesInput = {
     id?: string
     email: string
@@ -24569,6 +27855,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionCreateNestedManyWithoutUserInput
     certificates?: CertificateCreateNestedManyWithoutUserInput
     activityLogs?: UserActivityLogCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutTaughtCoursesInput = {
@@ -24588,6 +27876,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionUncheckedCreateNestedManyWithoutUserInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
     activityLogs?: UserActivityLogUncheckedCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutTaughtCoursesInput = {
@@ -24617,6 +27907,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     lessons?: LessonCreateNestedManyWithoutModuleInput
+    quiz?: QuizCreateNestedOneWithoutModuleInput
+    quizCompletions?: ModuleQuizCompletionCreateNestedManyWithoutModuleInput
   }
 
   export type ModuleUncheckedCreateWithoutCourseInput = {
@@ -24626,6 +27918,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     lessons?: LessonUncheckedCreateNestedManyWithoutModuleInput
+    quiz?: QuizUncheckedCreateNestedOneWithoutModuleInput
+    quizCompletions?: ModuleQuizCompletionUncheckedCreateNestedManyWithoutModuleInput
   }
 
   export type ModuleCreateOrConnectWithoutCourseInput = {
@@ -24714,14 +28008,14 @@ export namespace Prisma {
 
   export type QuizCreateWithoutCourseInput = {
     id?: string
-    lesson: LessonCreateNestedOneWithoutQuizInput
+    module?: ModuleCreateNestedOneWithoutQuizInput
     questions?: QuestionCreateNestedManyWithoutQuizInput
     submissions?: QuizSubmissionCreateNestedManyWithoutQuizInput
   }
 
   export type QuizUncheckedCreateWithoutCourseInput = {
     id?: string
-    lessonId: string
+    moduleId?: string | null
     questions?: QuestionUncheckedCreateNestedManyWithoutQuizInput
     submissions?: QuizSubmissionUncheckedCreateNestedManyWithoutQuizInput
   }
@@ -24759,6 +28053,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionUpdateManyWithoutUserNestedInput
     certificates?: CertificateUpdateManyWithoutUserNestedInput
     activityLogs?: UserActivityLogUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutTaughtCoursesInput = {
@@ -24778,6 +28074,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionUncheckedUpdateManyWithoutUserNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
     activityLogs?: UserActivityLogUncheckedUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CategoryUpsertWithoutCoursesInput = {
@@ -24901,14 +28199,14 @@ export namespace Prisma {
 
   export type QuizUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
-    lesson?: LessonUpdateOneRequiredWithoutQuizNestedInput
+    module?: ModuleUpdateOneWithoutQuizNestedInput
     questions?: QuestionUpdateManyWithoutQuizNestedInput
     submissions?: QuizSubmissionUpdateManyWithoutQuizNestedInput
   }
 
   export type QuizUncheckedUpdateWithoutCourseInput = {
     id?: StringFieldUpdateOperationsInput | string
-    lessonId?: StringFieldUpdateOperationsInput | string
+    moduleId?: NullableStringFieldUpdateOperationsInput | string | null
     questions?: QuestionUncheckedUpdateManyWithoutQuizNestedInput
     submissions?: QuizSubmissionUncheckedUpdateManyWithoutQuizNestedInput
   }
@@ -25031,7 +28329,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userProgress?: UserProgressCreateNestedManyWithoutLessonInput
-    quiz?: QuizCreateNestedOneWithoutLessonInput
     activityLogs?: UserActivityLogCreateNestedManyWithoutLessonInput
   }
 
@@ -25046,7 +28343,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userProgress?: UserProgressUncheckedCreateNestedManyWithoutLessonInput
-    quiz?: QuizUncheckedCreateNestedOneWithoutLessonInput
     activityLogs?: UserActivityLogUncheckedCreateNestedManyWithoutLessonInput
   }
 
@@ -25057,6 +28353,53 @@ export namespace Prisma {
 
   export type LessonCreateManyModuleInputEnvelope = {
     data: LessonCreateManyModuleInput | LessonCreateManyModuleInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type QuizCreateWithoutModuleInput = {
+    id?: string
+    course?: CourseCreateNestedOneWithoutFinalAssessmentInput
+    questions?: QuestionCreateNestedManyWithoutQuizInput
+    submissions?: QuizSubmissionCreateNestedManyWithoutQuizInput
+  }
+
+  export type QuizUncheckedCreateWithoutModuleInput = {
+    id?: string
+    course?: CourseUncheckedCreateNestedOneWithoutFinalAssessmentInput
+    questions?: QuestionUncheckedCreateNestedManyWithoutQuizInput
+    submissions?: QuizSubmissionUncheckedCreateNestedManyWithoutQuizInput
+  }
+
+  export type QuizCreateOrConnectWithoutModuleInput = {
+    where: QuizWhereUniqueInput
+    create: XOR<QuizCreateWithoutModuleInput, QuizUncheckedCreateWithoutModuleInput>
+  }
+
+  export type ModuleQuizCompletionCreateWithoutModuleInput = {
+    id?: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
+    user: UserCreateNestedOneWithoutModuleQuizCompletionsInput
+  }
+
+  export type ModuleQuizCompletionUncheckedCreateWithoutModuleInput = {
+    id?: string
+    userId: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
+  }
+
+  export type ModuleQuizCompletionCreateOrConnectWithoutModuleInput = {
+    where: ModuleQuizCompletionWhereUniqueInput
+    create: XOR<ModuleQuizCompletionCreateWithoutModuleInput, ModuleQuizCompletionUncheckedCreateWithoutModuleInput>
+  }
+
+  export type ModuleQuizCompletionCreateManyModuleInputEnvelope = {
+    data: ModuleQuizCompletionCreateManyModuleInput | ModuleQuizCompletionCreateManyModuleInput[]
     skipDuplicates?: boolean
   }
 
@@ -25141,6 +28484,47 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Lesson"> | Date | string
   }
 
+  export type QuizUpsertWithoutModuleInput = {
+    update: XOR<QuizUpdateWithoutModuleInput, QuizUncheckedUpdateWithoutModuleInput>
+    create: XOR<QuizCreateWithoutModuleInput, QuizUncheckedCreateWithoutModuleInput>
+    where?: QuizWhereInput
+  }
+
+  export type QuizUpdateToOneWithWhereWithoutModuleInput = {
+    where?: QuizWhereInput
+    data: XOR<QuizUpdateWithoutModuleInput, QuizUncheckedUpdateWithoutModuleInput>
+  }
+
+  export type QuizUpdateWithoutModuleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course?: CourseUpdateOneWithoutFinalAssessmentNestedInput
+    questions?: QuestionUpdateManyWithoutQuizNestedInput
+    submissions?: QuizSubmissionUpdateManyWithoutQuizNestedInput
+  }
+
+  export type QuizUncheckedUpdateWithoutModuleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    course?: CourseUncheckedUpdateOneWithoutFinalAssessmentNestedInput
+    questions?: QuestionUncheckedUpdateManyWithoutQuizNestedInput
+    submissions?: QuizSubmissionUncheckedUpdateManyWithoutQuizNestedInput
+  }
+
+  export type ModuleQuizCompletionUpsertWithWhereUniqueWithoutModuleInput = {
+    where: ModuleQuizCompletionWhereUniqueInput
+    update: XOR<ModuleQuizCompletionUpdateWithoutModuleInput, ModuleQuizCompletionUncheckedUpdateWithoutModuleInput>
+    create: XOR<ModuleQuizCompletionCreateWithoutModuleInput, ModuleQuizCompletionUncheckedCreateWithoutModuleInput>
+  }
+
+  export type ModuleQuizCompletionUpdateWithWhereUniqueWithoutModuleInput = {
+    where: ModuleQuizCompletionWhereUniqueInput
+    data: XOR<ModuleQuizCompletionUpdateWithoutModuleInput, ModuleQuizCompletionUncheckedUpdateWithoutModuleInput>
+  }
+
+  export type ModuleQuizCompletionUpdateManyWithWhereWithoutModuleInput = {
+    where: ModuleQuizCompletionScalarWhereInput
+    data: XOR<ModuleQuizCompletionUpdateManyMutationInput, ModuleQuizCompletionUncheckedUpdateManyWithoutModuleInput>
+  }
+
   export type UserProgressCreateWithoutLessonInput = {
     id?: string
     isCompleted?: boolean
@@ -25172,6 +28556,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     course: CourseCreateNestedOneWithoutModulesInput
+    quiz?: QuizCreateNestedOneWithoutModuleInput
+    quizCompletions?: ModuleQuizCompletionCreateNestedManyWithoutModuleInput
   }
 
   export type ModuleUncheckedCreateWithoutLessonsInput = {
@@ -25181,30 +28567,13 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     courseId: string
+    quiz?: QuizUncheckedCreateNestedOneWithoutModuleInput
+    quizCompletions?: ModuleQuizCompletionUncheckedCreateNestedManyWithoutModuleInput
   }
 
   export type ModuleCreateOrConnectWithoutLessonsInput = {
     where: ModuleWhereUniqueInput
     create: XOR<ModuleCreateWithoutLessonsInput, ModuleUncheckedCreateWithoutLessonsInput>
-  }
-
-  export type QuizCreateWithoutLessonInput = {
-    id?: string
-    course?: CourseCreateNestedOneWithoutFinalAssessmentInput
-    questions?: QuestionCreateNestedManyWithoutQuizInput
-    submissions?: QuizSubmissionCreateNestedManyWithoutQuizInput
-  }
-
-  export type QuizUncheckedCreateWithoutLessonInput = {
-    id?: string
-    course?: CourseUncheckedCreateNestedOneWithoutFinalAssessmentInput
-    questions?: QuestionUncheckedCreateNestedManyWithoutQuizInput
-    submissions?: QuizSubmissionUncheckedCreateNestedManyWithoutQuizInput
-  }
-
-  export type QuizCreateOrConnectWithoutLessonInput = {
-    where: QuizWhereUniqueInput
-    create: XOR<QuizCreateWithoutLessonInput, QuizUncheckedCreateWithoutLessonInput>
   }
 
   export type UserActivityLogCreateWithoutLessonInput = {
@@ -25265,6 +28634,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     course?: CourseUpdateOneRequiredWithoutModulesNestedInput
+    quiz?: QuizUpdateOneWithoutModuleNestedInput
+    quizCompletions?: ModuleQuizCompletionUpdateManyWithoutModuleNestedInput
   }
 
   export type ModuleUncheckedUpdateWithoutLessonsInput = {
@@ -25274,31 +28645,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     courseId?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type QuizUpsertWithoutLessonInput = {
-    update: XOR<QuizUpdateWithoutLessonInput, QuizUncheckedUpdateWithoutLessonInput>
-    create: XOR<QuizCreateWithoutLessonInput, QuizUncheckedCreateWithoutLessonInput>
-    where?: QuizWhereInput
-  }
-
-  export type QuizUpdateToOneWithWhereWithoutLessonInput = {
-    where?: QuizWhereInput
-    data: XOR<QuizUpdateWithoutLessonInput, QuizUncheckedUpdateWithoutLessonInput>
-  }
-
-  export type QuizUpdateWithoutLessonInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    course?: CourseUpdateOneWithoutFinalAssessmentNestedInput
-    questions?: QuestionUpdateManyWithoutQuizNestedInput
-    submissions?: QuizSubmissionUpdateManyWithoutQuizNestedInput
-  }
-
-  export type QuizUncheckedUpdateWithoutLessonInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    course?: CourseUncheckedUpdateOneWithoutFinalAssessmentNestedInput
-    questions?: QuestionUncheckedUpdateManyWithoutQuizNestedInput
-    submissions?: QuizSubmissionUncheckedUpdateManyWithoutQuizNestedInput
+    quiz?: QuizUncheckedUpdateOneWithoutModuleNestedInput
+    quizCompletions?: ModuleQuizCompletionUncheckedUpdateManyWithoutModuleNestedInput
   }
 
   export type UserActivityLogUpsertWithWhereUniqueWithoutLessonInput = {
@@ -25334,6 +28682,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionCreateNestedManyWithoutUserInput
     certificates?: CertificateCreateNestedManyWithoutUserInput
     activityLogs?: UserActivityLogCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEnrollmentsInput = {
@@ -25353,6 +28703,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionUncheckedCreateNestedManyWithoutUserInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
     activityLogs?: UserActivityLogUncheckedCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEnrollmentsInput = {
@@ -25431,6 +28783,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionUpdateManyWithoutUserNestedInput
     certificates?: CertificateUpdateManyWithoutUserNestedInput
     activityLogs?: UserActivityLogUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEnrollmentsInput = {
@@ -25450,6 +28804,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionUncheckedUpdateManyWithoutUserNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
     activityLogs?: UserActivityLogUncheckedUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutEnrollmentsInput = {
@@ -25518,6 +28874,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionCreateNestedManyWithoutUserInput
     certificates?: CertificateCreateNestedManyWithoutUserInput
     activityLogs?: UserActivityLogCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProgressInput = {
@@ -25537,6 +28895,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionUncheckedCreateNestedManyWithoutUserInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
     activityLogs?: UserActivityLogUncheckedCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProgressInput = {
@@ -25555,7 +28915,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     module: ModuleCreateNestedOneWithoutLessonsInput
-    quiz?: QuizCreateNestedOneWithoutLessonInput
     activityLogs?: UserActivityLogCreateNestedManyWithoutLessonInput
   }
 
@@ -25570,7 +28929,6 @@ export namespace Prisma {
     moduleId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    quiz?: QuizUncheckedCreateNestedOneWithoutLessonInput
     activityLogs?: UserActivityLogUncheckedCreateNestedManyWithoutLessonInput
   }
 
@@ -25607,6 +28965,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionUpdateManyWithoutUserNestedInput
     certificates?: CertificateUpdateManyWithoutUserNestedInput
     activityLogs?: UserActivityLogUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProgressInput = {
@@ -25626,6 +28986,8 @@ export namespace Prisma {
     quizSubmissions?: QuizSubmissionUncheckedUpdateManyWithoutUserNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
     activityLogs?: UserActivityLogUncheckedUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LessonUpsertWithoutUserProgressInput = {
@@ -25650,7 +29012,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     module?: ModuleUpdateOneRequiredWithoutLessonsNestedInput
-    quiz?: QuizUpdateOneWithoutLessonNestedInput
     activityLogs?: UserActivityLogUpdateManyWithoutLessonNestedInput
   }
 
@@ -25665,7 +29026,6 @@ export namespace Prisma {
     moduleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    quiz?: QuizUncheckedUpdateOneWithoutLessonNestedInput
     activityLogs?: UserActivityLogUncheckedUpdateManyWithoutLessonNestedInput
   }
 
@@ -25761,39 +29121,31 @@ export namespace Prisma {
     certificates?: CertificateUncheckedUpdateManyWithoutCourseNestedInput
   }
 
-  export type LessonCreateWithoutQuizInput = {
+  export type ModuleCreateWithoutQuizInput = {
     id?: string
     title: string
-    type: $Enums.LessonType
-    content?: string | null
-    videoUrl?: string | null
     order: number
-    completionTime?: number | null
     createdAt?: Date | string
     updatedAt?: Date | string
-    userProgress?: UserProgressCreateNestedManyWithoutLessonInput
-    module: ModuleCreateNestedOneWithoutLessonsInput
-    activityLogs?: UserActivityLogCreateNestedManyWithoutLessonInput
+    course: CourseCreateNestedOneWithoutModulesInput
+    lessons?: LessonCreateNestedManyWithoutModuleInput
+    quizCompletions?: ModuleQuizCompletionCreateNestedManyWithoutModuleInput
   }
 
-  export type LessonUncheckedCreateWithoutQuizInput = {
+  export type ModuleUncheckedCreateWithoutQuizInput = {
     id?: string
     title: string
-    type: $Enums.LessonType
-    content?: string | null
-    videoUrl?: string | null
     order: number
-    completionTime?: number | null
-    moduleId: string
     createdAt?: Date | string
     updatedAt?: Date | string
-    userProgress?: UserProgressUncheckedCreateNestedManyWithoutLessonInput
-    activityLogs?: UserActivityLogUncheckedCreateNestedManyWithoutLessonInput
+    courseId: string
+    lessons?: LessonUncheckedCreateNestedManyWithoutModuleInput
+    quizCompletions?: ModuleQuizCompletionUncheckedCreateNestedManyWithoutModuleInput
   }
 
-  export type LessonCreateOrConnectWithoutQuizInput = {
-    where: LessonWhereUniqueInput
-    create: XOR<LessonCreateWithoutQuizInput, LessonUncheckedCreateWithoutQuizInput>
+  export type ModuleCreateOrConnectWithoutQuizInput = {
+    where: ModuleWhereUniqueInput
+    create: XOR<ModuleCreateWithoutQuizInput, ModuleUncheckedCreateWithoutQuizInput>
   }
 
   export type CourseCreateWithoutFinalAssessmentInput = {
@@ -25889,45 +29241,37 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type LessonUpsertWithoutQuizInput = {
-    update: XOR<LessonUpdateWithoutQuizInput, LessonUncheckedUpdateWithoutQuizInput>
-    create: XOR<LessonCreateWithoutQuizInput, LessonUncheckedCreateWithoutQuizInput>
-    where?: LessonWhereInput
+  export type ModuleUpsertWithoutQuizInput = {
+    update: XOR<ModuleUpdateWithoutQuizInput, ModuleUncheckedUpdateWithoutQuizInput>
+    create: XOR<ModuleCreateWithoutQuizInput, ModuleUncheckedCreateWithoutQuizInput>
+    where?: ModuleWhereInput
   }
 
-  export type LessonUpdateToOneWithWhereWithoutQuizInput = {
-    where?: LessonWhereInput
-    data: XOR<LessonUpdateWithoutQuizInput, LessonUncheckedUpdateWithoutQuizInput>
+  export type ModuleUpdateToOneWithWhereWithoutQuizInput = {
+    where?: ModuleWhereInput
+    data: XOR<ModuleUpdateWithoutQuizInput, ModuleUncheckedUpdateWithoutQuizInput>
   }
 
-  export type LessonUpdateWithoutQuizInput = {
+  export type ModuleUpdateWithoutQuizInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    type?: EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
-    completionTime?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userProgress?: UserProgressUpdateManyWithoutLessonNestedInput
-    module?: ModuleUpdateOneRequiredWithoutLessonsNestedInput
-    activityLogs?: UserActivityLogUpdateManyWithoutLessonNestedInput
+    course?: CourseUpdateOneRequiredWithoutModulesNestedInput
+    lessons?: LessonUpdateManyWithoutModuleNestedInput
+    quizCompletions?: ModuleQuizCompletionUpdateManyWithoutModuleNestedInput
   }
 
-  export type LessonUncheckedUpdateWithoutQuizInput = {
+  export type ModuleUncheckedUpdateWithoutQuizInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
-    type?: EnumLessonTypeFieldUpdateOperationsInput | $Enums.LessonType
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    videoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     order?: IntFieldUpdateOperationsInput | number
-    completionTime?: NullableIntFieldUpdateOperationsInput | number | null
-    moduleId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    userProgress?: UserProgressUncheckedUpdateManyWithoutLessonNestedInput
-    activityLogs?: UserActivityLogUncheckedUpdateManyWithoutLessonNestedInput
+    courseId?: StringFieldUpdateOperationsInput | string
+    lessons?: LessonUncheckedUpdateManyWithoutModuleNestedInput
+    quizCompletions?: ModuleQuizCompletionUncheckedUpdateManyWithoutModuleNestedInput
   }
 
   export type CourseUpsertWithoutFinalAssessmentInput = {
@@ -26022,14 +29366,14 @@ export namespace Prisma {
 
   export type QuizCreateWithoutQuestionsInput = {
     id?: string
-    lesson: LessonCreateNestedOneWithoutQuizInput
+    module?: ModuleCreateNestedOneWithoutQuizInput
     course?: CourseCreateNestedOneWithoutFinalAssessmentInput
     submissions?: QuizSubmissionCreateNestedManyWithoutQuizInput
   }
 
   export type QuizUncheckedCreateWithoutQuestionsInput = {
     id?: string
-    lessonId: string
+    moduleId?: string | null
     course?: CourseUncheckedCreateNestedOneWithoutFinalAssessmentInput
     submissions?: QuizSubmissionUncheckedCreateNestedManyWithoutQuizInput
   }
@@ -26098,14 +29442,14 @@ export namespace Prisma {
 
   export type QuizUpdateWithoutQuestionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    lesson?: LessonUpdateOneRequiredWithoutQuizNestedInput
+    module?: ModuleUpdateOneWithoutQuizNestedInput
     course?: CourseUpdateOneWithoutFinalAssessmentNestedInput
     submissions?: QuizSubmissionUpdateManyWithoutQuizNestedInput
   }
 
   export type QuizUncheckedUpdateWithoutQuestionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    lessonId?: StringFieldUpdateOperationsInput | string
+    moduleId?: NullableStringFieldUpdateOperationsInput | string | null
     course?: CourseUncheckedUpdateOneWithoutFinalAssessmentNestedInput
     submissions?: QuizSubmissionUncheckedUpdateManyWithoutQuizNestedInput
   }
@@ -26261,6 +29605,8 @@ export namespace Prisma {
     progress?: UserProgressCreateNestedManyWithoutUserInput
     certificates?: CertificateCreateNestedManyWithoutUserInput
     activityLogs?: UserActivityLogCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutQuizSubmissionsInput = {
@@ -26280,6 +29626,8 @@ export namespace Prisma {
     progress?: UserProgressUncheckedCreateNestedManyWithoutUserInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
     activityLogs?: UserActivityLogUncheckedCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutQuizSubmissionsInput = {
@@ -26289,14 +29637,14 @@ export namespace Prisma {
 
   export type QuizCreateWithoutSubmissionsInput = {
     id?: string
-    lesson: LessonCreateNestedOneWithoutQuizInput
+    module?: ModuleCreateNestedOneWithoutQuizInput
     course?: CourseCreateNestedOneWithoutFinalAssessmentInput
     questions?: QuestionCreateNestedManyWithoutQuizInput
   }
 
   export type QuizUncheckedCreateWithoutSubmissionsInput = {
     id?: string
-    lessonId: string
+    moduleId?: string | null
     course?: CourseUncheckedCreateNestedOneWithoutFinalAssessmentInput
     questions?: QuestionUncheckedCreateNestedManyWithoutQuizInput
   }
@@ -26356,6 +29704,8 @@ export namespace Prisma {
     progress?: UserProgressUpdateManyWithoutUserNestedInput
     certificates?: CertificateUpdateManyWithoutUserNestedInput
     activityLogs?: UserActivityLogUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutQuizSubmissionsInput = {
@@ -26375,6 +29725,8 @@ export namespace Prisma {
     progress?: UserProgressUncheckedUpdateManyWithoutUserNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
     activityLogs?: UserActivityLogUncheckedUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuizUpsertWithoutSubmissionsInput = {
@@ -26390,14 +29742,14 @@ export namespace Prisma {
 
   export type QuizUpdateWithoutSubmissionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    lesson?: LessonUpdateOneRequiredWithoutQuizNestedInput
+    module?: ModuleUpdateOneWithoutQuizNestedInput
     course?: CourseUpdateOneWithoutFinalAssessmentNestedInput
     questions?: QuestionUpdateManyWithoutQuizNestedInput
   }
 
   export type QuizUncheckedUpdateWithoutSubmissionsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    lessonId?: StringFieldUpdateOperationsInput | string
+    moduleId?: NullableStringFieldUpdateOperationsInput | string | null
     course?: CourseUncheckedUpdateOneWithoutFinalAssessmentNestedInput
     questions?: QuestionUncheckedUpdateManyWithoutQuizNestedInput
   }
@@ -26571,6 +29923,8 @@ export namespace Prisma {
     progress?: UserProgressCreateNestedManyWithoutUserInput
     quizSubmissions?: QuizSubmissionCreateNestedManyWithoutUserInput
     activityLogs?: UserActivityLogCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCertificatesInput = {
@@ -26590,6 +29944,8 @@ export namespace Prisma {
     progress?: UserProgressUncheckedCreateNestedManyWithoutUserInput
     quizSubmissions?: QuizSubmissionUncheckedCreateNestedManyWithoutUserInput
     activityLogs?: UserActivityLogUncheckedCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCertificatesInput = {
@@ -26668,6 +30024,8 @@ export namespace Prisma {
     progress?: UserProgressUpdateManyWithoutUserNestedInput
     quizSubmissions?: QuizSubmissionUpdateManyWithoutUserNestedInput
     activityLogs?: UserActivityLogUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCertificatesInput = {
@@ -26687,6 +30045,8 @@ export namespace Prisma {
     progress?: UserProgressUncheckedUpdateManyWithoutUserNestedInput
     quizSubmissions?: QuizSubmissionUncheckedUpdateManyWithoutUserNestedInput
     activityLogs?: UserActivityLogUncheckedUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseUpsertWithoutCertificatesInput = {
@@ -26755,6 +30115,8 @@ export namespace Prisma {
     progress?: UserProgressCreateNestedManyWithoutUserInput
     quizSubmissions?: QuizSubmissionCreateNestedManyWithoutUserInput
     certificates?: CertificateCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutActivityLogsInput = {
@@ -26774,6 +30136,8 @@ export namespace Prisma {
     progress?: UserProgressUncheckedCreateNestedManyWithoutUserInput
     quizSubmissions?: QuizSubmissionUncheckedCreateNestedManyWithoutUserInput
     certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutActivityLogsInput = {
@@ -26793,7 +30157,6 @@ export namespace Prisma {
     updatedAt?: Date | string
     userProgress?: UserProgressCreateNestedManyWithoutLessonInput
     module: ModuleCreateNestedOneWithoutLessonsInput
-    quiz?: QuizCreateNestedOneWithoutLessonInput
   }
 
   export type LessonUncheckedCreateWithoutActivityLogsInput = {
@@ -26808,7 +30171,6 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     userProgress?: UserProgressUncheckedCreateNestedManyWithoutLessonInput
-    quiz?: QuizUncheckedCreateNestedOneWithoutLessonInput
   }
 
   export type LessonCreateOrConnectWithoutActivityLogsInput = {
@@ -26844,6 +30206,8 @@ export namespace Prisma {
     progress?: UserProgressUpdateManyWithoutUserNestedInput
     quizSubmissions?: QuizSubmissionUpdateManyWithoutUserNestedInput
     certificates?: CertificateUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutActivityLogsInput = {
@@ -26863,6 +30227,8 @@ export namespace Prisma {
     progress?: UserProgressUncheckedUpdateManyWithoutUserNestedInput
     quizSubmissions?: QuizSubmissionUncheckedUpdateManyWithoutUserNestedInput
     certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LessonUpsertWithoutActivityLogsInput = {
@@ -26888,7 +30254,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userProgress?: UserProgressUpdateManyWithoutLessonNestedInput
     module?: ModuleUpdateOneRequiredWithoutLessonsNestedInput
-    quiz?: QuizUpdateOneWithoutLessonNestedInput
   }
 
   export type LessonUncheckedUpdateWithoutActivityLogsInput = {
@@ -26903,7 +30268,266 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userProgress?: UserProgressUncheckedUpdateManyWithoutLessonNestedInput
-    quiz?: QuizUncheckedUpdateOneWithoutLessonNestedInput
+  }
+
+  export type UserCreateWithoutModuleQuizCompletionsInput = {
+    id?: string
+    email: string
+    name: string
+    password: string
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isVerified?: boolean
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
+    taughtCourses?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutUserInput
+    progress?: UserProgressCreateNestedManyWithoutUserInput
+    quizSubmissions?: QuizSubmissionCreateNestedManyWithoutUserInput
+    certificates?: CertificateCreateNestedManyWithoutUserInput
+    activityLogs?: UserActivityLogCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutModuleQuizCompletionsInput = {
+    id?: string
+    email: string
+    name: string
+    password: string
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isVerified?: boolean
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
+    taughtCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutUserInput
+    progress?: UserProgressUncheckedCreateNestedManyWithoutUserInput
+    quizSubmissions?: QuizSubmissionUncheckedCreateNestedManyWithoutUserInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    activityLogs?: UserActivityLogUncheckedCreateNestedManyWithoutUserInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutModuleQuizCompletionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutModuleQuizCompletionsInput, UserUncheckedCreateWithoutModuleQuizCompletionsInput>
+  }
+
+  export type ModuleCreateWithoutQuizCompletionsInput = {
+    id?: string
+    title: string
+    order: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    course: CourseCreateNestedOneWithoutModulesInput
+    lessons?: LessonCreateNestedManyWithoutModuleInput
+    quiz?: QuizCreateNestedOneWithoutModuleInput
+  }
+
+  export type ModuleUncheckedCreateWithoutQuizCompletionsInput = {
+    id?: string
+    title: string
+    order: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    courseId: string
+    lessons?: LessonUncheckedCreateNestedManyWithoutModuleInput
+    quiz?: QuizUncheckedCreateNestedOneWithoutModuleInput
+  }
+
+  export type ModuleCreateOrConnectWithoutQuizCompletionsInput = {
+    where: ModuleWhereUniqueInput
+    create: XOR<ModuleCreateWithoutQuizCompletionsInput, ModuleUncheckedCreateWithoutQuizCompletionsInput>
+  }
+
+  export type UserUpsertWithoutModuleQuizCompletionsInput = {
+    update: XOR<UserUpdateWithoutModuleQuizCompletionsInput, UserUncheckedUpdateWithoutModuleQuizCompletionsInput>
+    create: XOR<UserCreateWithoutModuleQuizCompletionsInput, UserUncheckedCreateWithoutModuleQuizCompletionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutModuleQuizCompletionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutModuleQuizCompletionsInput, UserUncheckedUpdateWithoutModuleQuizCompletionsInput>
+  }
+
+  export type UserUpdateWithoutModuleQuizCompletionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taughtCourses?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutUserNestedInput
+    progress?: UserProgressUpdateManyWithoutUserNestedInput
+    quizSubmissions?: QuizSubmissionUpdateManyWithoutUserNestedInput
+    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    activityLogs?: UserActivityLogUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutModuleQuizCompletionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taughtCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+    progress?: UserProgressUncheckedUpdateManyWithoutUserNestedInput
+    quizSubmissions?: QuizSubmissionUncheckedUpdateManyWithoutUserNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    activityLogs?: UserActivityLogUncheckedUpdateManyWithoutUserNestedInput
+    finalAssessmentCompletions?: FinalAssessmentCompletionUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ModuleUpsertWithoutQuizCompletionsInput = {
+    update: XOR<ModuleUpdateWithoutQuizCompletionsInput, ModuleUncheckedUpdateWithoutQuizCompletionsInput>
+    create: XOR<ModuleCreateWithoutQuizCompletionsInput, ModuleUncheckedCreateWithoutQuizCompletionsInput>
+    where?: ModuleWhereInput
+  }
+
+  export type ModuleUpdateToOneWithWhereWithoutQuizCompletionsInput = {
+    where?: ModuleWhereInput
+    data: XOR<ModuleUpdateWithoutQuizCompletionsInput, ModuleUncheckedUpdateWithoutQuizCompletionsInput>
+  }
+
+  export type ModuleUpdateWithoutQuizCompletionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    course?: CourseUpdateOneRequiredWithoutModulesNestedInput
+    lessons?: LessonUpdateManyWithoutModuleNestedInput
+    quiz?: QuizUpdateOneWithoutModuleNestedInput
+  }
+
+  export type ModuleUncheckedUpdateWithoutQuizCompletionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    order?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    lessons?: LessonUncheckedUpdateManyWithoutModuleNestedInput
+    quiz?: QuizUncheckedUpdateOneWithoutModuleNestedInput
+  }
+
+  export type UserCreateWithoutFinalAssessmentCompletionsInput = {
+    id?: string
+    email: string
+    name: string
+    password: string
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isVerified?: boolean
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
+    taughtCourses?: CourseCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentCreateNestedManyWithoutUserInput
+    progress?: UserProgressCreateNestedManyWithoutUserInput
+    quizSubmissions?: QuizSubmissionCreateNestedManyWithoutUserInput
+    certificates?: CertificateCreateNestedManyWithoutUserInput
+    activityLogs?: UserActivityLogCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutFinalAssessmentCompletionsInput = {
+    id?: string
+    email: string
+    name: string
+    password: string
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    isVerified?: boolean
+    otp_secret?: string | null
+    otp_count?: number | null
+    otp_generated_at?: Date | string | null
+    taughtCourses?: CourseUncheckedCreateNestedManyWithoutInstructorInput
+    enrollments?: EnrollmentUncheckedCreateNestedManyWithoutUserInput
+    progress?: UserProgressUncheckedCreateNestedManyWithoutUserInput
+    quizSubmissions?: QuizSubmissionUncheckedCreateNestedManyWithoutUserInput
+    certificates?: CertificateUncheckedCreateNestedManyWithoutUserInput
+    activityLogs?: UserActivityLogUncheckedCreateNestedManyWithoutUserInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutFinalAssessmentCompletionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutFinalAssessmentCompletionsInput, UserUncheckedCreateWithoutFinalAssessmentCompletionsInput>
+  }
+
+  export type UserUpsertWithoutFinalAssessmentCompletionsInput = {
+    update: XOR<UserUpdateWithoutFinalAssessmentCompletionsInput, UserUncheckedUpdateWithoutFinalAssessmentCompletionsInput>
+    create: XOR<UserCreateWithoutFinalAssessmentCompletionsInput, UserUncheckedCreateWithoutFinalAssessmentCompletionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutFinalAssessmentCompletionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutFinalAssessmentCompletionsInput, UserUncheckedUpdateWithoutFinalAssessmentCompletionsInput>
+  }
+
+  export type UserUpdateWithoutFinalAssessmentCompletionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taughtCourses?: CourseUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUpdateManyWithoutUserNestedInput
+    progress?: UserProgressUpdateManyWithoutUserNestedInput
+    quizSubmissions?: QuizSubmissionUpdateManyWithoutUserNestedInput
+    certificates?: CertificateUpdateManyWithoutUserNestedInput
+    activityLogs?: UserActivityLogUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutFinalAssessmentCompletionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    password?: StringFieldUpdateOperationsInput | string
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    otp_secret?: NullableStringFieldUpdateOperationsInput | string | null
+    otp_count?: NullableIntFieldUpdateOperationsInput | number | null
+    otp_generated_at?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    taughtCourses?: CourseUncheckedUpdateManyWithoutInstructorNestedInput
+    enrollments?: EnrollmentUncheckedUpdateManyWithoutUserNestedInput
+    progress?: UserProgressUncheckedUpdateManyWithoutUserNestedInput
+    quizSubmissions?: QuizSubmissionUncheckedUpdateManyWithoutUserNestedInput
+    certificates?: CertificateUncheckedUpdateManyWithoutUserNestedInput
+    activityLogs?: UserActivityLogUncheckedUpdateManyWithoutUserNestedInput
+    moduleQuizCompletions?: ModuleQuizCompletionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CourseCreateManyInstructorInput = {
@@ -26955,6 +30579,24 @@ export namespace Prisma {
     loggedAt?: Date | string
     durationSeconds: number
     lessonId: string
+  }
+
+  export type ModuleQuizCompletionCreateManyUserInput = {
+    id?: string
+    moduleId: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
+  }
+
+  export type FinalAssessmentCompletionCreateManyUserInput = {
+    id?: string
+    courseId: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
   }
 
   export type CourseUpdateWithoutInstructorInput = {
@@ -27120,6 +30762,60 @@ export namespace Prisma {
     lessonId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type ModuleQuizCompletionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    module?: ModuleUpdateOneRequiredWithoutQuizCompletionsNestedInput
+  }
+
+  export type ModuleQuizCompletionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    moduleId?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ModuleQuizCompletionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    moduleId?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinalAssessmentCompletionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinalAssessmentCompletionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FinalAssessmentCompletionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    courseId?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ModuleCreateManyCourseInput = {
     id?: string
     title: string
@@ -27157,6 +30853,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lessons?: LessonUpdateManyWithoutModuleNestedInput
+    quiz?: QuizUpdateOneWithoutModuleNestedInput
+    quizCompletions?: ModuleQuizCompletionUpdateManyWithoutModuleNestedInput
   }
 
   export type ModuleUncheckedUpdateWithoutCourseInput = {
@@ -27166,6 +30864,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lessons?: LessonUncheckedUpdateManyWithoutModuleNestedInput
+    quiz?: QuizUncheckedUpdateOneWithoutModuleNestedInput
+    quizCompletions?: ModuleQuizCompletionUncheckedUpdateManyWithoutModuleNestedInput
   }
 
   export type ModuleUncheckedUpdateManyWithoutCourseInput = {
@@ -27322,6 +31022,15 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type ModuleQuizCompletionCreateManyModuleInput = {
+    id?: string
+    userId: string
+    score: number
+    percentage: number
+    passed: boolean
+    completedAt?: Date | string
+  }
+
   export type LessonUpdateWithoutModuleInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: StringFieldUpdateOperationsInput | string
@@ -27333,7 +31042,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userProgress?: UserProgressUpdateManyWithoutLessonNestedInput
-    quiz?: QuizUpdateOneWithoutLessonNestedInput
     activityLogs?: UserActivityLogUpdateManyWithoutLessonNestedInput
   }
 
@@ -27348,7 +31056,6 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     userProgress?: UserProgressUncheckedUpdateManyWithoutLessonNestedInput
-    quiz?: QuizUncheckedUpdateOneWithoutLessonNestedInput
     activityLogs?: UserActivityLogUncheckedUpdateManyWithoutLessonNestedInput
   }
 
@@ -27362,6 +31069,33 @@ export namespace Prisma {
     completionTime?: NullableIntFieldUpdateOperationsInput | number | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ModuleQuizCompletionUpdateWithoutModuleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutModuleQuizCompletionsNestedInput
+  }
+
+  export type ModuleQuizCompletionUncheckedUpdateWithoutModuleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ModuleQuizCompletionUncheckedUpdateManyWithoutModuleInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    score?: FloatFieldUpdateOperationsInput | number
+    percentage?: FloatFieldUpdateOperationsInput | number
+    passed?: BoolFieldUpdateOperationsInput | boolean
+    completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type UserProgressCreateManyLessonInput = {
