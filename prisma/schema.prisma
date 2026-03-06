@@ -13,7 +13,7 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
+ 
 
 // 3. Define the data models for the LMS.
 
