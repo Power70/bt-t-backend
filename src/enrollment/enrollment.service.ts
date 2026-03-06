@@ -101,7 +101,7 @@ export class EnrollmentService {
         access_code: paystackResponse.data.access_code,
         reference: paystackResponse.data.reference,
         amount: course.price,
-        currency: 'NGN', // You can make this dynamic based on your requirements
+        currency: 'NGN',
         course: {
           id: course.id,
           title: course.title,

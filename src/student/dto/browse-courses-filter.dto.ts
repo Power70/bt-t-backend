@@ -40,12 +40,4 @@ export class BrowseCoursesFilterDto {
   @IsString()
   @IsOptional()
   category?: string;
-
-  @ApiPropertyOptional({
-    description: 'Filter by course level',
-    example: 'Beginner',
-  })
-  @IsString()
-  @IsOptional()
-  level?: string;
 }

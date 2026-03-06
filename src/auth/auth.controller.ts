@@ -112,12 +112,13 @@ export class AuthController {
   ) {
     const result = await this.authService.verifyOtp(verifyOtpDto);
 
-    // Set secure httpOnly cookie
+    // Set secure httpOnly cookie with 7 days expiration
     response.cookie('Authentication', result.accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      path: '/',
     });
 
     return {

@@ -152,6 +152,8 @@ export class StudentService {
     const { page = 1, limit = 10, search, status } = filterDto;
     const skip = (page - 1) * limit;
 
+    console.log('[getMyEnrollments] Called with:', { userId, filterDto });
+
     // Build where clause
     const where: any = { userId };
 
@@ -180,6 +182,7 @@ export class StudentService {
     }
 
     const total = await this.prisma.enrollment.count({ where });
+    console.log('[getMyEnrollments] Total enrollments found:', total);
 
     const enrollments = await this.prisma.enrollment.findMany({
       where,
@@ -208,6 +211,13 @@ export class StudentService {
         enrolledAt: 'desc',
       },
     });
+
+    console.log('[getMyEnrollments] Enrollments retrieved:', enrollments.length);
+    console.log('[getMyEnrollments] First enrollment:', enrollments[0] ? {
+      id: enrollments[0].id,
+      courseTitle: enrollments[0].course?.title,
+      status: enrollments[0].status,
+    } : 'none');
 
     // Calculate progress for each enrollment
     const enrollmentsWithProgress: EnrollmentWithProgressDto[] =
@@ -245,7 +255,17 @@ export class StudentService {
         }),
       );
 
-    return createPaginatedResult(enrollmentsWithProgress, total, page, limit);
+    console.log('[getMyEnrollments] Enrollments with progress calculated:', enrollmentsWithProgress.length);
+
+    const result = createPaginatedResult(enrollmentsWithProgress, total, page, limit);
+    console.log('[getMyEnrollments] Returning result:', {
+      total: result.meta.total,
+      page: result.meta.page,
+      totalPages: result.meta.totalPages,
+      enrollmentsCount: result.data.length,
+    });
+
+    return result;
   }
 
   /**
@@ -1365,7 +1385,7 @@ export class StudentService {
   async getPublishedCourses(
     filterDto: BrowseCoursesFilterDto,
   ): Promise<PaginatedResult<any>> {
-    const { page = 1, limit = 10, search, category, level } = filterDto;
+    const { page = 1, limit = 10, search, category } = filterDto;
 
     const skip = (page - 1) * limit;
 
@@ -1415,11 +1435,6 @@ export class StudentService {
           mode: 'insensitive',
         },
       };
-    }
-
-    // Filter by level
-    if (level) {
-      where.level = level;
     }
 
     const [courses, total] = await Promise.all([

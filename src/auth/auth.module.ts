@@ -19,7 +19,7 @@ import { MailModule } from '../mail/mail.module';
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET') || 'your-secret-key',
         signOptions: {
-          expiresIn: '24h',
+          expiresIn: '7d', // 7 days to match cookie expiration
         },
       }),
       inject: [ConfigService],
