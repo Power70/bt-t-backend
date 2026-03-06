@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdminService } from './admin.service';
 import { PrismaService } from '../prisma/prisma.service';

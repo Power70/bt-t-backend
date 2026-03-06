@@ -8,19 +8,13 @@
  * @returns A URL-friendly slug
  */
 export function generateSlug(title: string): string {
-  return (
-    title
-      .toLowerCase()
-      .trim()
-      // Remove special characters except spaces and hyphens
-      .replace(/[^\w\s-]/g, '')
-      // Replace spaces and underscores with hyphens
-      .replace(/[\s_]+/g, '-')
-      // Replace multiple hyphens with single hyphen
-      .replace(/-+/g, '-')
-      // Remove leading and trailing hyphens
-      .replace(/^-+|-+$/g, '')
-  );
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 /**

@@ -147,7 +147,8 @@ exports.Prisma.CourseScalarFieldEnum = {
   updatedAt: 'updatedAt',
   instructorId: 'instructorId',
   categoryId: 'categoryId',
-  completionTime: 'completionTime'
+  completionTime: 'completionTime',
+  finalAssessmentId: 'finalAssessmentId'
 };
 
 exports.Prisma.CategoryScalarFieldEnum = {
@@ -203,7 +204,7 @@ exports.Prisma.AttachmentScalarFieldEnum = {
 
 exports.Prisma.QuizScalarFieldEnum = {
   id: 'id',
-  lessonId: 'lessonId'
+  moduleId: 'moduleId'
 };
 
 exports.Prisma.QuestionScalarFieldEnum = {
@@ -232,6 +233,43 @@ exports.Prisma.UserAnswerScalarFieldEnum = {
   submissionId: 'submissionId',
   questionId: 'questionId',
   optionId: 'optionId'
+};
+
+exports.Prisma.CertificateScalarFieldEnum = {
+  id: 'id',
+  issuedAt: 'issuedAt',
+  uniqueCode: 'uniqueCode',
+  pdfUrl: 'pdfUrl',
+  userId: 'userId',
+  courseId: 'courseId'
+};
+
+exports.Prisma.UserActivityLogScalarFieldEnum = {
+  id: 'id',
+  loggedAt: 'loggedAt',
+  durationSeconds: 'durationSeconds',
+  userId: 'userId',
+  lessonId: 'lessonId'
+};
+
+exports.Prisma.ModuleQuizCompletionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  moduleId: 'moduleId',
+  score: 'score',
+  percentage: 'percentage',
+  passed: 'passed',
+  completedAt: 'completedAt'
+};
+
+exports.Prisma.FinalAssessmentCompletionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  courseId: 'courseId',
+  score: 'score',
+  percentage: 'percentage',
+  passed: 'passed',
+  completedAt: 'completedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -279,7 +317,11 @@ exports.Prisma.ModelName = {
   Question: 'Question',
   Option: 'Option',
   QuizSubmission: 'QuizSubmission',
-  UserAnswer: 'UserAnswer'
+  UserAnswer: 'UserAnswer',
+  Certificate: 'Certificate',
+  UserActivityLog: 'UserActivityLog',
+  ModuleQuizCompletion: 'ModuleQuizCompletion',
+  FinalAssessmentCompletion: 'FinalAssessmentCompletion'
 };
 
 /**

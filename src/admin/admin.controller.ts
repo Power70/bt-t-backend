@@ -39,6 +39,9 @@ import { CreateAdminDto } from './dto/users/create-admin.dto';
 import { CreateInstructorDto } from './dto/users/create-instructor.dto';
 import { UpdateUserDto } from './dto/users/update-user.dto';
 import { UserFilterDto } from './dto/users/user-filter.dto';
+import { CreateModuleQuizDto } from './dto/quizzes/create-module-quiz.dto';
+import { CreateFinalAssessmentDto } from './dto/quizzes/create-final-assessment.dto';
+import { UpdateQuestionDto } from './dto/quizzes/update-question.dto';
 
 @ApiTags('Admin')
 @Controller('admin')
@@ -787,5 +790,176 @@ export class AdminController {
   })
   async deleteUser(@Param('id') id: string) {
     return this.adminService.deleteUser(id);
+  }
+
+  // ============================================
+  // QUIZ MANAGEMENT (Module & Final Assessment)
+  // ============================================
+
+  @Post('modules/:moduleId/quiz')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: 'Create or update module quiz',
+    description:
+      'Creates or updates quiz for a module. Adds questions to existing quiz, preserving student submissions.',
+  })
+  @ApiParam({ name: 'moduleId', description: 'Module ID', type: String })
+  @ApiResponse({
+    status: 201,
+    description: 'Quiz created/updated successfully',
+  })
+  @ApiResponse({ status: 404, description: 'Module not found' })
+  async upsertModuleQuiz(
+    @Param('moduleId') moduleId: string,
+    @Body() createQuizDto: CreateModuleQuizDto,
+  ) {
+    return this.adminService.createQuiz('module', moduleId, createQuizDto);
+  }
+
+  @Get('modules/:moduleId/quiz')
+  @ApiOperation({
+    summary: 'Get module quiz',
+    description:
+      'Retrieves module quiz with all questions and correct answers (admin view).',
+  })
+  @ApiParam({ name: 'moduleId', description: 'Module ID', type: String })
+  @ApiResponse({ status: 200, description: 'Quiz retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'Module or quiz not found' })
+  async getModuleQuiz(@Param('moduleId') moduleId: string) {
+    return this.adminService.getQuiz('module', moduleId);
+  }
+
+  @Delete('quizzes/:quizId/module')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Delete module quiz',
+    description:
+      'Deletes module quiz. Fails if quiz has student submissions to prevent data loss.',
+  })
+  @ApiParam({ name: 'quizId', description: 'Quiz ID', type: String })
+  @ApiResponse({ status: 200, description: 'Quiz deleted successfully' })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot delete - quiz has student submissions',
+  })
+  @ApiResponse({ status: 404, description: 'Quiz not found' })
+  async deleteModuleQuiz(@Param('quizId') quizId: string) {
+    return this.adminService.deleteQuiz('module', quizId);
+  }
+
+  @Post('courses/:courseId/final-assessment')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: 'Create or update final assessment',
+    description:
+      'Creates or updates final assessment for a course. Adds questions to existing assessment.',
+  })
+  @ApiParam({ name: 'courseId', description: 'Course ID', type: String })
+  @ApiResponse({
+    status: 201,
+    description: 'Assessment created/updated successfully',
+  })
+  @ApiResponse({ status: 404, description: 'Course not found' })
+  async createFinalAssessment(
+    @Param('courseId') courseId: string,
+    @Body() createAssessmentDto: CreateFinalAssessmentDto,
+  ) {
+    return this.adminService.createQuiz(
+      'course',
+      courseId,
+      createAssessmentDto,
+    );
+  }
+
+  @Get('courses/:courseId/final-assessment')
+  @ApiOperation({
+    summary: 'Get final assessment',
+    description:
+      'Retrieves final assessment with all questions and correct answers (admin view).',
+  })
+  @ApiParam({ name: 'courseId', description: 'Course ID', type: String })
+  @ApiResponse({
+    status: 200,
+    description: 'Assessment retrieved successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Course or assessment not found',
+  })
+  async getFinalAssessment(@Param('courseId') courseId: string) {
+    return this.adminService.getQuiz('course', courseId);
+  }
+
+  @Delete('quizzes/:quizId/final-assessment')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Delete final assessment',
+    description:
+      'Deletes final assessment. Fails if assessment has student submissions to prevent data loss.',
+  })
+  @ApiParam({ name: 'quizId', description: 'Quiz ID', type: String })
+  @ApiResponse({ status: 200, description: 'Assessment deleted successfully' })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot delete - assessment has student submissions',
+  })
+  @ApiResponse({ status: 404, description: 'Quiz not found' })
+  async deleteFinalAssessment(@Param('quizId') quizId: string) {
+    return this.adminService.deleteQuiz('course', quizId);
+  }
+
+  @Patch('questions/:questionId/text')
+  @ApiOperation({
+    summary: 'Update question text only',
+    description:
+      'Updates only the question text. Fails if quiz has student submissions to prevent data invalidation.',
+  })
+  @ApiParam({ name: 'questionId', description: 'Question ID', type: String })
+  @ApiResponse({
+    status: 200,
+    description: 'Question text updated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot update - quiz has student submissions',
+  })
+  @ApiResponse({ status: 404, description: 'Question not found' })
+  async updateQuestionText(
+    @Param('questionId') questionId: string,
+    @Body() updateQuestionDto: { text: string },
+  ) {
+    return this.adminService.updateQuestionText(
+      questionId,
+      updateQuestionDto.text,
+    );
+  }
+
+  @Patch('questions/:questionId/options')
+  @ApiOperation({
+    summary: 'Update question options (DANGEROUS)',
+    description:
+      'Updates question text and options. FAILS if ANY student submissions exist. ' +
+      'This is intentionally restrictive to prevent data loss. ' +
+      'Options are immutable once students submit answers.',
+  })
+  @ApiParam({ name: 'questionId', description: 'Question ID', type: String })
+  @ApiResponse({
+    status: 200,
+    description: 'Question updated successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Cannot update - quiz has student submissions. Create new quiz instead.',
+  })
+  @ApiResponse({ status: 404, description: 'Question not found' })
+  async updateQuestionOptions(
+    @Param('questionId') questionId: string,
+    @Body() updateQuestionDto: UpdateQuestionDto,
+  ) {
+    return this.adminService.updateQuestionOptions(
+      questionId,
+      updateQuestionDto,
+    );
   }
 }

@@ -26,6 +26,9 @@ import { CreateAdminDto } from './dto/users/create-admin.dto';
 import { CreateInstructorDto } from './dto/users/create-instructor.dto';
 import { UpdateUserDto } from './dto/users/update-user.dto';
 import { UserFilterDto } from './dto/users/user-filter.dto';
+import { CreateModuleQuizDto } from './dto/quizzes/create-module-quiz.dto';
+import { CreateFinalAssessmentDto } from './dto/quizzes/create-final-assessment.dto';
+import { UpdateQuestionDto } from './dto/quizzes/update-question.dto';
 
 @Injectable()
 export class AdminService {
@@ -1629,5 +1632,354 @@ export class AdminService {
     });
 
     return { message: 'User deleted successfully' };
+  }
+
+  // ============================================
+  // QUIZ MANAGEMENT (Module & Final Assessment)
+  // ============================================
+
+  /**
+   * Create or update quiz for module or course
+   * Uses upsert to preserve student submissions
+   */
+  async createQuiz(
+    parentType: 'module' | 'course',
+    parentId: string,
+    quizDto: CreateModuleQuizDto | CreateFinalAssessmentDto,
+  ) {
+    // Verify parent exists
+    const parent =
+      parentType === 'module'
+        ? await this.prisma.module.findUnique({
+            where: { id: parentId },
+            include: {
+              quiz: true,
+              course: { select: { id: true, title: true } },
+            },
+          })
+        : await this.prisma.course.findUnique({
+            where: { id: parentId },
+            include: { finalAssessment: true },
+          });
+
+    if (!parent) {
+      throw new NotFoundException(
+        `${parentType === 'module' ? 'Module' : 'Course'} not found`,
+      );
+    }
+
+    // Get existing quiz
+    const existingQuiz =
+      parentType === 'module'
+        ? (parent as any).quiz
+        : (parent as any).finalAssessment;
+
+    const result = await this.prisma.$transaction(async (tx) => {
+      let quiz;
+
+      if (existingQuiz) {
+        // Quiz exists - just update metadata if needed
+        quiz = existingQuiz;
+      } else {
+        // Create new quiz
+        const quizData: any = {};
+        if (parentType === 'module') {
+          quizData.moduleId = parentId;
+        }
+
+        quiz = await tx.quiz.create({
+          data: quizData,
+        });
+
+        // Link to course if final assessment
+        if (parentType === 'course') {
+          await tx.course.update({
+            where: { id: parentId },
+            data: { finalAssessmentId: quiz.id },
+          });
+        }
+      }
+
+      // Handle questions if provided
+      if (quizDto.questions && quizDto.questions.length > 0) {
+        for (const questionDto of quizDto.questions) {
+          // Create question
+          const question = await tx.question.create({
+            data: {
+              text: questionDto.text,
+              quizId: quiz.id,
+            },
+          });
+
+          // Create options
+          await tx.option.createMany({
+            data: questionDto.options.map((opt) => ({
+              text: opt.text,
+              isCorrect: opt.isCorrect,
+              questionId: question.id,
+            })),
+          });
+        }
+      }
+
+      // Return complete quiz
+      return await tx.quiz.findUnique({
+        where: { id: quiz.id },
+        include: {
+          questions: { include: { options: true } },
+          module: {
+            select: {
+              id: true,
+              title: true,
+              course: { select: { id: true, title: true } },
+            },
+          },
+          course: { select: { id: true, title: true } },
+        },
+      });
+    });
+
+    return {
+      message: `${parentType === 'module' ? 'Module quiz' : 'Final assessment'} ${existingQuiz ? 'updated' : 'created'} successfully`,
+      quiz: result,
+    };
+  }
+
+  /**
+   * Get quiz by module or course ID
+   */
+  async getQuiz(parentType: 'module' | 'course', parentId: string) {
+    if (parentType === 'module') {
+      const module = await this.prisma.module.findUnique({
+        where: { id: parentId },
+        include: {
+          quiz: {
+            include: {
+              questions: { include: { options: true } },
+            },
+          },
+          course: { select: { id: true, title: true } },
+        },
+      });
+
+      if (!module) {
+        throw new NotFoundException('Module not found');
+      }
+
+      if (!module.quiz) {
+        throw new NotFoundException('No quiz found for this module');
+      }
+
+      return {
+        ...module.quiz,
+        module: { id: module.id, title: module.title },
+        course: module.course,
+      };
+    } else {
+      const course = await this.prisma.course.findUnique({
+        where: { id: parentId },
+        include: {
+          finalAssessment: {
+            include: {
+              questions: { include: { options: true } },
+            },
+          },
+        },
+      });
+
+      if (!course) {
+        throw new NotFoundException('Course not found');
+      }
+
+      if (!course.finalAssessment) {
+        throw new NotFoundException(
+          'No final assessment found for this course',
+        );
+      }
+
+      return {
+        ...course.finalAssessment,
+        course: { id: course.id, title: course.title },
+      };
+    }
+  }
+
+  /**
+   * Update question text only (safe - preserves all student data)
+   * Options cannot be updated once students have submitted answers
+   */
+  async updateQuestionText(questionId: string, text: string) {
+    const question = await this.prisma.question.findUnique({
+      where: { id: questionId },
+      include: {
+        quiz: {
+          include: {
+            submissions: { select: { id: true } },
+          },
+        },
+        options: true,
+      },
+    });
+
+    if (!question) {
+      throw new NotFoundException('Question not found');
+    }
+
+    // Check if quiz has any submissions
+    if (question.quiz.submissions.length > 0) {
+      throw new BadRequestException(
+        `Cannot update question. Quiz has ${question.quiz.submissions.length} student submissions. ` +
+          'Updating questions would invalidate existing student answers and cause data loss. ' +
+          'Please create a new quiz version instead.',
+      );
+    }
+
+    const updatedQuestion = await this.prisma.question.update({
+      where: { id: questionId },
+      data: { text },
+      include: { options: true },
+    });
+
+    return {
+      message: 'Question text updated successfully',
+      question: updatedQuestion,
+    };
+  }
+
+  /**
+   * Update question options (only allowed if no student submissions exist)
+   * This prevents data loss by rejecting updates to active quizzes
+   */
+  async updateQuestionOptions(
+    questionId: string,
+    updateQuestionDto: UpdateQuestionDto,
+  ) {
+    const question = await this.prisma.question.findUnique({
+      where: { id: questionId },
+      include: {
+        quiz: {
+          include: {
+            submissions: { select: { id: true } },
+          },
+        },
+        options: true,
+        userAnswers: { select: { id: true } },
+      },
+    });
+
+    if (!question) {
+      throw new NotFoundException('Question not found');
+    }
+
+    // Critical: Check for any student data
+    if (
+      question.quiz.submissions.length > 0 ||
+      question.userAnswers.length > 0
+    ) {
+      throw new BadRequestException(
+        `Cannot update question options. This question has ${question.quiz.submissions.length} quiz submissions ` +
+          `and ${question.userAnswers.length} student answers. ` +
+          'Modifying options would destroy student submission data. ' +
+          'Options are immutable once students have submitted answers. ' +
+          'To make changes, please create a new quiz version.',
+      );
+    }
+
+    // Safe to update if no submissions exist
+    await this.prisma.$transaction(async (tx) => {
+      // Update question text if provided
+      if (updateQuestionDto.text) {
+        await tx.question.update({
+          where: { id: questionId },
+          data: { text: updateQuestionDto.text },
+        });
+      }
+
+      // Update options - only safe because we verified no submissions exist
+      if (updateQuestionDto.options) {
+        await tx.option.deleteMany({ where: { questionId } });
+        await tx.option.createMany({
+          data: updateQuestionDto.options.map((opt) => ({
+            text: opt.text,
+            isCorrect: opt.isCorrect,
+            questionId,
+          })),
+        });
+      }
+    });
+
+    return await this.prisma.question.findUnique({
+      where: { id: questionId },
+      include: { options: true },
+    });
+  }
+
+  /**
+   * Delete quiz - ONLY allowed if no student data exists
+   * This is a hard delete, not a soft delete, because we never delete quizzes with student data
+   */
+  async deleteQuiz(parentType: 'module' | 'course', quizId: string) {
+    const quiz = await this.prisma.quiz.findUnique({
+      where: { id: quizId },
+      include: {
+        module: true,
+        course: true,
+        submissions: { select: { id: true } },
+        questions: {
+          include: {
+            userAnswers: { select: { id: true } },
+          },
+        },
+      },
+    });
+
+    if (!quiz) {
+      throw new NotFoundException('Quiz not found');
+    }
+
+    // Verify quiz type matches
+    if (parentType === 'module' && !quiz.module) {
+      throw new BadRequestException('This is not a module quiz');
+    }
+    if (parentType === 'course' && !quiz.course) {
+      throw new BadRequestException('This is not a final assessment');
+    }
+
+    // Count all student data
+    const totalSubmissions = quiz.submissions.length;
+    const totalAnswers = quiz.questions.reduce(
+      (sum, q) => sum + q.userAnswers.length,
+      0,
+    );
+
+    // Critical: Prevent deletion if ANY student data exists
+    if (totalSubmissions > 0 || totalAnswers > 0) {
+      throw new BadRequestException(
+        `Cannot delete quiz. This quiz has:\n` +
+          `- ${totalSubmissions} student submission(s)\n` +
+          `- ${totalAnswers} student answer(s)\n\n` +
+          'Deleting this quiz would permanently destroy student data and invalidate their progress records. ' +
+          'Quizzes with student submissions cannot be deleted. ' +
+          'If you need to make changes, create a new quiz version instead.',
+      );
+    }
+
+    // Only safe to delete if no student data exists
+    await this.prisma.$transaction(async (tx) => {
+      // Unlink from parent
+      if (parentType === 'course' && quiz.course) {
+        await tx.course.update({
+          where: { id: quiz.course.id },
+          data: { finalAssessmentId: null },
+        });
+      }
+
+      // Delete quiz (cascade will handle questions and options)
+      await tx.quiz.delete({ where: { id: quizId } });
+    });
+
+    return {
+      message: `${parentType === 'module' ? 'Module quiz' : 'Final assessment'} deleted successfully. No student data was affected.`,
+    };
   }
 }
