@@ -193,12 +193,8 @@ export class AuthController {
   })
   async resetPassword(
     @Body() resetPasswordDto: ResetPasswordDto,
-    @Request()
-    req: ExpressRequest & {
-      user: { id: string; role?: UserRole; email?: string };
-    },
   ) {
-    return this.authService.resetPassword(resetPasswordDto, req.user.id);
+    return this.authService.resetPassword(resetPasswordDto);
   }
 
   /**

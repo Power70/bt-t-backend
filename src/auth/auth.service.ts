@@ -234,11 +234,31 @@ export class AuthService {
    */
   async resetPassword(
     resetPasswordDto: ResetPasswordDto,
-    userId: string,
   ): Promise<{ message: string }> {
-    const user = await this.usersService.findRawById(userId);
+    const user = await this.usersService.findRawByEmail(resetPasswordDto.email);
     if (!user) {
-      throw new UnauthorizedException('Invalid user');
+      throw new UnauthorizedException('Invalid request');
+    }
+
+    if (!user.otp_secret || user.otp_count === null || !user.otp_generated_at) {
+      throw new UnauthorizedException('No OTP request found');
+    }
+
+    // Check OTP expiration (15 minutes)
+    const otpAge = Date.now() - user.otp_generated_at.getTime();
+    const fifteenMinutes = 15 * 60 * 1000;
+    if (otpAge > fifteenMinutes) {
+      throw new UnauthorizedException('OTP has expired, request a new one');
+    }
+
+    const isValidOtp = hotp.verify({
+      token: resetPasswordDto.otp,
+      secret: user.otp_secret,
+      counter: user.otp_count,
+    });
+
+    if (!isValidOtp) {
+      throw new UnauthorizedException('Invalid OTP');
     }
 
     if (resetPasswordDto.newPassword !== resetPasswordDto.confirmPassword) {
@@ -250,7 +270,10 @@ export class AuthService {
     await this.usersService.updateUserInfo(user.id, {
       password: hashedPassword,
     });
-    return { ...user, message: 'Password reset successfully' };
+
+    await this.usersService.clearUserOtp(user.id);
+
+    return { message: 'Password reset successfully' };
   }
 
   /**

@@ -11,12 +11,13 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const logger = new Logger('Bootstrap');
+  const frontendUrl = configService.get<string>('FRONTEND_URL') || 'http://localhost:5173';
 
   // --- Security & CORS ---
   app.use(helmet());
   app.use(cookieParser());
   app.enableCors({
-    origin: '*', // TODO: In production, restrict this to your frontend's domain.
+    origin: frontendUrl,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true, // Enable credentials for cookie-based auth
   });
