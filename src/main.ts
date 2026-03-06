@@ -11,13 +11,35 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const logger = new Logger('Bootstrap');
-  const frontendUrl = configService.get<string>('FRONTEND_URL') || 'http://localhost:5173';
+  const configuredOrigins =
+    configService
+      .get<string>('FRONTEND_URL')
+      ?.split(',')
+      .map((origin) => origin.trim())
+      .filter((origin) => Boolean(origin) && origin !== '*') || [];
+  const allowedOrigins =
+    configuredOrigins.length > 0
+      ? configuredOrigins
+      : ['http://localhost:5173', 'http://127.0.0.1:5173'];
 
   // --- Security & CORS ---
   app.use(helmet());
   app.use(cookieParser());
   app.enableCors({
-    origin: frontendUrl,
+    origin: (origin, callback) => {
+      // Allow non-browser clients (curl, Postman) with no Origin header.
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true, // Enable credentials for cookie-based auth
   });
@@ -62,7 +84,7 @@ async function bootstrap() {
   // await prismaService.enableShutdownHooks(app);
 
   // --- Start Application ---
-  const port = configService.get<number>('PORT', 30004);
+  const port = configService.get<number>('PORT', 3004);
   await app.listen(port);
   logger.log(`🚀 Application is running on: http://localhost:${port}`);
   logger.log(
