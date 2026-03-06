@@ -42,6 +42,7 @@ import { UserFilterDto } from './dto/users/user-filter.dto';
 import { CreateModuleQuizDto } from './dto/quizzes/create-module-quiz.dto';
 import { CreateFinalAssessmentDto } from './dto/quizzes/create-final-assessment.dto';
 import { UpdateQuestionDto } from './dto/quizzes/update-question.dto';
+import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('Admin')
 @Controller('admin')
@@ -77,6 +78,7 @@ export class AdminController {
     return this.adminService.createCourse(createCourseDto);
   }
 
+  @Public()
   @Get('courses')
   @ApiOperation({
     summary: 'Get all courses',
@@ -90,6 +92,7 @@ export class AdminController {
     return this.adminService.getCourses(filterDto);
   }
 
+  @Public()
   @Get('courses/:id')
   @ApiOperation({
     summary: 'Get a single course',

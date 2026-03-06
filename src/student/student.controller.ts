@@ -23,6 +23,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '../../generated/prisma';
 import { PaginatedFilterDto } from './dto/paginated-filter.dto';
+import { BrowseCoursesFilterDto } from './dto/browse-courses-filter.dto';
 import { LogActivityDto } from './dto/log-activity.dto';
 import { SubmitQuizDto } from './dto/submit-quiz.dto';
 import { DashboardSummaryDto } from './dto/responses/dashboard-summary.dto';
@@ -451,5 +452,34 @@ export class StudentController {
   ): Promise<CertificateDto> {
     const userId = (req.user?.sub ?? req.user?.id) as string;
     return this.studentService.getCertificateForDownload(userId, certificateId);
+  }
+
+  // ============================================
+  // BROWSE COURSES ENDPOINTS
+  // ============================================
+
+  @Get('courses/published')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Browse published courses',
+    description:
+      'Returns a paginated list of all published courses available for enrollment. Supports search by title, instructor, or category, and filtering by category and level.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Published courses retrieved successfully',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Invalid or missing JWT token',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - User is not a student',
+  })
+  async getPublishedCourses(
+    @Query() filterDto: BrowseCoursesFilterDto,
+  ) {
+    return this.studentService.getPublishedCourses(filterDto);
   }
 }
