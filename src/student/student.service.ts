@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from '../../generated/prisma';
 import { PaginatedFilterDto } from './dto/paginated-filter.dto';
+import { BrowseCoursesFilterDto } from './dto/browse-courses-filter.dto';
 import {
   PaginatedResult,
   createPaginatedResult,
@@ -1351,5 +1352,109 @@ export class StudentService {
     await this.checkCertificateEligibility(userId, certificate.courseId);
 
     return certificate;
+  }
+
+  // ============================================
+  // BROWSE COURSES
+  // ============================================
+
+  /**
+   * Get all published courses for browsing
+   * Available to students for course discovery and enrollment
+   */
+  async getPublishedCourses(
+    filterDto: BrowseCoursesFilterDto,
+  ): Promise<PaginatedResult<any>> {
+    const { page = 1, limit = 10, search, category, level } = filterDto;
+
+    const skip = (page - 1) * limit;
+
+    const where: any = {
+      isPublished: true, // Only show published courses
+    };
+
+    // Universal search across multiple fields
+    if (search) {
+      where.OR = [
+        {
+          title: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
+        {
+          description: {
+            contains: search,
+            mode: 'insensitive',
+          },
+        },
+        {
+          instructor: {
+            name: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+        },
+        {
+          category: {
+            name: {
+              contains: search,
+              mode: 'insensitive',
+            },
+          },
+        },
+      ];
+    }
+
+    // Filter by category
+    if (category) {
+      where.category = {
+        name: {
+          contains: category,
+          mode: 'insensitive',
+        },
+      };
+    }
+
+    // Filter by level
+    if (level) {
+      where.level = level;
+    }
+
+    const [courses, total] = await Promise.all([
+      this.prisma.course.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          instructor: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          _count: {
+            select: {
+              modules: true,
+              enrollments: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+      this.prisma.course.count({ where }),
+    ]);
+
+    return createPaginatedResult(courses, total, page, limit);
   }
 }

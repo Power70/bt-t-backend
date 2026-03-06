@@ -103,6 +103,39 @@ export class StudentController {
     return this.studentService.getMyEnrollments(userId, filterDto);
   }
 
+  // ============================================
+  // BROWSE COURSES ENDPOINTS
+  // ============================================
+
+  @Get('courses/published')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Browse published courses',
+    description:
+      'Returns a paginated list of all published courses available for enrollment. Supports search by title, instructor, or category, and filtering by category and level.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Published courses retrieved successfully',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized - Invalid or missing JWT token',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - User is not a student',
+  })
+  async getPublishedCourses(
+    @Query() filterDto: BrowseCoursesFilterDto,
+  ) {
+    return this.studentService.getPublishedCourses(filterDto);
+  }
+
+  // ============================================
+  // COURSE DETAILS ENDPOINTS
+  // ============================================
+
   @Get('courses/:courseId')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -452,34 +485,5 @@ export class StudentController {
   ): Promise<CertificateDto> {
     const userId = (req.user?.sub ?? req.user?.id) as string;
     return this.studentService.getCertificateForDownload(userId, certificateId);
-  }
-
-  // ============================================
-  // BROWSE COURSES ENDPOINTS
-  // ============================================
-
-  @Get('courses/published')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({
-    summary: 'Browse published courses',
-    description:
-      'Returns a paginated list of all published courses available for enrollment. Supports search by title, instructor, or category, and filtering by category and level.',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Published courses retrieved successfully',
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Unauthorized - Invalid or missing JWT token',
-  })
-  @ApiResponse({
-    status: 403,
-    description: 'Forbidden - User is not a student',
-  })
-  async getPublishedCourses(
-    @Query() filterDto: BrowseCoursesFilterDto,
-  ) {
-    return this.studentService.getPublishedCourses(filterDto);
   }
 }
