@@ -126,9 +126,7 @@ export class StudentController {
     status: 403,
     description: 'Forbidden - User is not a student',
   })
-  async getPublishedCourses(
-    @Query() filterDto: BrowseCoursesFilterDto,
-  ) {
+  async getPublishedCourses(@Query() filterDto: BrowseCoursesFilterDto) {
     return this.studentService.getPublishedCourses(filterDto);
   }
 

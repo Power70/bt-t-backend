@@ -212,12 +212,20 @@ export class StudentService {
       },
     });
 
-    console.log('[getMyEnrollments] Enrollments retrieved:', enrollments.length);
-    console.log('[getMyEnrollments] First enrollment:', enrollments[0] ? {
-      id: enrollments[0].id,
-      courseTitle: enrollments[0].course?.title,
-      status: enrollments[0].status,
-    } : 'none');
+    console.log(
+      '[getMyEnrollments] Enrollments retrieved:',
+      enrollments.length,
+    );
+    console.log(
+      '[getMyEnrollments] First enrollment:',
+      enrollments[0]
+        ? {
+            id: enrollments[0].id,
+            courseTitle: enrollments[0].course?.title,
+            status: enrollments[0].status,
+          }
+        : 'none',
+    );
 
     // Calculate progress for each enrollment
     const enrollmentsWithProgress: EnrollmentWithProgressDto[] =
@@ -255,9 +263,17 @@ export class StudentService {
         }),
       );
 
-    console.log('[getMyEnrollments] Enrollments with progress calculated:', enrollmentsWithProgress.length);
+    console.log(
+      '[getMyEnrollments] Enrollments with progress calculated:',
+      enrollmentsWithProgress.length,
+    );
 
-    const result = createPaginatedResult(enrollmentsWithProgress, total, page, limit);
+    const result = createPaginatedResult(
+      enrollmentsWithProgress,
+      total,
+      page,
+      limit,
+    );
     console.log('[getMyEnrollments] Returning result:', {
       total: result.meta.total,
       page: result.meta.page,
