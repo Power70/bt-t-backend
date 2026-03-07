@@ -40,4 +40,10 @@ export default tseslint.config(
       'no-unused-private-class-members': 'off',
     },
   },
+  {
+    files: ['**/*.spec.ts', '**/*.test.ts'],
+    rules: {
+      '@typescript-eslint/unbound-method': 'off',
+    },
+  },
 );
