@@ -1,0 +1,151 @@
+{
+  "info": {
+    "name": "BT&T Enrollment API",
+    "description": "API collection for testing enrollment endpoints with Paystack integration",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "your_jwt_token_here",
+      "type": "string"
+    },
+    {
+      "key": "course_id",
+      "value": "your_course_id_here",
+      "type": "string"
+    },
+    {
+      "key": "email",
+      "value": "student@email.com",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Initiate Enrollment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"{{email}}\",\n  \"courseId\": \"{{course_id}}\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/enrollments/initiate",
+          "host": ["{{base_url}}"],
+          "path": ["enrollments", "initiate"]
+        },
+        "description": "Initiates the enrollment process and creates a Paystack payment transaction. Returns access_code for Paystack Popup."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Verify Payment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"reference\": \"transaction_reference_here\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/enrollments/verify",
+          "host": ["{{base_url}}"],
+          "path": ["enrollments", "verify"]
+        },
+        "description": "Verifies a payment transaction and creates the enrollment if successful."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get My Enrollments",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/enrollments/my-enrollments",
+          "host": ["{{base_url}}"],
+          "path": ["enrollments", "my-enrollments"]
+        },
+        "description": "Retrieves all enrollments for the authenticated user."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Check Enrollment Status",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/enrollments/check/{{course_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["enrollments", "check", "{{course_id}}"]
+        },
+        "description": "Checks if the authenticated user is enrolled in a specific course."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Paystack Webhook (Test)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "x-paystack-signature",
+            "value": "test_signature_here"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"event\": \"charge.success\",\n  \"data\": {\n    \"id\": 123456,\n    \"domain\": \"test\",\n    \"status\": \"success\",\n    \"reference\": \"test_reference_123\",\n    \"amount\": 150000,\n    \"message\": \"Payment successful\",\n    \"gateway_response\": \"Approved\",\n    \"paid_at\": \"2024-01-01T00:00:00.000Z\",\n    \"created_at\": \"2024-01-01T00:00:00.000Z\",\n    \"channel\": \"card\",\n    \"currency\": \"NGN\",\n    \"ip_address\": \"127.0.0.1\",\n    \"metadata\": {\n      \"courseId\": \"your_course_id\",\n      \"userId\": \"your_user_id\",\n      \"courseName\": \"Test Course\"\n    },\n    \"customer\": {\n      \"id\": 789,\n      \"email\": \"student@email.com\",\n      \"customer_code\": \"CUS_test123\"\n    }\n  }\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/enrollments/webhook/paystack",
+          "host": ["{{base_url}}"],
+          "path": ["enrollments", "webhook", "paystack"]
+        },
+        "description": "Test endpoint for Paystack webhook. In production, this is called by Paystack."
+      },
+      "response": []
+    }
+  ]
+}
+
