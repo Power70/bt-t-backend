@@ -111,12 +111,14 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const result = await this.authService.verifyOtp(verifyOtpDto);
+    const isProduction = process.env.NODE_ENV === 'production';
 
     // Set secure httpOnly cookie with 7 days expiration
     response.cookie('Authentication', result.accessToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+      secure: isProduction,
+      // Required for cross-origin cookies (frontend + backend on different Vercel domains)
+      sameSite: isProduction ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       path: '/',
     });
@@ -210,7 +212,15 @@ export class AuthController {
     description: 'User logged out successfully.',
   })
   logout(@Res({ passthrough: true }) response: Response) {
-    response.clearCookie('Authentication');
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    response.clearCookie('Authentication', {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
+      path: '/',
+    });
+
     return { message: 'Logout successful' };
   }
 
