@@ -5,9 +5,9 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
-import { CourseFilterDto } from './dto/course-filter.dto';
+import { InstructorCreateCourseDto } from './dto/create-course.dto';
+import { InstructorUpdateCourseDto } from './dto/update-course.dto';
+import { InstructorCourseFilterDto } from './dto/course-filter.dto';
 import { generateSlug } from '../admin/utils/slug.util';
 
 @Injectable()
@@ -67,7 +67,7 @@ export class InstructorService {
   /**
    * Create a new course
    */
-  async createCourse(instructorId: string, createCourseDto: CreateCourseDto) {
+  async createCourse(instructorId: string, createCourseDto: InstructorCreateCourseDto) {
     const { title, categoryId, ...data } = createCourseDto;
 
     // Verify category exists
@@ -128,7 +128,7 @@ export class InstructorService {
    */
   async getInstructorCourses(
     instructorId: string,
-    filters: CourseFilterDto,
+    filters: InstructorCourseFilterDto,
   ) {
     const {
       search,
@@ -265,7 +265,7 @@ export class InstructorService {
   async updateCourse(
     instructorId: string,
     courseId: string,
-    updateCourseDto: UpdateCourseDto,
+    updateCourseDto: InstructorUpdateCourseDto,
   ) {
     await this.verifyInstructorOwnership(instructorId, courseId);
 

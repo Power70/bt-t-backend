@@ -11,9 +11,9 @@ import {
   Request,
 } from '@nestjs/common';
 import { InstructorService } from './instructor.service';
-import { CreateCourseDto } from './dto/create-course.dto';
-import { UpdateCourseDto } from './dto/update-course.dto';
-import { CourseFilterDto } from './dto/course-filter.dto';
+import { InstructorCreateCourseDto } from './dto/create-course.dto';
+import { InstructorUpdateCourseDto } from './dto/update-course.dto';
+import { InstructorCourseFilterDto } from './dto/course-filter.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
@@ -43,7 +43,7 @@ export class InstructorController {
   // ============================================
 
   @Get('courses')
-  async getInstructorCourses(@Request() req, @Query() filters: CourseFilterDto) {
+  async getInstructorCourses(@Request() req, @Query() filters: InstructorCourseFilterDto) {
     return this.instructorService.getInstructorCourses(req.user.userId, filters);
   }
 
@@ -53,7 +53,7 @@ export class InstructorController {
   }
 
   @Post('courses')
-  async createCourse(@Request() req, @Body() createCourseDto: CreateCourseDto) {
+  async createCourse(@Request() req, @Body() createCourseDto: InstructorCreateCourseDto) {
     return this.instructorService.createCourse(req.user.userId, createCourseDto);
   }
 
@@ -61,7 +61,7 @@ export class InstructorController {
   async updateCourse(
     @Request() req,
     @Param('courseId') courseId: string,
-    @Body() updateCourseDto: UpdateCourseDto,
+    @Body() updateCourseDto: InstructorUpdateCourseDto,
   ) {
     return this.instructorService.updateCourse(
       req.user.userId,

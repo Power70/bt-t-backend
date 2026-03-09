@@ -1,7 +1,7 @@
 import { IsOptional, IsString, IsBoolean, IsInt, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class CourseFilterDto {
+export class InstructorCourseFilterDto {
   @IsOptional()
   @IsString()
   search?: string;

@@ -7,7 +7,7 @@ import {
   MaxLength,
 } from 'class-validator';
 
-export class CreateCourseDto {
+export class InstructorCreateCourseDto {
   @IsString()
   @MaxLength(255)
   title: string;
