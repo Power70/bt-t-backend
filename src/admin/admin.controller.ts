@@ -965,4 +965,51 @@ export class AdminController {
       updateQuestionDto,
     );
   }
+
+  // ============================================
+  // REVENUE ANALYTICS ENDPOINTS
+  // ============================================
+
+  @Get('analytics/revenue')
+  @ApiOperation({
+    summary: 'Get revenue analytics',
+    description:
+      'Retrieves comprehensive revenue analytics including total revenue, top earning courses, revenue by month, and revenue by category.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Revenue analytics retrieved successfully',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Not an admin',
+  })
+  async getRevenueAnalytics() {
+    return this.adminService.getRevenueAnalytics();
+  }
+
+  @Get('analytics/transactions')
+  @ApiOperation({
+    summary: 'Get payment transactions',
+    description:
+      'Retrieves paginated list of all payment transactions with details.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Transactions retrieved successfully',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Not an admin',
+  })
+  async getPaymentTransactions(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ) {
+    return this.adminService.getPaymentTransactions(
+      page ? parseInt(page.toString()) : 1,
+      limit ? parseInt(limit.toString()) : 20,
+    );
+  }
 }
+

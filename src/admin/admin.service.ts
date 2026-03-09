@@ -1982,4 +1982,281 @@ export class AdminService {
       message: `${parentType === 'module' ? 'Module quiz' : 'Final assessment'} deleted successfully. No student data was affected.`,
     };
   }
+
+  // ============================================
+  // REVENUE ANALYTICS
+  // ============================================
+
+  /**
+   * Get comprehensive revenue analytics
+   */
+  async getRevenueAnalytics() {
+    // Get all enrollments with course data
+    const enrollments = await this.prisma.enrollment.findMany({
+      include: {
+        course: {
+          include: {
+            instructor: {
+              select: {
+                name: true,
+              },
+            },
+            category: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        enrolledAt: 'desc',
+      },
+    });
+
+    // Calculate total revenue
+    const totalRevenue = enrollments.reduce(
+      (sum, enrollment) => sum + enrollment.course.price,
+      0,
+    );
+
+    const totalPayments = enrollments.length;
+    const averageTransactionValue =
+      totalPayments > 0 ? totalRevenue / totalPayments : 0;
+
+    // Get current month and last month data
+    const now = new Date();
+    const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+
+    const currentMonthEnrollments = enrollments.filter(
+      (e) => e.enrolledAt >= currentMonthStart,
+    );
+    const lastMonthEnrollments = enrollments.filter(
+      (e) => e.enrolledAt >= lastMonthStart && e.enrolledAt < currentMonthStart,
+    );
+
+    const monthlyRevenue = currentMonthEnrollments.reduce(
+      (sum, e) => sum + e.course.price,
+      0,
+    );
+    const lastMonthRevenue = lastMonthEnrollments.reduce(
+      (sum, e) => sum + e.course.price,
+      0,
+    );
+
+    const revenueGrowth =
+      lastMonthRevenue > 0
+        ? ((monthlyRevenue - lastMonthRevenue) / lastMonthRevenue) * 100
+        : monthlyRevenue > 0
+          ? 100
+          : 0;
+
+    // Top earning courses
+    const courseRevenue = new Map<
+      string,
+      {
+        courseId: string;
+        title: string;
+        price: number;
+        instructorName: string;
+        count: number;
+        revenue: number;
+      }
+    >();
+
+    enrollments.forEach((enrollment) => {
+      const courseId = enrollment.course.id;
+      if (courseRevenue.has(courseId)) {
+        const data = courseRevenue.get(courseId)!;
+        data.count += 1;
+        data.revenue += enrollment.course.price;
+      } else {
+        courseRevenue.set(courseId, {
+          courseId,
+          title: enrollment.course.title,
+          price: enrollment.course.price,
+          instructorName: enrollment.course.instructor.name,
+          count: 1,
+          revenue: enrollment.course.price,
+        });
+      }
+    });
+
+    const topEarningCourses = Array.from(courseRevenue.values())
+      .sort((a, b) => b.revenue - a.revenue)
+      .slice(0, 10)
+      .map((course) => ({
+        courseId: course.courseId,
+        title: course.title,
+        enrollmentCount: course.count,
+        revenue: course.revenue,
+        price: course.price,
+        instructorName: course.instructorName,
+      }));
+
+    // Revenue by month (last 12 months)
+    const monthlyRevenueData: {
+      month: string;
+      revenue: number;
+      enrollments: number;
+      year: number;
+    }[] = [];
+
+    for (let i = 11; i >= 0; i--) {
+      const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const monthEnd = new Date(
+        monthDate.getFullYear(),
+        monthDate.getMonth() + 1,
+        0,
+      );
+
+      const monthEnrollments = enrollments.filter(
+        (e) => e.enrolledAt >= monthDate && e.enrolledAt <= monthEnd,
+      );
+
+      const monthRevenue = monthEnrollments.reduce(
+        (sum, e) => sum + e.course.price,
+        0,
+      );
+
+      monthlyRevenueData.push({
+        month: monthDate.toLocaleString('default', { month: 'short' }),
+        revenue: monthRevenue,
+        enrollments: monthEnrollments.length,
+        year: monthDate.getFullYear(),
+      });
+    }
+
+    // Revenue by category
+    const categoryRevenue = new Map<
+      string,
+      {
+        categoryId: string;
+        categoryName: string;
+        revenue: number;
+        enrollmentCount: number;
+        courses: Set<string>;
+      }
+    >();
+
+    enrollments.forEach((enrollment) => {
+      const categoryId = enrollment.course.category.id;
+      const categoryName = enrollment.course.category.name;
+
+      if (categoryRevenue.has(categoryId)) {
+        const data = categoryRevenue.get(categoryId)!;
+        data.revenue += enrollment.course.price;
+        data.enrollmentCount += 1;
+        data.courses.add(enrollment.course.id);
+      } else {
+        categoryRevenue.set(categoryId, {
+          categoryId,
+          categoryName,
+          revenue: enrollment.course.price,
+          enrollmentCount: 1,
+          courses: new Set([enrollment.course.id]),
+        });
+      }
+    });
+
+    const revenueByCategory = Array.from(categoryRevenue.values())
+      .map((cat) => ({
+        categoryId: cat.categoryId,
+        categoryName: cat.categoryName,
+        revenue: cat.revenue,
+        enrollmentCount: cat.enrollmentCount,
+        courseCount: cat.courses.size,
+      }))
+      .sort((a, b) => b.revenue - a.revenue);
+
+    return {
+      totalRevenue,
+      totalPayments,
+      averageTransactionValue,
+      totalEnrollments: totalPayments,
+      monthlyRevenue,
+      revenueGrowth,
+      topEarningCourses,
+      revenueByMonth: monthlyRevenueData,
+      revenueByCategory,
+    };
+  }
+
+  /**
+   * Get paginated payment transactions
+   */
+  async getPaymentTransactions(page = 1, limit = 10) {
+    const skip = (page - 1) * limit;
+
+    const [enrollments, total] = await Promise.all([
+      this.prisma.enrollment.findMany({
+        skip,
+        take: limit,
+        include: {
+          course: {
+            include: {
+              instructor: {
+                select: {
+                  name: true,
+                },
+              },
+              category: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+        },
+        orderBy: {
+          enrolledAt: 'desc',
+        },
+      }),
+      this.prisma.enrollment.count(),
+    ]);
+
+    const transactions = enrollments.map((enrollment) => ({
+      id: enrollment.id,
+      enrolledAt: enrollment.enrolledAt,
+      userId: enrollment.userId,
+      userEmail: enrollment.user.email,
+      userName: enrollment.user.name,
+      courseId: enrollment.courseId,
+      courseTitle: enrollment.course.title,
+      price: enrollment.course.price,
+      instructorName: enrollment.course.instructor.name,
+      categoryName: enrollment.course.category.name,
+    }));
+
+    const totalRevenue = await this.prisma.enrollment
+      .findMany({
+        include: { course: { select: { price: true } } },
+      })
+      .then((enrollments) =>
+        enrollments.reduce((sum, e) => sum + e.course.price, 0),
+      );
+
+    return {
+      transactions,
+      total,
+      page,
+      limit,
+      totalRevenue,
+    };
+  }
 }
