@@ -94,6 +94,11 @@ export type UserActivityLog = $Result.DefaultSelection<Prisma.$UserActivityLogPa
  */
 export type ModuleQuizCompletion = $Result.DefaultSelection<Prisma.$ModuleQuizCompletionPayload>
 /**
+ * Model InstructorInvitation
+ * 
+ */
+export type InstructorInvitation = $Result.DefaultSelection<Prisma.$InstructorInvitationPayload>
+/**
  * Model FinalAssessmentCompletion
  * 
  */
@@ -422,6 +427,16 @@ export class PrismaClient<
   get moduleQuizCompletion(): Prisma.ModuleQuizCompletionDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.instructorInvitation`: Exposes CRUD operations for the **InstructorInvitation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more InstructorInvitations
+    * const instructorInvitations = await prisma.instructorInvitation.findMany()
+    * ```
+    */
+  get instructorInvitation(): Prisma.InstructorInvitationDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.finalAssessmentCompletion`: Exposes CRUD operations for the **FinalAssessmentCompletion** model.
     * Example usage:
     * ```ts
@@ -488,8 +503,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 6.19.0
-   * Query Engine version: 2ba551f319ab1df4bc874a89965d8b3641056773
+   * Prisma Client JS version: 6.19.2
+   * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
    */
   export type PrismaVersion = {
     client: string
@@ -667,7 +682,7 @@ export namespace Prisma {
   ? False
   : T extends Uint8Array
   ? False
-  : T extends bigint
+  : T extends BigInt
   ? False
   : T extends object
   ? True
@@ -887,6 +902,7 @@ export namespace Prisma {
     Certificate: 'Certificate',
     UserActivityLog: 'UserActivityLog',
     ModuleQuizCompletion: 'ModuleQuizCompletion',
+    InstructorInvitation: 'InstructorInvitation',
     FinalAssessmentCompletion: 'FinalAssessmentCompletion'
   };
 
@@ -906,7 +922,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "course" | "category" | "module" | "lesson" | "enrollment" | "userProgress" | "attachment" | "quiz" | "question" | "option" | "quizSubmission" | "userAnswer" | "certificate" | "userActivityLog" | "moduleQuizCompletion" | "finalAssessmentCompletion"
+      modelProps: "user" | "course" | "category" | "module" | "lesson" | "enrollment" | "userProgress" | "attachment" | "quiz" | "question" | "option" | "quizSubmission" | "userAnswer" | "certificate" | "userActivityLog" | "moduleQuizCompletion" | "instructorInvitation" | "finalAssessmentCompletion"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2094,6 +2110,80 @@ export namespace Prisma {
           }
         }
       }
+      InstructorInvitation: {
+        payload: Prisma.$InstructorInvitationPayload<ExtArgs>
+        fields: Prisma.InstructorInvitationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.InstructorInvitationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorInvitationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.InstructorInvitationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorInvitationPayload>
+          }
+          findFirst: {
+            args: Prisma.InstructorInvitationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorInvitationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.InstructorInvitationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorInvitationPayload>
+          }
+          findMany: {
+            args: Prisma.InstructorInvitationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorInvitationPayload>[]
+          }
+          create: {
+            args: Prisma.InstructorInvitationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorInvitationPayload>
+          }
+          createMany: {
+            args: Prisma.InstructorInvitationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.InstructorInvitationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorInvitationPayload>[]
+          }
+          delete: {
+            args: Prisma.InstructorInvitationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorInvitationPayload>
+          }
+          update: {
+            args: Prisma.InstructorInvitationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorInvitationPayload>
+          }
+          deleteMany: {
+            args: Prisma.InstructorInvitationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.InstructorInvitationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.InstructorInvitationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorInvitationPayload>[]
+          }
+          upsert: {
+            args: Prisma.InstructorInvitationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$InstructorInvitationPayload>
+          }
+          aggregate: {
+            args: Prisma.InstructorInvitationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInstructorInvitation>
+          }
+          groupBy: {
+            args: Prisma.InstructorInvitationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<InstructorInvitationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.InstructorInvitationCountArgs<ExtArgs>
+            result: $Utils.Optional<InstructorInvitationCountAggregateOutputType> | number
+          }
+        }
+      }
       FinalAssessmentCompletion: {
         payload: Prisma.$FinalAssessmentCompletionPayload<ExtArgs>
         fields: Prisma.FinalAssessmentCompletionFieldRefs
@@ -2280,6 +2370,7 @@ export namespace Prisma {
     certificate?: CertificateOmit
     userActivityLog?: UserActivityLogOmit
     moduleQuizCompletion?: ModuleQuizCompletionOmit
+    instructorInvitation?: InstructorInvitationOmit
     finalAssessmentCompletion?: FinalAssessmentCompletionOmit
   }
 
@@ -20903,6 +20994,1014 @@ export namespace Prisma {
 
 
   /**
+   * Model InstructorInvitation
+   */
+
+  export type AggregateInstructorInvitation = {
+    _count: InstructorInvitationCountAggregateOutputType | null
+    _min: InstructorInvitationMinAggregateOutputType | null
+    _max: InstructorInvitationMaxAggregateOutputType | null
+  }
+
+  export type InstructorInvitationMinAggregateOutputType = {
+    id: string | null
+    token: string | null
+    email: string | null
+    expiresAt: Date | null
+    usedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type InstructorInvitationMaxAggregateOutputType = {
+    id: string | null
+    token: string | null
+    email: string | null
+    expiresAt: Date | null
+    usedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type InstructorInvitationCountAggregateOutputType = {
+    id: number
+    token: number
+    email: number
+    expiresAt: number
+    usedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type InstructorInvitationMinAggregateInputType = {
+    id?: true
+    token?: true
+    email?: true
+    expiresAt?: true
+    usedAt?: true
+    createdAt?: true
+  }
+
+  export type InstructorInvitationMaxAggregateInputType = {
+    id?: true
+    token?: true
+    email?: true
+    expiresAt?: true
+    usedAt?: true
+    createdAt?: true
+  }
+
+  export type InstructorInvitationCountAggregateInputType = {
+    id?: true
+    token?: true
+    email?: true
+    expiresAt?: true
+    usedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type InstructorInvitationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InstructorInvitation to aggregate.
+     */
+    where?: InstructorInvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstructorInvitations to fetch.
+     */
+    orderBy?: InstructorInvitationOrderByWithRelationInput | InstructorInvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: InstructorInvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstructorInvitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstructorInvitations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned InstructorInvitations
+    **/
+    _count?: true | InstructorInvitationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: InstructorInvitationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: InstructorInvitationMaxAggregateInputType
+  }
+
+  export type GetInstructorInvitationAggregateType<T extends InstructorInvitationAggregateArgs> = {
+        [P in keyof T & keyof AggregateInstructorInvitation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInstructorInvitation[P]>
+      : GetScalarType<T[P], AggregateInstructorInvitation[P]>
+  }
+
+
+
+
+  export type InstructorInvitationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: InstructorInvitationWhereInput
+    orderBy?: InstructorInvitationOrderByWithAggregationInput | InstructorInvitationOrderByWithAggregationInput[]
+    by: InstructorInvitationScalarFieldEnum[] | InstructorInvitationScalarFieldEnum
+    having?: InstructorInvitationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: InstructorInvitationCountAggregateInputType | true
+    _min?: InstructorInvitationMinAggregateInputType
+    _max?: InstructorInvitationMaxAggregateInputType
+  }
+
+  export type InstructorInvitationGroupByOutputType = {
+    id: string
+    token: string
+    email: string
+    expiresAt: Date
+    usedAt: Date | null
+    createdAt: Date
+    _count: InstructorInvitationCountAggregateOutputType | null
+    _min: InstructorInvitationMinAggregateOutputType | null
+    _max: InstructorInvitationMaxAggregateOutputType | null
+  }
+
+  type GetInstructorInvitationGroupByPayload<T extends InstructorInvitationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<InstructorInvitationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof InstructorInvitationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], InstructorInvitationGroupByOutputType[P]>
+            : GetScalarType<T[P], InstructorInvitationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type InstructorInvitationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    token?: boolean
+    email?: boolean
+    expiresAt?: boolean
+    usedAt?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["instructorInvitation"]>
+
+  export type InstructorInvitationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    token?: boolean
+    email?: boolean
+    expiresAt?: boolean
+    usedAt?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["instructorInvitation"]>
+
+  export type InstructorInvitationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    token?: boolean
+    email?: boolean
+    expiresAt?: boolean
+    usedAt?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["instructorInvitation"]>
+
+  export type InstructorInvitationSelectScalar = {
+    id?: boolean
+    token?: boolean
+    email?: boolean
+    expiresAt?: boolean
+    usedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type InstructorInvitationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "token" | "email" | "expiresAt" | "usedAt" | "createdAt", ExtArgs["result"]["instructorInvitation"]>
+
+  export type $InstructorInvitationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "InstructorInvitation"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      token: string
+      email: string
+      expiresAt: Date
+      usedAt: Date | null
+      createdAt: Date
+    }, ExtArgs["result"]["instructorInvitation"]>
+    composites: {}
+  }
+
+  type InstructorInvitationGetPayload<S extends boolean | null | undefined | InstructorInvitationDefaultArgs> = $Result.GetResult<Prisma.$InstructorInvitationPayload, S>
+
+  type InstructorInvitationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<InstructorInvitationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: InstructorInvitationCountAggregateInputType | true
+    }
+
+  export interface InstructorInvitationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['InstructorInvitation'], meta: { name: 'InstructorInvitation' } }
+    /**
+     * Find zero or one InstructorInvitation that matches the filter.
+     * @param {InstructorInvitationFindUniqueArgs} args - Arguments to find a InstructorInvitation
+     * @example
+     * // Get one InstructorInvitation
+     * const instructorInvitation = await prisma.instructorInvitation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends InstructorInvitationFindUniqueArgs>(args: SelectSubset<T, InstructorInvitationFindUniqueArgs<ExtArgs>>): Prisma__InstructorInvitationClient<$Result.GetResult<Prisma.$InstructorInvitationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one InstructorInvitation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {InstructorInvitationFindUniqueOrThrowArgs} args - Arguments to find a InstructorInvitation
+     * @example
+     * // Get one InstructorInvitation
+     * const instructorInvitation = await prisma.instructorInvitation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends InstructorInvitationFindUniqueOrThrowArgs>(args: SelectSubset<T, InstructorInvitationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__InstructorInvitationClient<$Result.GetResult<Prisma.$InstructorInvitationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first InstructorInvitation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstructorInvitationFindFirstArgs} args - Arguments to find a InstructorInvitation
+     * @example
+     * // Get one InstructorInvitation
+     * const instructorInvitation = await prisma.instructorInvitation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends InstructorInvitationFindFirstArgs>(args?: SelectSubset<T, InstructorInvitationFindFirstArgs<ExtArgs>>): Prisma__InstructorInvitationClient<$Result.GetResult<Prisma.$InstructorInvitationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first InstructorInvitation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstructorInvitationFindFirstOrThrowArgs} args - Arguments to find a InstructorInvitation
+     * @example
+     * // Get one InstructorInvitation
+     * const instructorInvitation = await prisma.instructorInvitation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends InstructorInvitationFindFirstOrThrowArgs>(args?: SelectSubset<T, InstructorInvitationFindFirstOrThrowArgs<ExtArgs>>): Prisma__InstructorInvitationClient<$Result.GetResult<Prisma.$InstructorInvitationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more InstructorInvitations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstructorInvitationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all InstructorInvitations
+     * const instructorInvitations = await prisma.instructorInvitation.findMany()
+     * 
+     * // Get first 10 InstructorInvitations
+     * const instructorInvitations = await prisma.instructorInvitation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const instructorInvitationWithIdOnly = await prisma.instructorInvitation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends InstructorInvitationFindManyArgs>(args?: SelectSubset<T, InstructorInvitationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstructorInvitationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a InstructorInvitation.
+     * @param {InstructorInvitationCreateArgs} args - Arguments to create a InstructorInvitation.
+     * @example
+     * // Create one InstructorInvitation
+     * const InstructorInvitation = await prisma.instructorInvitation.create({
+     *   data: {
+     *     // ... data to create a InstructorInvitation
+     *   }
+     * })
+     * 
+     */
+    create<T extends InstructorInvitationCreateArgs>(args: SelectSubset<T, InstructorInvitationCreateArgs<ExtArgs>>): Prisma__InstructorInvitationClient<$Result.GetResult<Prisma.$InstructorInvitationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many InstructorInvitations.
+     * @param {InstructorInvitationCreateManyArgs} args - Arguments to create many InstructorInvitations.
+     * @example
+     * // Create many InstructorInvitations
+     * const instructorInvitation = await prisma.instructorInvitation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends InstructorInvitationCreateManyArgs>(args?: SelectSubset<T, InstructorInvitationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many InstructorInvitations and returns the data saved in the database.
+     * @param {InstructorInvitationCreateManyAndReturnArgs} args - Arguments to create many InstructorInvitations.
+     * @example
+     * // Create many InstructorInvitations
+     * const instructorInvitation = await prisma.instructorInvitation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many InstructorInvitations and only return the `id`
+     * const instructorInvitationWithIdOnly = await prisma.instructorInvitation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends InstructorInvitationCreateManyAndReturnArgs>(args?: SelectSubset<T, InstructorInvitationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstructorInvitationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a InstructorInvitation.
+     * @param {InstructorInvitationDeleteArgs} args - Arguments to delete one InstructorInvitation.
+     * @example
+     * // Delete one InstructorInvitation
+     * const InstructorInvitation = await prisma.instructorInvitation.delete({
+     *   where: {
+     *     // ... filter to delete one InstructorInvitation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends InstructorInvitationDeleteArgs>(args: SelectSubset<T, InstructorInvitationDeleteArgs<ExtArgs>>): Prisma__InstructorInvitationClient<$Result.GetResult<Prisma.$InstructorInvitationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one InstructorInvitation.
+     * @param {InstructorInvitationUpdateArgs} args - Arguments to update one InstructorInvitation.
+     * @example
+     * // Update one InstructorInvitation
+     * const instructorInvitation = await prisma.instructorInvitation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends InstructorInvitationUpdateArgs>(args: SelectSubset<T, InstructorInvitationUpdateArgs<ExtArgs>>): Prisma__InstructorInvitationClient<$Result.GetResult<Prisma.$InstructorInvitationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more InstructorInvitations.
+     * @param {InstructorInvitationDeleteManyArgs} args - Arguments to filter InstructorInvitations to delete.
+     * @example
+     * // Delete a few InstructorInvitations
+     * const { count } = await prisma.instructorInvitation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends InstructorInvitationDeleteManyArgs>(args?: SelectSubset<T, InstructorInvitationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more InstructorInvitations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstructorInvitationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many InstructorInvitations
+     * const instructorInvitation = await prisma.instructorInvitation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends InstructorInvitationUpdateManyArgs>(args: SelectSubset<T, InstructorInvitationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more InstructorInvitations and returns the data updated in the database.
+     * @param {InstructorInvitationUpdateManyAndReturnArgs} args - Arguments to update many InstructorInvitations.
+     * @example
+     * // Update many InstructorInvitations
+     * const instructorInvitation = await prisma.instructorInvitation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more InstructorInvitations and only return the `id`
+     * const instructorInvitationWithIdOnly = await prisma.instructorInvitation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends InstructorInvitationUpdateManyAndReturnArgs>(args: SelectSubset<T, InstructorInvitationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$InstructorInvitationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one InstructorInvitation.
+     * @param {InstructorInvitationUpsertArgs} args - Arguments to update or create a InstructorInvitation.
+     * @example
+     * // Update or create a InstructorInvitation
+     * const instructorInvitation = await prisma.instructorInvitation.upsert({
+     *   create: {
+     *     // ... data to create a InstructorInvitation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the InstructorInvitation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends InstructorInvitationUpsertArgs>(args: SelectSubset<T, InstructorInvitationUpsertArgs<ExtArgs>>): Prisma__InstructorInvitationClient<$Result.GetResult<Prisma.$InstructorInvitationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of InstructorInvitations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstructorInvitationCountArgs} args - Arguments to filter InstructorInvitations to count.
+     * @example
+     * // Count the number of InstructorInvitations
+     * const count = await prisma.instructorInvitation.count({
+     *   where: {
+     *     // ... the filter for the InstructorInvitations we want to count
+     *   }
+     * })
+    **/
+    count<T extends InstructorInvitationCountArgs>(
+      args?: Subset<T, InstructorInvitationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], InstructorInvitationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a InstructorInvitation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstructorInvitationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends InstructorInvitationAggregateArgs>(args: Subset<T, InstructorInvitationAggregateArgs>): Prisma.PrismaPromise<GetInstructorInvitationAggregateType<T>>
+
+    /**
+     * Group by InstructorInvitation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {InstructorInvitationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends InstructorInvitationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: InstructorInvitationGroupByArgs['orderBy'] }
+        : { orderBy?: InstructorInvitationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, InstructorInvitationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInstructorInvitationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the InstructorInvitation model
+   */
+  readonly fields: InstructorInvitationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for InstructorInvitation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__InstructorInvitationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the InstructorInvitation model
+   */
+  interface InstructorInvitationFieldRefs {
+    readonly id: FieldRef<"InstructorInvitation", 'String'>
+    readonly token: FieldRef<"InstructorInvitation", 'String'>
+    readonly email: FieldRef<"InstructorInvitation", 'String'>
+    readonly expiresAt: FieldRef<"InstructorInvitation", 'DateTime'>
+    readonly usedAt: FieldRef<"InstructorInvitation", 'DateTime'>
+    readonly createdAt: FieldRef<"InstructorInvitation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * InstructorInvitation findUnique
+   */
+  export type InstructorInvitationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorInvitation
+     */
+    select?: InstructorInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstructorInvitation
+     */
+    omit?: InstructorInvitationOmit<ExtArgs> | null
+    /**
+     * Filter, which InstructorInvitation to fetch.
+     */
+    where: InstructorInvitationWhereUniqueInput
+  }
+
+  /**
+   * InstructorInvitation findUniqueOrThrow
+   */
+  export type InstructorInvitationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorInvitation
+     */
+    select?: InstructorInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstructorInvitation
+     */
+    omit?: InstructorInvitationOmit<ExtArgs> | null
+    /**
+     * Filter, which InstructorInvitation to fetch.
+     */
+    where: InstructorInvitationWhereUniqueInput
+  }
+
+  /**
+   * InstructorInvitation findFirst
+   */
+  export type InstructorInvitationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorInvitation
+     */
+    select?: InstructorInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstructorInvitation
+     */
+    omit?: InstructorInvitationOmit<ExtArgs> | null
+    /**
+     * Filter, which InstructorInvitation to fetch.
+     */
+    where?: InstructorInvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstructorInvitations to fetch.
+     */
+    orderBy?: InstructorInvitationOrderByWithRelationInput | InstructorInvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InstructorInvitations.
+     */
+    cursor?: InstructorInvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstructorInvitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstructorInvitations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InstructorInvitations.
+     */
+    distinct?: InstructorInvitationScalarFieldEnum | InstructorInvitationScalarFieldEnum[]
+  }
+
+  /**
+   * InstructorInvitation findFirstOrThrow
+   */
+  export type InstructorInvitationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorInvitation
+     */
+    select?: InstructorInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstructorInvitation
+     */
+    omit?: InstructorInvitationOmit<ExtArgs> | null
+    /**
+     * Filter, which InstructorInvitation to fetch.
+     */
+    where?: InstructorInvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstructorInvitations to fetch.
+     */
+    orderBy?: InstructorInvitationOrderByWithRelationInput | InstructorInvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for InstructorInvitations.
+     */
+    cursor?: InstructorInvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstructorInvitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstructorInvitations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of InstructorInvitations.
+     */
+    distinct?: InstructorInvitationScalarFieldEnum | InstructorInvitationScalarFieldEnum[]
+  }
+
+  /**
+   * InstructorInvitation findMany
+   */
+  export type InstructorInvitationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorInvitation
+     */
+    select?: InstructorInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstructorInvitation
+     */
+    omit?: InstructorInvitationOmit<ExtArgs> | null
+    /**
+     * Filter, which InstructorInvitations to fetch.
+     */
+    where?: InstructorInvitationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of InstructorInvitations to fetch.
+     */
+    orderBy?: InstructorInvitationOrderByWithRelationInput | InstructorInvitationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing InstructorInvitations.
+     */
+    cursor?: InstructorInvitationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` InstructorInvitations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` InstructorInvitations.
+     */
+    skip?: number
+    distinct?: InstructorInvitationScalarFieldEnum | InstructorInvitationScalarFieldEnum[]
+  }
+
+  /**
+   * InstructorInvitation create
+   */
+  export type InstructorInvitationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorInvitation
+     */
+    select?: InstructorInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstructorInvitation
+     */
+    omit?: InstructorInvitationOmit<ExtArgs> | null
+    /**
+     * The data needed to create a InstructorInvitation.
+     */
+    data: XOR<InstructorInvitationCreateInput, InstructorInvitationUncheckedCreateInput>
+  }
+
+  /**
+   * InstructorInvitation createMany
+   */
+  export type InstructorInvitationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many InstructorInvitations.
+     */
+    data: InstructorInvitationCreateManyInput | InstructorInvitationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InstructorInvitation createManyAndReturn
+   */
+  export type InstructorInvitationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorInvitation
+     */
+    select?: InstructorInvitationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstructorInvitation
+     */
+    omit?: InstructorInvitationOmit<ExtArgs> | null
+    /**
+     * The data used to create many InstructorInvitations.
+     */
+    data: InstructorInvitationCreateManyInput | InstructorInvitationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * InstructorInvitation update
+   */
+  export type InstructorInvitationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorInvitation
+     */
+    select?: InstructorInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstructorInvitation
+     */
+    omit?: InstructorInvitationOmit<ExtArgs> | null
+    /**
+     * The data needed to update a InstructorInvitation.
+     */
+    data: XOR<InstructorInvitationUpdateInput, InstructorInvitationUncheckedUpdateInput>
+    /**
+     * Choose, which InstructorInvitation to update.
+     */
+    where: InstructorInvitationWhereUniqueInput
+  }
+
+  /**
+   * InstructorInvitation updateMany
+   */
+  export type InstructorInvitationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update InstructorInvitations.
+     */
+    data: XOR<InstructorInvitationUpdateManyMutationInput, InstructorInvitationUncheckedUpdateManyInput>
+    /**
+     * Filter which InstructorInvitations to update
+     */
+    where?: InstructorInvitationWhereInput
+    /**
+     * Limit how many InstructorInvitations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * InstructorInvitation updateManyAndReturn
+   */
+  export type InstructorInvitationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorInvitation
+     */
+    select?: InstructorInvitationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstructorInvitation
+     */
+    omit?: InstructorInvitationOmit<ExtArgs> | null
+    /**
+     * The data used to update InstructorInvitations.
+     */
+    data: XOR<InstructorInvitationUpdateManyMutationInput, InstructorInvitationUncheckedUpdateManyInput>
+    /**
+     * Filter which InstructorInvitations to update
+     */
+    where?: InstructorInvitationWhereInput
+    /**
+     * Limit how many InstructorInvitations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * InstructorInvitation upsert
+   */
+  export type InstructorInvitationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorInvitation
+     */
+    select?: InstructorInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstructorInvitation
+     */
+    omit?: InstructorInvitationOmit<ExtArgs> | null
+    /**
+     * The filter to search for the InstructorInvitation to update in case it exists.
+     */
+    where: InstructorInvitationWhereUniqueInput
+    /**
+     * In case the InstructorInvitation found by the `where` argument doesn't exist, create a new InstructorInvitation with this data.
+     */
+    create: XOR<InstructorInvitationCreateInput, InstructorInvitationUncheckedCreateInput>
+    /**
+     * In case the InstructorInvitation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<InstructorInvitationUpdateInput, InstructorInvitationUncheckedUpdateInput>
+  }
+
+  /**
+   * InstructorInvitation delete
+   */
+  export type InstructorInvitationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorInvitation
+     */
+    select?: InstructorInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstructorInvitation
+     */
+    omit?: InstructorInvitationOmit<ExtArgs> | null
+    /**
+     * Filter which InstructorInvitation to delete.
+     */
+    where: InstructorInvitationWhereUniqueInput
+  }
+
+  /**
+   * InstructorInvitation deleteMany
+   */
+  export type InstructorInvitationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which InstructorInvitations to delete
+     */
+    where?: InstructorInvitationWhereInput
+    /**
+     * Limit how many InstructorInvitations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * InstructorInvitation without action
+   */
+  export type InstructorInvitationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the InstructorInvitation
+     */
+    select?: InstructorInvitationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the InstructorInvitation
+     */
+    omit?: InstructorInvitationOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model FinalAssessmentCompletion
    */
 
@@ -22227,6 +23326,18 @@ export namespace Prisma {
   export type ModuleQuizCompletionScalarFieldEnum = (typeof ModuleQuizCompletionScalarFieldEnum)[keyof typeof ModuleQuizCompletionScalarFieldEnum]
 
 
+  export const InstructorInvitationScalarFieldEnum: {
+    id: 'id',
+    token: 'token',
+    email: 'email',
+    expiresAt: 'expiresAt',
+    usedAt: 'usedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type InstructorInvitationScalarFieldEnum = (typeof InstructorInvitationScalarFieldEnum)[keyof typeof InstructorInvitationScalarFieldEnum]
+
+
   export const FinalAssessmentCompletionScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
@@ -23442,6 +24553,63 @@ export namespace Prisma {
     completedAt?: DateTimeWithAggregatesFilter<"ModuleQuizCompletion"> | Date | string
   }
 
+  export type InstructorInvitationWhereInput = {
+    AND?: InstructorInvitationWhereInput | InstructorInvitationWhereInput[]
+    OR?: InstructorInvitationWhereInput[]
+    NOT?: InstructorInvitationWhereInput | InstructorInvitationWhereInput[]
+    id?: StringFilter<"InstructorInvitation"> | string
+    token?: StringFilter<"InstructorInvitation"> | string
+    email?: StringFilter<"InstructorInvitation"> | string
+    expiresAt?: DateTimeFilter<"InstructorInvitation"> | Date | string
+    usedAt?: DateTimeNullableFilter<"InstructorInvitation"> | Date | string | null
+    createdAt?: DateTimeFilter<"InstructorInvitation"> | Date | string
+  }
+
+  export type InstructorInvitationOrderByWithRelationInput = {
+    id?: SortOrder
+    token?: SortOrder
+    email?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type InstructorInvitationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    token?: string
+    AND?: InstructorInvitationWhereInput | InstructorInvitationWhereInput[]
+    OR?: InstructorInvitationWhereInput[]
+    NOT?: InstructorInvitationWhereInput | InstructorInvitationWhereInput[]
+    email?: StringFilter<"InstructorInvitation"> | string
+    expiresAt?: DateTimeFilter<"InstructorInvitation"> | Date | string
+    usedAt?: DateTimeNullableFilter<"InstructorInvitation"> | Date | string | null
+    createdAt?: DateTimeFilter<"InstructorInvitation"> | Date | string
+  }, "id" | "token">
+
+  export type InstructorInvitationOrderByWithAggregationInput = {
+    id?: SortOrder
+    token?: SortOrder
+    email?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: InstructorInvitationCountOrderByAggregateInput
+    _max?: InstructorInvitationMaxOrderByAggregateInput
+    _min?: InstructorInvitationMinOrderByAggregateInput
+  }
+
+  export type InstructorInvitationScalarWhereWithAggregatesInput = {
+    AND?: InstructorInvitationScalarWhereWithAggregatesInput | InstructorInvitationScalarWhereWithAggregatesInput[]
+    OR?: InstructorInvitationScalarWhereWithAggregatesInput[]
+    NOT?: InstructorInvitationScalarWhereWithAggregatesInput | InstructorInvitationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"InstructorInvitation"> | string
+    token?: StringWithAggregatesFilter<"InstructorInvitation"> | string
+    email?: StringWithAggregatesFilter<"InstructorInvitation"> | string
+    expiresAt?: DateTimeWithAggregatesFilter<"InstructorInvitation"> | Date | string
+    usedAt?: DateTimeNullableWithAggregatesFilter<"InstructorInvitation"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"InstructorInvitation"> | Date | string
+  }
+
   export type FinalAssessmentCompletionWhereInput = {
     AND?: FinalAssessmentCompletionWhereInput | FinalAssessmentCompletionWhereInput[]
     OR?: FinalAssessmentCompletionWhereInput[]
@@ -24573,6 +25741,69 @@ export namespace Prisma {
     completedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type InstructorInvitationCreateInput = {
+    id?: string
+    token?: string
+    email: string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type InstructorInvitationUncheckedCreateInput = {
+    id?: string
+    token?: string
+    email: string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type InstructorInvitationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InstructorInvitationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InstructorInvitationCreateManyInput = {
+    id?: string
+    token?: string
+    email: string
+    expiresAt: Date | string
+    usedAt?: Date | string | null
+    createdAt?: Date | string
+  }
+
+  export type InstructorInvitationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type InstructorInvitationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    token?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    expiresAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    usedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type FinalAssessmentCompletionCreateInput = {
     id?: string
     courseId: string
@@ -25626,6 +26857,33 @@ export namespace Prisma {
   export type ModuleQuizCompletionSumOrderByAggregateInput = {
     score?: SortOrder
     percentage?: SortOrder
+  }
+
+  export type InstructorInvitationCountOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    email?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type InstructorInvitationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    email?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type InstructorInvitationMinOrderByAggregateInput = {
+    id?: SortOrder
+    token?: SortOrder
+    email?: SortOrder
+    expiresAt?: SortOrder
+    usedAt?: SortOrder
+    createdAt?: SortOrder
   }
 
   export type FinalAssessmentCompletionUserIdCourseIdCompoundUniqueInput = {

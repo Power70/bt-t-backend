@@ -4,6 +4,7 @@ import {
   Body,
   Res,
   Get,
+  Param,
   UseGuards,
   Request,
   HttpCode,
@@ -32,6 +33,7 @@ import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
 import { UserRole } from '../../generated/prisma';
 import { ResetPasswordDto } from './dto/reset-password-dto';
+import { RegisterInstructorDto } from './dto/register-instructor.dto';
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -222,6 +224,80 @@ export class AuthController {
     });
 
     return { message: 'Logout successful' };
+  }
+
+  // ===== INSTRUCTOR INVITATION ENDPOINTS =====
+
+  /**
+   * Validate an invitation token (public, no auth required)
+   */
+  @Get('invitation/:token')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Validate invitation token',
+    description:
+      'Checks if an instructor invitation token is valid, not expired, and not yet used. Returns the associated email.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Token is valid.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Invalid invitation link',
+  })
+  @ApiBadRequestResponse({
+    description: 'Invitation expired or already used',
+  })
+  async validateInvitation(@Param('token') token: string) {
+    return this.authService.validateInvitation(token);
+  }
+
+  /**
+   * Register as an instructor using an invitation token
+   */
+  @Post('register-instructor')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: 'Register an instructor via invitation',
+    description:
+      'Creates a new instructor account using a valid invitation token. Sets authentication cookie on success.',
+  })
+  @ApiBody({ type: RegisterInstructorDto })
+  @ApiResponse({
+    status: 201,
+    description: 'Instructor account created and authenticated.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Invalid invitation link',
+  })
+  @ApiBadRequestResponse({
+    description: 'Invitation expired or already used',
+  })
+  @ApiConflictResponse({
+    description: 'User with this email already exists',
+  })
+  async registerInstructor(
+    @Body() dto: RegisterInstructorDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const result = await this.authService.registerInstructor(dto);
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    // Set secure httpOnly cookie with 7 days expiration
+    response.cookie('Authentication', result.accessToken, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      path: '/',
+    });
+
+    return {
+      message: 'Instructor account created successfully',
+      user: result.user,
+    };
   }
 
   // ===== PROTECTED ENDPOINTS FOR TESTING RBAC =====

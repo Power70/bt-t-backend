@@ -4,10 +4,12 @@ import {
   BadRequestException,
   ConflictException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
 import { AuthService } from '../auth/auth.service';
 import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
 import { generateSlug } from './utils/slug.util';
 import { UserRole, LessonType } from '../../generated/prisma';
 import { PaginatedResult } from './dto/common/pagination.dto';
@@ -36,6 +38,7 @@ export class AdminService {
     private readonly prisma: PrismaService,
     private readonly mailService: MailService,
     private readonly authService: AuthService,
+    private readonly configService: ConfigService,
   ) {}
 
   // ============================================
@@ -1347,6 +1350,180 @@ export class AdminService {
     });
 
     return { message: 'Category deleted successfully' };
+  }
+
+  // ============================================
+  // INSTRUCTOR INVITATION MANAGEMENT
+  // ============================================
+
+  /**
+   * Generate an invitation link for an instructor and send it via email
+   */
+  async createInvitation(email: string) {
+    // Check if the email is already registered
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) {
+      throw new ConflictException('A user with this email already exists');
+    }
+
+    // Check if there's already an active (unused, unexpired) invitation for this email
+    const existingInvitation =
+      await this.prisma.instructorInvitation.findFirst({
+        where: {
+          email,
+          usedAt: null,
+          expiresAt: { gt: new Date() },
+        },
+      });
+
+    if (existingInvitation) {
+      throw new ConflictException(
+        'An active invitation already exists for this email. It expires on ' +
+          existingInvitation.expiresAt.toISOString(),
+      );
+    }
+
+    // Generate a secure token
+    const token = crypto.randomBytes(32).toString('hex');
+
+    // Set expiry to 72 hours from now
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 72);
+
+    // Create the invitation record
+    const invitation = await this.prisma.instructorInvitation.create({
+      data: {
+        token,
+        email,
+        expiresAt,
+      },
+    });
+
+    // Build the invitation link
+    const frontendUrl =
+      this.configService.get<string>('FRONTEND_URL') ||
+      'http://localhost:5173';
+    const inviteLink = `${frontendUrl}/instructor-signup?token=${token}`;
+
+    // Send the invitation email
+    await this.mailService.sendInstructorInvitation(email, inviteLink);
+
+    return {
+      message: 'Invitation sent successfully',
+      invitation: {
+        id: invitation.id,
+        email: invitation.email,
+        expiresAt: invitation.expiresAt,
+        inviteLink,
+      },
+    };
+  }
+
+  /**
+   * Get all invitations with pagination
+   */
+  async getInvitations(page = 1, limit = 10) {
+    const skip = (page - 1) * limit;
+
+    const [invitations, total] = await Promise.all([
+      this.prisma.instructorInvitation.findMany({
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.instructorInvitation.count(),
+    ]);
+
+    return {
+      data: invitations.map((inv) => ({
+        id: inv.id,
+        email: inv.email,
+        expiresAt: inv.expiresAt,
+        usedAt: inv.usedAt,
+        createdAt: inv.createdAt,
+        status: inv.usedAt
+          ? 'used'
+          : inv.expiresAt < new Date()
+            ? 'expired'
+            : 'pending',
+      })),
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  /**
+   * Revoke (delete) an invitation
+   */
+  async revokeInvitation(id: string) {
+    const invitation = await this.prisma.instructorInvitation.findUnique({
+      where: { id },
+    });
+
+    if (!invitation) {
+      throw new NotFoundException('Invitation not found');
+    }
+
+    if (invitation.usedAt) {
+      throw new BadRequestException(
+        'Cannot revoke an invitation that has already been used',
+      );
+    }
+
+    await this.prisma.instructorInvitation.delete({
+      where: { id },
+    });
+
+    return { message: 'Invitation revoked successfully' };
+  }
+
+  /**
+   * Resend an existing invitation
+   */
+  async resendInvitation(id: string) {
+    const invitation = await this.prisma.instructorInvitation.findUnique({
+      where: { id },
+    });
+
+    if (!invitation) {
+      throw new NotFoundException('Invitation not found');
+    }
+
+    if (invitation.usedAt) {
+      throw new BadRequestException(
+        'Cannot resend an invitation that has already been used',
+      );
+    }
+
+    // Extend the expiry to 72 hours from now
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 72);
+
+    await this.prisma.instructorInvitation.update({
+      where: { id },
+      data: { expiresAt },
+    });
+
+    // Build the invitation link
+    const frontendUrl =
+      this.configService.get<string>('FRONTEND_URL') ||
+      'http://localhost:5173';
+    const inviteLink = `${frontendUrl}/instructor-signup?token=${invitation.token}`;
+
+    // Resend the email
+    await this.mailService.sendInstructorInvitation(
+      invitation.email,
+      inviteLink,
+    );
+
+    return { message: 'Invitation resent successfully' };
   }
 
   // ============================================

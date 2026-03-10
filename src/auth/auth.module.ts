@@ -9,6 +9,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { UserModule } from '../user/user.module';
 import { MailModule } from '../mail/mail.module';
+import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { MailModule } from '../mail/mail.module';
     }),
     UserModule,
     MailModule,
+    PrismaModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, JwtAuthGuard, RolesGuard],

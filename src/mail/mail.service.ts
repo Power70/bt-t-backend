@@ -13,6 +13,7 @@ import {
   loginOtpTemplate,
   forgotPasswordTemplate,
   otpResendTemplate,
+  instructorInvitationTemplate,
 } from './templates/email-templates';
 
 @Injectable()
@@ -217,6 +218,31 @@ export class MailService {
       });
     } catch {
       throw new BadRequestException('Failed to send forgot password OTP');
+    }
+  }
+
+  /**
+   * Send instructor invitation email with signup link
+   */
+  async sendInstructorInvitation(
+    email: string,
+    inviteLink: string,
+  ): Promise<void> {
+    try {
+      const html = this.processTemplate(instructorInvitationTemplate, {
+        inviteLink,
+      });
+
+      await this.sendEmail({
+        to: email,
+        subject: "You're Invited to Join BT&T as an Instructor!",
+        html,
+        text: `You've been invited to join BT&T Platform as an instructor. Create your account here: ${inviteLink}. This link expires in 72 hours.`,
+      });
+    } catch {
+      throw new BadRequestException(
+        'Failed to send instructor invitation email',
+      );
     }
   }
 
