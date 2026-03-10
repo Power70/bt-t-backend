@@ -24,6 +24,8 @@ import {
   UpdateInstructorQuestionDto,
 } from './dto/quiz.dto';
 import { InstructorStudentFilterDto } from './dto/student-filter.dto';
+import { UpdateInstructorProfileDto } from './dto/update-profile.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class InstructorService {
@@ -241,6 +243,34 @@ export class InstructorService {
         totalHoursOfContent,
       },
     };
+  }
+
+  async updateProfile(instructorId: string, dto: UpdateInstructorProfileDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: instructorId },
+    });
+    if (!user) throw new NotFoundException('User not found');
+
+    const updateData: Record<string, unknown> = {};
+
+    if (dto.name) {
+      updateData.name = dto.name;
+    }
+
+    if (dto.password) {
+      updateData.password = await bcrypt.hash(dto.password, 10);
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return { message: 'No changes to update' };
+    }
+
+    await this.prisma.user.update({
+      where: { id: instructorId },
+      data: updateData,
+    });
+
+    return { message: 'Profile updated successfully' };
   }
 
   // ============================================

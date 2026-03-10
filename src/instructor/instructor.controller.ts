@@ -40,6 +40,7 @@ import {
   UpdateInstructorQuestionDto,
 } from './dto/quiz.dto';
 import { InstructorStudentFilterDto } from './dto/student-filter.dto';
+import { UpdateInstructorProfileDto } from './dto/update-profile.dto';
 
 @ApiTags('Instructor')
 @Controller('instructor')
@@ -73,6 +74,17 @@ export class InstructorController {
   @ApiResponse({ status: 200, description: 'Profile retrieved' })
   async getProfile(@Request() req: any) {
     return this.instructorService.getProfile(this.getUserId(req));
+  }
+
+  @Patch('profile')
+  @ApiOperation({ summary: 'Update instructor profile (name and/or password)' })
+  @ApiResponse({ status: 200, description: 'Profile updated successfully' })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  async updateProfile(
+    @Request() req: any,
+    @Body() dto: UpdateInstructorProfileDto,
+  ) {
+    return this.instructorService.updateProfile(this.getUserId(req), dto);
   }
 
   // ============================================
