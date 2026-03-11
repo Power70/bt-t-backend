@@ -231,7 +231,7 @@ export class InstructorService {
             0,
           ),
         0,
-      ) / 60,
+      ) / 3600,
     );
 
     return {
@@ -736,6 +736,11 @@ export class InstructorService {
 
     const { type, content, videoUrl, ...data } = dto;
 
+    // Convert completionTime from minutes (frontend) to seconds (storage)
+    if (data.completionTime !== undefined) {
+      data.completionTime = data.completionTime * 60;
+    }
+
     if (type === LessonType.VIDEO && !videoUrl)
       throw new BadRequestException('Video URL is required for VIDEO lessons');
     if (
@@ -806,6 +811,12 @@ export class InstructorService {
     const lesson = await this.ensureLessonOwnership(instructorId, lessonId);
 
     const { type, content, videoUrl, ...data } = dto;
+
+    // Convert completionTime from minutes (frontend) to seconds (storage)
+    if (data.completionTime !== undefined) {
+      data.completionTime = data.completionTime * 60;
+    }
+
     const updateData: any = { ...data };
 
     if (type) {

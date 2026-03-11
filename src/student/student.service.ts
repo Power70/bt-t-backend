@@ -53,7 +53,8 @@ export class StudentService {
       where: { userId },
     });
 
-    const totalCompleted = await this.prisma.enrollment.count({
+    // Count courses completed by enrollment status
+    const statusCompleted = await this.prisma.enrollment.count({
       where: {
         userId,
         status: Status.Completed,
@@ -93,6 +94,7 @@ export class StudentService {
     });
 
     let avgCompletion = 0;
+    let lessonBasedCompleted = 0;
     if (enrollments.length > 0) {
       const progressPercentages = await Promise.all(
         enrollments.map(async (enrollment) => {
@@ -120,6 +122,11 @@ export class StudentService {
             },
           });
 
+          // Count as completed if all lessons are done
+          if (completedLessons >= totalLessons) {
+            lessonBasedCompleted++;
+          }
+
           return (completedLessons / totalLessons) * 100;
         }),
       );
@@ -129,11 +136,44 @@ export class StudentService {
         progressPercentages.length;
     }
 
+    // Use the higher of status-based or lesson-based completed count
+    const totalCompleted = Math.max(statusCompleted, lessonBasedCompleted);
+
+    // Compute this week's study time from completed lesson times
+    // Get lessons completed this week and sum their completionTime values
+    const weekCompletedProgress = await this.prisma.userProgress.findMany({
+      where: {
+        userId,
+        isCompleted: true,
+        completedAt: {
+          gte: sevenDaysAgo,
+        },
+      },
+      select: {
+        lesson: {
+          select: {
+            completionTime: true,
+          },
+        },
+      },
+    });
+
+    const weekLessonTimeSeconds = weekCompletedProgress.reduce<number>(
+      (sum, p) => sum + (p.lesson.completionTime || 0),
+      0,
+    );
+
+    // Use the higher of activity-logged time or lesson completion time
+    const effectiveStudyTimeHours = Math.max(
+      totalStudyTime,
+      weekLessonTimeSeconds / 3600,
+    );
+
     return {
       totalEnrolled,
       totalCompleted,
       avgCompletion: Math.round(avgCompletion * 10) / 10,
-      totalStudyTime: Math.round(totalStudyTime * 10) / 10,
+      totalStudyTime: Math.round(effectiveStudyTimeHours * 10) / 10,
     };
   }
 
@@ -383,6 +423,12 @@ export class StudentService {
       };
     });
 
+    // Compute total completionTime dynamically from all lessons
+    const computedCompletionTime = modulesWithProgress.reduce(
+      (sum, mod) => sum + mod.totalModuleTime,
+      0,
+    );
+
     return {
       id: course.id,
       title: course.title,
@@ -391,7 +437,7 @@ export class StudentService {
       imageUrl: course.imageUrl,
       price: course.price,
       isPublished: course.isPublished,
-      completionTime: course.completionTime,
+      completionTime: computedCompletionTime || course.completionTime,
       instructor: course.instructor,
       category: course.category,
       modules: modulesWithProgress,
@@ -1472,6 +1518,15 @@ export class StudentService {
               name: true,
             },
           },
+          modules: {
+            include: {
+              lessons: {
+                select: {
+                  completionTime: true,
+                },
+              },
+            },
+          },
           _count: {
             select: {
               modules: true,
@@ -1486,6 +1541,25 @@ export class StudentService {
       this.prisma.course.count({ where }),
     ]);
 
-    return createPaginatedResult(courses, total, page, limit);
+    // Compute completionTime dynamically from lessons
+    const coursesWithComputedTime = courses.map((course) => {
+      const computedTime = course.modules.reduce(
+        (courseSum, mod) =>
+          courseSum +
+          mod.lessons.reduce(
+            (modSum, lesson) => modSum + (lesson.completionTime || 0),
+            0,
+          ),
+        0,
+      );
+      // Remove modules from output (not needed for browse), keep computed time
+      const { modules, ...courseWithoutModules } = course;
+      return {
+        ...courseWithoutModules,
+        completionTime: computedTime || course.completionTime,
+      };
+    });
+
+    return createPaginatedResult(coursesWithComputedTime, total, page, limit);
   }
 }

@@ -54,7 +54,7 @@ export class UpdateInstructorLessonDto {
   order?: number;
 
   @ApiPropertyOptional({
-    description: 'Estimated completion time in minutes',
+    description: 'Estimated completion time in minutes (stored as seconds internally)',
     example: 20,
     minimum: 0,
   })

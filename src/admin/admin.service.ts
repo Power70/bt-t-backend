@@ -733,6 +733,11 @@ export class AdminService {
       order = lastLesson ? lastLesson.order + 1 : 0;
     }
 
+    // Convert completionTime from minutes (frontend) to seconds (storage)
+    if (data.completionTime !== undefined) {
+      data.completionTime = data.completionTime * 60;
+    }
+
     // Set content/videoUrl based on type
     const lessonData: any = {
       ...data,
@@ -846,6 +851,11 @@ export class AdminService {
     }
 
     const { type, content, videoUrl, ...data } = updateLessonDto;
+
+    // Convert completionTime from minutes (frontend) to seconds (storage)
+    if (data.completionTime !== undefined) {
+      data.completionTime = data.completionTime * 60;
+    }
 
     const updateData: any = { ...data };
 
@@ -1169,11 +1179,40 @@ export class AdminService {
         },
         enrollments: {
           select: {
+            userId: true,
             status: true,
           },
         },
       },
     });
+
+    // Fetch all completed progress records to compute real per-enrollment progress
+    const allProgress = await this.prisma.userProgress.findMany({
+      where: { isCompleted: true },
+      select: {
+        userId: true,
+        lessonId: true,
+        lesson: {
+          select: {
+            module: {
+              select: { courseId: true },
+            },
+          },
+        },
+      },
+    });
+
+    // Build a map: courseId -> userId -> completedLessonCount
+    const progressMap = new Map<string, Map<string, number>>();
+    for (const p of allProgress) {
+      const courseId = p.lesson.module.courseId;
+      if (!progressMap.has(courseId)) progressMap.set(courseId, new Map());
+      const userMap = progressMap.get(courseId)!;
+      userMap.set(p.userId, (userMap.get(p.userId) || 0) + 1);
+    }
+
+    let totalProgressSum = 0;
+    let totalEnrollmentCount = 0;
 
     const courseStats = courses.map((course) => {
       if (!course.modules || !course.enrollments) {
@@ -1200,6 +1239,17 @@ export class AdminService {
 
       const enrollmentCount = enrollments.length;
 
+      // Compute per-enrollment progress for this course
+      const courseProgressMap = progressMap.get(course.id);
+      if (totalLessons > 0 && enrollmentCount > 0) {
+        for (const enrollment of enrollments) {
+          const completedCount = courseProgressMap?.get(enrollment.userId) || 0;
+          const enrollmentProgress = (completedCount / totalLessons) * 100;
+          totalProgressSum += enrollmentProgress;
+          totalEnrollmentCount++;
+        }
+      }
+
       // Count enrollments by status
       const statusCounts = enrollments.reduce(
         (acc: Record<string, number>, enrollment: any) => {
@@ -1222,10 +1272,16 @@ export class AdminService {
       };
     });
 
+    const averageProgressPerCourse =
+      totalEnrollmentCount > 0
+        ? Math.round((totalProgressSum / totalEnrollmentCount) * 100) / 100
+        : 0;
+
     return {
       totalCourses,
       totalStudents,
       totalEnrollments,
+      averageProgressPerCourse,
       courseStats,
     };
   }
