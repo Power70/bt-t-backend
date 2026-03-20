@@ -276,6 +276,19 @@ model ModuleQuizCompletion {
   @@index([moduleId])
 }
 
+// Instructor Invitation Links
+model InstructorInvitation {
+  id        String    @id @default(cuid())
+  token     String    @unique @default(cuid())
+  email     String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([token])
+  @@index([email])
+}
+
 // Final Assessment Completion Tracking
 model FinalAssessmentCompletion {
   id          String   @id @default(cuid())

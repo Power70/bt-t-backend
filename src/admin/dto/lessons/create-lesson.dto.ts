@@ -57,8 +57,9 @@ export class CreateLessonDto {
   order?: number;
 
   @ApiPropertyOptional({
-    description: 'Estimated completion time in seconds',
-    example: 900,
+    description:
+      'Estimated completion time in minutes (stored as seconds internally)',
+    example: 15,
     minimum: 0,
   })
   @IsInt()

@@ -21,12 +21,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 6.19.0
- * Query Engine version: 2ba551f319ab1df4bc874a89965d8b3641056773
+ * Prisma Client JS version: 6.19.2
+ * Query Engine version: c2990dca591cba766e3b7ef5d9e8a84796e47ab7
  */
 Prisma.prismaVersion = {
-  client: "6.19.0",
-  engine: "2ba551f319ab1df4bc874a89965d8b3641056773"
+  client: "6.19.2",
+  engine: "c2990dca591cba766e3b7ef5d9e8a84796e47ab7"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -262,6 +262,15 @@ exports.Prisma.ModuleQuizCompletionScalarFieldEnum = {
   completedAt: 'completedAt'
 };
 
+exports.Prisma.InstructorInvitationScalarFieldEnum = {
+  id: 'id',
+  token: 'token',
+  email: 'email',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.FinalAssessmentCompletionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -321,6 +330,7 @@ exports.Prisma.ModelName = {
   Certificate: 'Certificate',
   UserActivityLog: 'UserActivityLog',
   ModuleQuizCompletion: 'ModuleQuizCompletion',
+  InstructorInvitation: 'InstructorInvitation',
   FinalAssessmentCompletion: 'FinalAssessmentCompletion'
 };
 

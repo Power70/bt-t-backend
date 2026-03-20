@@ -4,10 +4,12 @@ import {
   BadRequestException,
   ConflictException,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
 import { AuthService } from '../auth/auth.service';
 import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
 import { generateSlug } from './utils/slug.util';
 import { UserRole, LessonType } from '../../generated/prisma';
 import { PaginatedResult } from './dto/common/pagination.dto';
@@ -36,6 +38,7 @@ export class AdminService {
     private readonly prisma: PrismaService,
     private readonly mailService: MailService,
     private readonly authService: AuthService,
+    private readonly configService: ConfigService,
   ) {}
 
   // ============================================
@@ -478,6 +481,142 @@ export class AdminService {
     return updatedCourse;
   }
 
+  /**
+   * Duplicate a course (deep clone modules, lessons, quizzes, final assessment)
+   */
+  async duplicateCourse(id: string) {
+    const course = await this.prisma.course.findUnique({
+      where: { id },
+      include: {
+        modules: {
+          include: {
+            lessons: { orderBy: { order: 'asc' } },
+            quiz: {
+              include: {
+                questions: { include: { options: true } },
+              },
+            },
+          },
+          orderBy: { order: 'asc' },
+        },
+        finalAssessment: {
+          include: {
+            questions: { include: { options: true } },
+          },
+        },
+      },
+    });
+
+    if (!course) {
+      throw new NotFoundException('Course not found');
+    }
+
+    let slug = generateSlug(`${course.title} copy`);
+    let counter = 0;
+    while (await this.prisma.course.findUnique({ where: { slug } })) {
+      counter++;
+      slug = `${generateSlug(`${course.title} copy`)}-${counter}`;
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      const newCourse = await tx.course.create({
+        data: {
+          title: `${course.title} (Copy)`,
+          slug,
+          description: course.description,
+          imageUrl: course.imageUrl,
+          price: course.price,
+          isPublished: false,
+          instructorId: course.instructorId,
+          categoryId: course.categoryId,
+          completionTime: course.completionTime,
+        },
+      });
+
+      for (const mod of course.modules) {
+        const newModule = await tx.module.create({
+          data: {
+            title: mod.title,
+            order: mod.order,
+            courseId: newCourse.id,
+          },
+        });
+
+        for (const lesson of mod.lessons) {
+          await tx.lesson.create({
+            data: {
+              title: lesson.title,
+              type: lesson.type,
+              content: lesson.content,
+              videoUrl: lesson.videoUrl,
+              order: lesson.order,
+              completionTime: lesson.completionTime,
+              moduleId: newModule.id,
+            },
+          });
+        }
+
+        if (mod.quiz) {
+          const newQuiz = await tx.quiz.create({
+            data: { moduleId: newModule.id },
+          });
+          for (const q of mod.quiz.questions) {
+            const newQuestion = await tx.question.create({
+              data: { text: q.text, quizId: newQuiz.id },
+            });
+            await tx.option.createMany({
+              data: q.options.map((opt) => ({
+                text: opt.text,
+                isCorrect: opt.isCorrect,
+                questionId: newQuestion.id,
+              })),
+            });
+          }
+        }
+      }
+
+      if (course.finalAssessment) {
+        const newAssessment = await tx.quiz.create({ data: {} });
+        for (const q of course.finalAssessment.questions) {
+          const newQuestion = await tx.question.create({
+            data: { text: q.text, quizId: newAssessment.id },
+          });
+          await tx.option.createMany({
+            data: q.options.map((opt) => ({
+              text: opt.text,
+              isCorrect: opt.isCorrect,
+              questionId: newQuestion.id,
+            })),
+          });
+        }
+        await tx.course.update({
+          where: { id: newCourse.id },
+          data: { finalAssessmentId: newAssessment.id },
+        });
+      }
+
+      return tx.course.findUnique({
+        where: { id: newCourse.id },
+        include: {
+          instructor: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+          category: true,
+          _count: {
+            select: {
+              modules: true,
+              enrollments: true,
+            },
+          },
+        },
+      });
+    });
+  }
+
   // ============================================
   // MODULE MANAGEMENT
   // ============================================
@@ -730,6 +869,11 @@ export class AdminService {
       order = lastLesson ? lastLesson.order + 1 : 0;
     }
 
+    // Convert completionTime from minutes (frontend) to seconds (storage)
+    if (data.completionTime !== undefined) {
+      data.completionTime = data.completionTime * 60;
+    }
+
     // Set content/videoUrl based on type
     const lessonData: any = {
       ...data,
@@ -843,6 +987,11 @@ export class AdminService {
     }
 
     const { type, content, videoUrl, ...data } = updateLessonDto;
+
+    // Convert completionTime from minutes (frontend) to seconds (storage)
+    if (data.completionTime !== undefined) {
+      data.completionTime = data.completionTime * 60;
+    }
 
     const updateData: any = { ...data };
 
@@ -1166,11 +1315,40 @@ export class AdminService {
         },
         enrollments: {
           select: {
+            userId: true,
             status: true,
           },
         },
       },
     });
+
+    // Fetch all completed progress records to compute real per-enrollment progress
+    const allProgress = await this.prisma.userProgress.findMany({
+      where: { isCompleted: true },
+      select: {
+        userId: true,
+        lessonId: true,
+        lesson: {
+          select: {
+            module: {
+              select: { courseId: true },
+            },
+          },
+        },
+      },
+    });
+
+    // Build a map: courseId -> userId -> completedLessonCount
+    const progressMap = new Map<string, Map<string, number>>();
+    for (const p of allProgress) {
+      const courseId = p.lesson.module.courseId;
+      if (!progressMap.has(courseId)) progressMap.set(courseId, new Map());
+      const userMap = progressMap.get(courseId)!;
+      userMap.set(p.userId, (userMap.get(p.userId) || 0) + 1);
+    }
+
+    let totalProgressSum = 0;
+    let totalEnrollmentCount = 0;
 
     const courseStats = courses.map((course) => {
       if (!course.modules || !course.enrollments) {
@@ -1197,6 +1375,17 @@ export class AdminService {
 
       const enrollmentCount = enrollments.length;
 
+      // Compute per-enrollment progress for this course
+      const courseProgressMap = progressMap.get(course.id);
+      if (totalLessons > 0 && enrollmentCount > 0) {
+        for (const enrollment of enrollments) {
+          const completedCount = courseProgressMap?.get(enrollment.userId) || 0;
+          const enrollmentProgress = (completedCount / totalLessons) * 100;
+          totalProgressSum += enrollmentProgress;
+          totalEnrollmentCount++;
+        }
+      }
+
       // Count enrollments by status
       const statusCounts = enrollments.reduce(
         (acc: Record<string, number>, enrollment: any) => {
@@ -1219,10 +1408,16 @@ export class AdminService {
       };
     });
 
+    const averageProgressPerCourse =
+      totalEnrollmentCount > 0
+        ? Math.round((totalProgressSum / totalEnrollmentCount) * 100) / 100
+        : 0;
+
     return {
       totalCourses,
       totalStudents,
       totalEnrollments,
+      averageProgressPerCourse,
       courseStats,
     };
   }
@@ -1347,6 +1542,179 @@ export class AdminService {
     });
 
     return { message: 'Category deleted successfully' };
+  }
+
+  // ============================================
+  // INSTRUCTOR INVITATION MANAGEMENT
+  // ============================================
+
+  /**
+   * Generate an invitation link for an instructor and send it via email
+   */
+  async createInvitation(email: string) {
+    // Check if the email is already registered
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) {
+      throw new ConflictException('A user with this email already exists');
+    }
+
+    // Check if there's already an active (unused, unexpired) invitation for this email
+    const existingInvitation = await this.prisma.instructorInvitation.findFirst(
+      {
+        where: {
+          email,
+          usedAt: null,
+          expiresAt: { gt: new Date() },
+        },
+      },
+    );
+
+    if (existingInvitation) {
+      throw new ConflictException(
+        'An active invitation already exists for this email. It expires on ' +
+          existingInvitation.expiresAt.toISOString(),
+      );
+    }
+
+    // Generate a secure token
+    const token = crypto.randomBytes(32).toString('hex');
+
+    // Set expiry to 72 hours from now
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 72);
+
+    // Create the invitation record
+    const invitation = await this.prisma.instructorInvitation.create({
+      data: {
+        token,
+        email,
+        expiresAt,
+      },
+    });
+
+    // Build the invitation link
+    const frontendUrl =
+      this.configService.get<string>('FRONTEND_URL') || 'http://localhost:5173';
+    const inviteLink = `${frontendUrl}/instructor-signup?token=${token}`;
+
+    // Send the invitation email
+    await this.mailService.sendInstructorInvitation(email, inviteLink);
+
+    return {
+      message: 'Invitation sent successfully',
+      invitation: {
+        id: invitation.id,
+        email: invitation.email,
+        expiresAt: invitation.expiresAt,
+        inviteLink,
+      },
+    };
+  }
+
+  /**
+   * Get all invitations with pagination
+   */
+  async getInvitations(page = 1, limit = 10) {
+    const skip = (page - 1) * limit;
+
+    const [invitations, total] = await Promise.all([
+      this.prisma.instructorInvitation.findMany({
+        skip,
+        take: limit,
+        orderBy: { createdAt: 'desc' },
+      }),
+      this.prisma.instructorInvitation.count(),
+    ]);
+
+    return {
+      data: invitations.map((inv) => ({
+        id: inv.id,
+        email: inv.email,
+        expiresAt: inv.expiresAt,
+        usedAt: inv.usedAt,
+        createdAt: inv.createdAt,
+        status: inv.usedAt
+          ? 'used'
+          : inv.expiresAt < new Date()
+            ? 'expired'
+            : 'pending',
+      })),
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  /**
+   * Revoke (delete) an invitation
+   */
+  async revokeInvitation(id: string) {
+    const invitation = await this.prisma.instructorInvitation.findUnique({
+      where: { id },
+    });
+
+    if (!invitation) {
+      throw new NotFoundException('Invitation not found');
+    }
+
+    if (invitation.usedAt) {
+      throw new BadRequestException(
+        'Cannot revoke an invitation that has already been used',
+      );
+    }
+
+    await this.prisma.instructorInvitation.delete({
+      where: { id },
+    });
+
+    return { message: 'Invitation revoked successfully' };
+  }
+
+  /**
+   * Resend an existing invitation
+   */
+  async resendInvitation(id: string) {
+    const invitation = await this.prisma.instructorInvitation.findUnique({
+      where: { id },
+    });
+
+    if (!invitation) {
+      throw new NotFoundException('Invitation not found');
+    }
+
+    if (invitation.usedAt) {
+      throw new BadRequestException(
+        'Cannot resend an invitation that has already been used',
+      );
+    }
+
+    // Extend the expiry to 72 hours from now
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 72);
+
+    await this.prisma.instructorInvitation.update({
+      where: { id },
+      data: { expiresAt },
+    });
+
+    // Build the invitation link
+    const frontendUrl =
+      this.configService.get<string>('FRONTEND_URL') || 'http://localhost:5173';
+    const inviteLink = `${frontendUrl}/instructor-signup?token=${invitation.token}`;
+
+    // Resend the email
+    await this.mailService.sendInstructorInvitation(
+      invitation.email,
+      inviteLink,
+    );
+
+    return { message: 'Invitation resent successfully' };
   }
 
   // ============================================
@@ -1980,6 +2348,283 @@ export class AdminService {
 
     return {
       message: `${parentType === 'module' ? 'Module quiz' : 'Final assessment'} deleted successfully. No student data was affected.`,
+    };
+  }
+
+  // ============================================
+  // REVENUE ANALYTICS
+  // ============================================
+
+  /**
+   * Get comprehensive revenue analytics
+   */
+  async getRevenueAnalytics() {
+    // Get all enrollments with course data
+    const enrollments = await this.prisma.enrollment.findMany({
+      include: {
+        course: {
+          include: {
+            instructor: {
+              select: {
+                name: true,
+              },
+            },
+            category: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+        user: {
+          select: {
+            name: true,
+            email: true,
+          },
+        },
+      },
+      orderBy: {
+        enrolledAt: 'desc',
+      },
+    });
+
+    // Calculate total revenue
+    const totalRevenue = enrollments.reduce(
+      (sum, enrollment) => sum + enrollment.course.price,
+      0,
+    );
+
+    const totalPayments = enrollments.length;
+    const averageTransactionValue =
+      totalPayments > 0 ? totalRevenue / totalPayments : 0;
+
+    // Get current month and last month data
+    const now = new Date();
+    const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+
+    const currentMonthEnrollments = enrollments.filter(
+      (e) => e.enrolledAt >= currentMonthStart,
+    );
+    const lastMonthEnrollments = enrollments.filter(
+      (e) => e.enrolledAt >= lastMonthStart && e.enrolledAt < currentMonthStart,
+    );
+
+    const monthlyRevenue = currentMonthEnrollments.reduce(
+      (sum, e) => sum + e.course.price,
+      0,
+    );
+    const lastMonthRevenue = lastMonthEnrollments.reduce(
+      (sum, e) => sum + e.course.price,
+      0,
+    );
+
+    const revenueGrowth =
+      lastMonthRevenue > 0
+        ? ((monthlyRevenue - lastMonthRevenue) / lastMonthRevenue) * 100
+        : monthlyRevenue > 0
+          ? 100
+          : 0;
+
+    // Top earning courses
+    const courseRevenue = new Map<
+      string,
+      {
+        courseId: string;
+        title: string;
+        price: number;
+        instructorName: string;
+        count: number;
+        revenue: number;
+      }
+    >();
+
+    enrollments.forEach((enrollment) => {
+      const courseId = enrollment.course.id;
+      if (courseRevenue.has(courseId)) {
+        const data = courseRevenue.get(courseId)!;
+        data.count += 1;
+        data.revenue += enrollment.course.price;
+      } else {
+        courseRevenue.set(courseId, {
+          courseId,
+          title: enrollment.course.title,
+          price: enrollment.course.price,
+          instructorName: enrollment.course.instructor.name,
+          count: 1,
+          revenue: enrollment.course.price,
+        });
+      }
+    });
+
+    const topEarningCourses = Array.from(courseRevenue.values())
+      .sort((a, b) => b.revenue - a.revenue)
+      .slice(0, 10)
+      .map((course) => ({
+        courseId: course.courseId,
+        title: course.title,
+        enrollmentCount: course.count,
+        revenue: course.revenue,
+        price: course.price,
+        instructorName: course.instructorName,
+      }));
+
+    // Revenue by month (last 12 months)
+    const monthlyRevenueData: {
+      month: string;
+      revenue: number;
+      enrollments: number;
+      year: number;
+    }[] = [];
+
+    for (let i = 11; i >= 0; i--) {
+      const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const monthEnd = new Date(
+        monthDate.getFullYear(),
+        monthDate.getMonth() + 1,
+        0,
+      );
+
+      const monthEnrollments = enrollments.filter(
+        (e) => e.enrolledAt >= monthDate && e.enrolledAt <= monthEnd,
+      );
+
+      const monthRevenue = monthEnrollments.reduce(
+        (sum, e) => sum + e.course.price,
+        0,
+      );
+
+      monthlyRevenueData.push({
+        month: monthDate.toLocaleString('default', { month: 'short' }),
+        revenue: monthRevenue,
+        enrollments: monthEnrollments.length,
+        year: monthDate.getFullYear(),
+      });
+    }
+
+    // Revenue by category
+    const categoryRevenue = new Map<
+      string,
+      {
+        categoryId: string;
+        categoryName: string;
+        revenue: number;
+        enrollmentCount: number;
+        courses: Set<string>;
+      }
+    >();
+
+    enrollments.forEach((enrollment) => {
+      const categoryId = enrollment.course.category.id;
+      const categoryName = enrollment.course.category.name;
+
+      if (categoryRevenue.has(categoryId)) {
+        const data = categoryRevenue.get(categoryId)!;
+        data.revenue += enrollment.course.price;
+        data.enrollmentCount += 1;
+        data.courses.add(enrollment.course.id);
+      } else {
+        categoryRevenue.set(categoryId, {
+          categoryId,
+          categoryName,
+          revenue: enrollment.course.price,
+          enrollmentCount: 1,
+          courses: new Set([enrollment.course.id]),
+        });
+      }
+    });
+
+    const revenueByCategory = Array.from(categoryRevenue.values())
+      .map((cat) => ({
+        categoryId: cat.categoryId,
+        categoryName: cat.categoryName,
+        revenue: cat.revenue,
+        enrollmentCount: cat.enrollmentCount,
+        courseCount: cat.courses.size,
+      }))
+      .sort((a, b) => b.revenue - a.revenue);
+
+    return {
+      totalRevenue,
+      totalPayments,
+      averageTransactionValue,
+      totalEnrollments: totalPayments,
+      monthlyRevenue,
+      revenueGrowth,
+      topEarningCourses,
+      revenueByMonth: monthlyRevenueData,
+      revenueByCategory,
+    };
+  }
+
+  /**
+   * Get paginated payment transactions
+   */
+  async getPaymentTransactions(page = 1, limit = 10) {
+    const skip = (page - 1) * limit;
+
+    const [enrollments, total] = await Promise.all([
+      this.prisma.enrollment.findMany({
+        skip,
+        take: limit,
+        include: {
+          course: {
+            include: {
+              instructor: {
+                select: {
+                  name: true,
+                },
+              },
+              category: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+          user: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+        },
+        orderBy: {
+          enrolledAt: 'desc',
+        },
+      }),
+      this.prisma.enrollment.count(),
+    ]);
+
+    const transactions = enrollments.map((enrollment) => ({
+      id: enrollment.id,
+      enrolledAt: enrollment.enrolledAt,
+      userId: enrollment.userId,
+      userEmail: enrollment.user.email,
+      userName: enrollment.user.name,
+      courseId: enrollment.courseId,
+      courseTitle: enrollment.course.title,
+      price: enrollment.course.price,
+      instructorName: enrollment.course.instructor.name,
+      categoryName: enrollment.course.category.name,
+    }));
+
+    const totalRevenue = await this.prisma.enrollment
+      .findMany({
+        include: { course: { select: { price: true } } },
+      })
+      .then((enrollments) =>
+        enrollments.reduce((sum, e) => sum + e.course.price, 0),
+      );
+
+    return {
+      transactions,
+      total,
+      page,
+      limit,
+      totalRevenue,
     };
   }
 }

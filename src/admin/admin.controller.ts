@@ -42,6 +42,7 @@ import { UserFilterDto } from './dto/users/user-filter.dto';
 import { CreateModuleQuizDto } from './dto/quizzes/create-module-quiz.dto';
 import { CreateFinalAssessmentDto } from './dto/quizzes/create-final-assessment.dto';
 import { UpdateQuestionDto } from './dto/quizzes/update-question.dto';
+import { CreateInvitationDto } from './dto/invitations/create-invitation.dto';
 import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('Admin')
@@ -187,6 +188,30 @@ export class AdminController {
   })
   async toggleCoursePublish(@Param('id') id: string) {
     return this.adminService.toggleCoursePublish(id);
+  }
+
+  @Post('courses/:id/duplicate')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: 'Duplicate a course (deep clone)',
+    description:
+      'Creates a full copy of a course including modules, lessons, quizzes, and final assessment.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Course ID',
+    type: String,
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Course duplicated successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Course not found',
+  })
+  async duplicateCourse(@Param('id') id: string) {
+    return this.adminService.duplicateCourse(id);
   }
 
   // ============================================
@@ -668,6 +693,95 @@ export class AdminController {
   }
 
   // ============================================
+  // INSTRUCTOR INVITATION ENDPOINTS
+  // ============================================
+
+  @Post('invitations')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: 'Create an instructor invitation',
+    description:
+      'Generates an invitation link and sends it to the specified email. The link expires in 72 hours.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Invitation sent successfully',
+  })
+  @ApiResponse({
+    status: 409,
+    description: 'Conflict - User already exists or active invitation exists',
+  })
+  async createInvitation(@Body() createInvitationDto: CreateInvitationDto) {
+    return this.adminService.createInvitation(createInvitationDto.email);
+  }
+
+  @Get('invitations')
+  @ApiOperation({
+    summary: 'Get all invitations',
+    description: 'Retrieves all instructor invitations with pagination.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Invitations retrieved successfully',
+  })
+  async getInvitations(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+  ) {
+    return this.adminService.getInvitations(
+      page ? parseInt(page, 10) : 1,
+      limit ? parseInt(limit, 10) : 10,
+    );
+  }
+
+  @Delete('invitations/:id')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Revoke an invitation',
+    description: 'Deletes an unused invitation.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Invitation ID',
+    type: String,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Invitation revoked successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Invitation not found',
+  })
+  async revokeInvitation(@Param('id') id: string) {
+    return this.adminService.revokeInvitation(id);
+  }
+
+  @Post('invitations/:id/resend')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Resend an invitation',
+    description:
+      'Resends the invitation email and extends the expiry to 72 hours.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Invitation ID',
+    type: String,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Invitation resent successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Invitation not found',
+  })
+  async resendInvitation(@Param('id') id: string) {
+    return this.adminService.resendInvitation(id);
+  }
+
+  // ============================================
   // USER MANAGEMENT ENDPOINTS
   // ============================================
 
@@ -963,6 +1077,52 @@ export class AdminController {
     return this.adminService.updateQuestionOptions(
       questionId,
       updateQuestionDto,
+    );
+  }
+
+  // ============================================
+  // REVENUE ANALYTICS ENDPOINTS
+  // ============================================
+
+  @Get('analytics/revenue')
+  @ApiOperation({
+    summary: 'Get revenue analytics',
+    description:
+      'Retrieves comprehensive revenue analytics including total revenue, top earning courses, revenue by month, and revenue by category.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Revenue analytics retrieved successfully',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Not an admin',
+  })
+  async getRevenueAnalytics() {
+    return this.adminService.getRevenueAnalytics();
+  }
+
+  @Get('analytics/transactions')
+  @ApiOperation({
+    summary: 'Get payment transactions',
+    description:
+      'Retrieves paginated list of all payment transactions with details.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Transactions retrieved successfully',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Not an admin',
+  })
+  async getPaymentTransactions(
+    @Query('page') page?: number,
+    @Query('limit') limit?: number,
+  ) {
+    return this.adminService.getPaymentTransactions(
+      page ? parseInt(page.toString()) : 1,
+      limit ? parseInt(limit.toString()) : 20,
     );
   }
 }

@@ -125,7 +125,8 @@ async function main() {
                   title: 'Welcome to Web Development',
                   type: LessonType.VIDEO,
                   content: 'Introduction to the course and what you will learn',
-                  videoUrl: 'https://example.com/videos/intro.mp4',
+                  videoUrl: 'https://www.youtube.com/watch?v=qz0aGYrrlhU',
+                  completionTime: 900,
                   order: 1,
                 },
                 {
@@ -133,6 +134,7 @@ async function main() {
                   type: LessonType.TEXT,
                   content:
                     'Learn the fundamentals of HTML including tags, elements, and attributes.',
+                  completionTime: 600,
                   order: 2,
                 },
                 {
@@ -140,7 +142,8 @@ async function main() {
                   type: LessonType.VIDEO,
                   content:
                     'Understanding CSS selectors, properties, and values',
-                  videoUrl: 'https://example.com/videos/css-basics.mp4',
+                  videoUrl: 'https://www.youtube.com/watch?v=1PnVor36_40',
+                  completionTime: 1200,
                   order: 3,
                 },
               ],
@@ -155,7 +158,8 @@ async function main() {
                   title: 'JavaScript Introduction',
                   type: LessonType.VIDEO,
                   content: 'Getting started with JavaScript programming',
-                  videoUrl: 'https://example.com/videos/js-intro.mp4',
+                  videoUrl: 'https://www.youtube.com/watch?v=W6NZfCO5SIk',
+                  completionTime: 1500,
                   order: 1,
                 },
                 {
@@ -163,13 +167,15 @@ async function main() {
                   type: LessonType.TEXT,
                   content:
                     'Understanding variables, let, const, and different data types in JavaScript',
+                  completionTime: 720,
                   order: 2,
                 },
                 {
                   title: 'Functions and Scope',
                   type: LessonType.VIDEO,
                   content: 'Master JavaScript functions and understand scope',
-                  videoUrl: 'https://example.com/videos/functions.mp4',
+                  videoUrl: 'https://www.youtube.com/watch?v=xUI5Tsl2JpY',
+                  completionTime: 1080,
                   order: 3,
                 },
               ],
@@ -210,7 +216,8 @@ async function main() {
                   title: 'What is React?',
                   type: LessonType.VIDEO,
                   content: 'Introduction to React and its ecosystem',
-                  videoUrl: 'https://example.com/videos/react-intro.mp4',
+                  videoUrl: 'https://www.youtube.com/watch?v=SqcY0GlETPk',
+                  completionTime: 1200,
                   order: 1,
                 },
                 {
@@ -218,6 +225,7 @@ async function main() {
                   type: LessonType.TEXT,
                   content:
                     'Learn how to set up Node.js, npm, and create-react-app',
+                  completionTime: 480,
                   order: 2,
                 },
                 {
@@ -225,7 +233,8 @@ async function main() {
                   type: LessonType.VIDEO,
                   content:
                     'Understanding React components and how to pass data with props',
-                  videoUrl: 'https://example.com/videos/components.mp4',
+                  videoUrl: 'https://www.youtube.com/watch?v=Tn6-PIqc4UM',
+                  completionTime: 1320,
                   order: 3,
                 },
               ],
@@ -241,7 +250,8 @@ async function main() {
                   type: LessonType.VIDEO,
                   content:
                     'Learn about React state and how to manage component data',
-                  videoUrl: 'https://example.com/videos/state.mp4',
+                  videoUrl: 'https://www.youtube.com/watch?v=O6P86uwfdR0',
+                  completionTime: 1500,
                   order: 1,
                 },
                 {
@@ -249,6 +259,7 @@ async function main() {
                   type: LessonType.TEXT,
                   content:
                     'Deep dive into useState, useEffect, and other React hooks',
+                  completionTime: 900,
                   order: 2,
                 },
               ],
@@ -289,13 +300,15 @@ async function main() {
                   title: 'Introduction to Python',
                   type: LessonType.VIDEO,
                   content: 'Getting started with Python programming',
-                  videoUrl: 'https://example.com/videos/python-intro.mp4',
+                  videoUrl: 'https://www.youtube.com/watch?v=kqtD5dpn9C8',
+                  completionTime: 1800,
                   order: 1,
                 },
                 {
                   title: 'Python Data Structures',
                   type: LessonType.TEXT,
                   content: 'Learn about lists, tuples, dictionaries, and sets',
+                  completionTime: 720,
                   order: 2,
                 },
               ],
@@ -310,13 +323,15 @@ async function main() {
                   title: 'Introduction to Pandas',
                   type: LessonType.VIDEO,
                   content: 'Learn the basics of the pandas library',
-                  videoUrl: 'https://example.com/videos/pandas-intro.mp4',
+                  videoUrl: 'https://www.youtube.com/watch?v=vmEHCJofslg',
+                  completionTime: 1200,
                   order: 1,
                 },
                 {
                   title: 'Data Cleaning and Preprocessing',
                   type: LessonType.TEXT,
                   content: 'Master data cleaning techniques with pandas',
+                  completionTime: 900,
                   order: 2,
                 },
               ],
@@ -358,7 +373,8 @@ async function main() {
                   type: LessonType.VIDEO,
                   content:
                     'Introduction to React Native and mobile development',
-                  videoUrl: 'https://example.com/videos/rn-intro.mp4',
+                  videoUrl: 'https://www.youtube.com/watch?v=0-S5a0eXPoc',
+                  completionTime: 1500,
                   order: 1,
                 },
               ],

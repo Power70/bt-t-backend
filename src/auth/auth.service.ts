@@ -3,10 +3,12 @@ import {
   ConflictException,
   UnauthorizedException,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../user/user.service';
 import { MailService } from '../mail/mail.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { UserEntity } from '../user/entities/user.entity';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
@@ -17,6 +19,8 @@ import { hotp } from 'otplib';
 import * as crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
 import { ResetPasswordDto } from './dto/reset-password-dto';
+import { RegisterInstructorDto } from './dto/register-instructor.dto';
+import { UserRole } from '../../generated/prisma';
 
 export interface AuthResult {
   accessToken: string;
@@ -30,6 +34,7 @@ export class AuthService {
     private readonly mailService: MailService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly prisma: PrismaService,
   ) {}
 
   /**
@@ -299,6 +304,109 @@ export class AuthService {
 
     return {
       message: successMessage,
+    };
+  }
+
+  /**
+   * Validate an instructor invitation token (public endpoint for the frontend)
+   */
+  async validateInvitation(
+    token: string,
+  ): Promise<{ valid: boolean; email: string }> {
+    const invitation = await this.prisma.instructorInvitation.findUnique({
+      where: { token },
+    });
+
+    if (!invitation) {
+      throw new NotFoundException('Invalid invitation link');
+    }
+
+    if (invitation.usedAt) {
+      throw new BadRequestException('This invitation has already been used');
+    }
+
+    if (invitation.expiresAt < new Date()) {
+      throw new BadRequestException(
+        'This invitation has expired. Please contact your administrator for a new one.',
+      );
+    }
+
+    return { valid: true, email: invitation.email };
+  }
+
+  /**
+   * Register an instructor using an invitation token
+   */
+  async registerInstructor(dto: RegisterInstructorDto): Promise<AuthResult> {
+    // Validate the invitation token
+    const invitation = await this.prisma.instructorInvitation.findUnique({
+      where: { token: dto.token },
+    });
+
+    if (!invitation) {
+      throw new NotFoundException('Invalid invitation link');
+    }
+
+    if (invitation.usedAt) {
+      throw new BadRequestException('This invitation has already been used');
+    }
+
+    if (invitation.expiresAt < new Date()) {
+      throw new BadRequestException(
+        'This invitation has expired. Please contact your administrator for a new one.',
+      );
+    }
+
+    // Check if email is already registered
+    const existingUser = await this.usersService.findUserByEmail(
+      invitation.email,
+    );
+    if (existingUser) {
+      throw new ConflictException('A user with this email already exists');
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+
+    // Create the instructor user (already verified since they came via invitation link)
+    const user = await this.prisma.user.create({
+      data: {
+        email: invitation.email,
+        name: dto.name,
+        password: hashedPassword,
+        role: UserRole.INSTRUCTOR,
+        isVerified: true,
+      },
+    });
+
+    // Mark the invitation as used
+    await this.prisma.instructorInvitation.update({
+      where: { id: invitation.id },
+      data: { usedAt: new Date() },
+    });
+
+    // Generate JWT token immediately (no OTP needed since email was validated via invitation)
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    };
+
+    const accessToken = this.jwtService.sign(payload);
+
+    const userEntity: UserEntity = {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      isVerified: user.isVerified,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+
+    return {
+      accessToken,
+      user: userEntity,
     };
   }
 }
