@@ -205,10 +205,7 @@ export class InstructorController {
   @ApiOperation({ summary: 'Get modules for a course' })
   @ApiParam({ name: 'courseId', type: String })
   @ApiResponse({ status: 200, description: 'Modules retrieved' })
-  async getModules(
-    @Request() req: any,
-    @Param('courseId') courseId: string,
-  ) {
+  async getModules(@Request() req: any, @Param('courseId') courseId: string) {
     return this.instructorService.getModulesByCourse(
       this.getUserId(req),
       courseId,
@@ -285,10 +282,7 @@ export class InstructorController {
   @ApiOperation({ summary: 'Get lessons for a module' })
   @ApiParam({ name: 'moduleId', type: String })
   @ApiResponse({ status: 200, description: 'Lessons retrieved' })
-  async getLessons(
-    @Request() req: any,
-    @Param('moduleId') moduleId: string,
-  ) {
+  async getLessons(@Request() req: any, @Param('moduleId') moduleId: string) {
     return this.instructorService.getLessonsByModule(
       this.getUserId(req),
       moduleId,
@@ -382,10 +376,7 @@ export class InstructorController {
   @ApiOperation({ summary: 'Delete module quiz' })
   @ApiParam({ name: 'quizId', type: String })
   @ApiResponse({ status: 200, description: 'Quiz deleted' })
-  async deleteModuleQuiz(
-    @Request() req: any,
-    @Param('quizId') quizId: string,
-  ) {
+  async deleteModuleQuiz(@Request() req: any, @Param('quizId') quizId: string) {
     return this.instructorService.deleteQuiz(
       this.getUserId(req),
       'module',

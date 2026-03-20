@@ -12,7 +12,10 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { PartialType } from '@nestjs/swagger';
 
 export class CreateInstructorOptionDto {
-  @ApiProperty({ description: 'Option text', example: 'A programming language' })
+  @ApiProperty({
+    description: 'Option text',
+    example: 'A programming language',
+  })
   @IsString()
   @IsNotEmpty()
   text: string;

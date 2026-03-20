@@ -16,7 +16,9 @@ export class RevenueAnalyticsDto {
   @ApiProperty({ description: 'Revenue from current month' })
   monthlyRevenue: number;
 
-  @ApiProperty({ description: 'Revenue growth percentage compared to last month' })
+  @ApiProperty({
+    description: 'Revenue growth percentage compared to last month',
+  })
   revenueGrowth: number;
 
   @ApiProperty({ description: 'Top earning courses' })

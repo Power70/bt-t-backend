@@ -1562,14 +1562,15 @@ export class AdminService {
     }
 
     // Check if there's already an active (unused, unexpired) invitation for this email
-    const existingInvitation =
-      await this.prisma.instructorInvitation.findFirst({
+    const existingInvitation = await this.prisma.instructorInvitation.findFirst(
+      {
         where: {
           email,
           usedAt: null,
           expiresAt: { gt: new Date() },
         },
-      });
+      },
+    );
 
     if (existingInvitation) {
       throw new ConflictException(
@@ -1596,8 +1597,7 @@ export class AdminService {
 
     // Build the invitation link
     const frontendUrl =
-      this.configService.get<string>('FRONTEND_URL') ||
-      'http://localhost:5173';
+      this.configService.get<string>('FRONTEND_URL') || 'http://localhost:5173';
     const inviteLink = `${frontendUrl}/instructor-signup?token=${token}`;
 
     // Send the invitation email
@@ -1705,8 +1705,7 @@ export class AdminService {
 
     // Build the invitation link
     const frontendUrl =
-      this.configService.get<string>('FRONTEND_URL') ||
-      'http://localhost:5173';
+      this.configService.get<string>('FRONTEND_URL') || 'http://localhost:5173';
     const inviteLink = `${frontendUrl}/instructor-signup?token=${invitation.token}`;
 
     // Resend the email

@@ -4,6 +4,7 @@ import { UsersService } from '../user/user.service';
 import { MailService } from '../mail/mail.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { PrismaService } from '../prisma/prisma.service';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -42,6 +43,14 @@ describe('AuthService', () => {
           provide: ConfigService,
           useValue: {
             get: jest.fn(() => 'mock-config-value'),
+          },
+        },
+        {
+          provide: PrismaService,
+          useValue: {
+            user: {
+              create: jest.fn(),
+            },
           },
         },
       ],

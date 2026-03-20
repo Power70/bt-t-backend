@@ -117,7 +117,9 @@ export class InstructorService {
     return question;
   }
 
-  private async calculateCourseCompletionTime(courseId: string): Promise<number> {
+  private async calculateCourseCompletionTime(
+    courseId: string,
+  ): Promise<number> {
     const lessons = await this.prisma.lesson.findMany({
       where: { module: { courseId } },
       select: { completionTime: true },
@@ -169,8 +171,7 @@ export class InstructorService {
       );
 
     const totalLessons = courses.reduce(
-      (sum, c) =>
-        sum + c.modules.reduce((ms, m) => ms + m.lessons.length, 0),
+      (sum, c) => sum + c.modules.reduce((ms, m) => ms + m.lessons.length, 0),
       0,
     );
 
@@ -226,8 +227,7 @@ export class InstructorService {
           sum +
           c.modules.reduce(
             (ms, m) =>
-              ms +
-              m.lessons.reduce((ls, l) => ls + (l.completionTime || 0), 0),
+              ms + m.lessons.reduce((ls, l) => ls + (l.completionTime || 0), 0),
             0,
           ),
         0,
@@ -277,10 +277,7 @@ export class InstructorService {
   // COURSE MANAGEMENT
   // ============================================
 
-  async createCourse(
-    instructorId: string,
-    dto: CreateInstructorCourseDto,
-  ) {
+  async createCourse(instructorId: string, dto: CreateInstructorCourseDto) {
     const { categoryName, title, ...data } = dto;
 
     const category = await this.prisma.category.findUnique({
@@ -372,7 +369,9 @@ export class InstructorService {
         modules: {
           include: {
             lessons: { orderBy: { order: 'asc' } },
-            quiz: { select: { id: true, _count: { select: { questions: true } } } },
+            quiz: {
+              select: { id: true, _count: { select: { questions: true } } },
+            },
           },
           orderBy: { order: 'asc' },
         },
@@ -384,9 +383,8 @@ export class InstructorService {
     if (course.instructorId !== instructorId)
       throw new ForbiddenException('You do not own this course');
 
-    const totalCompletionTime = await this.calculateCourseCompletionTime(
-      courseId,
-    );
+    const totalCompletionTime =
+      await this.calculateCourseCompletionTime(courseId);
 
     return { ...course, completionTime: totalCompletionTime };
   }
@@ -596,7 +594,9 @@ export class InstructorService {
         modules: {
           include: {
             lessons: { orderBy: { order: 'asc' } },
-            quiz: { select: { id: true, _count: { select: { questions: true } } } },
+            quiz: {
+              select: { id: true, _count: { select: { questions: true } } },
+            },
           },
           orderBy: { order: 'asc' },
         },
@@ -743,10 +743,7 @@ export class InstructorService {
 
     if (type === LessonType.VIDEO && !videoUrl)
       throw new BadRequestException('Video URL is required for VIDEO lessons');
-    if (
-      (type === LessonType.TEXT || type === LessonType.QUIZ) &&
-      !content
-    )
+    if ((type === LessonType.TEXT || type === LessonType.QUIZ) && !content)
       throw new BadRequestException(`Content is required for ${type} lessons`);
 
     let order = dto.order;
@@ -1209,15 +1206,16 @@ export class InstructorService {
         );
         const totalLessons = lessonIds.length;
 
-        const completedCount = totalLessons > 0
-          ? await this.prisma.userProgress.count({
-              where: {
-                userId: enrollment.userId,
-                lessonId: { in: lessonIds },
-                isCompleted: true,
-              },
-            })
-          : 0;
+        const completedCount =
+          totalLessons > 0
+            ? await this.prisma.userProgress.count({
+                where: {
+                  userId: enrollment.userId,
+                  lessonId: { in: lessonIds },
+                  isCompleted: true,
+                },
+              })
+            : 0;
 
         // Get last activity
         const lastActivity = await this.prisma.userActivityLog.findFirst({
@@ -1309,15 +1307,16 @@ export class InstructorService {
 
     const data = await Promise.all(
       enrollments.map(async (enrollment) => {
-        const completedCount = totalLessons > 0
-          ? await this.prisma.userProgress.count({
-              where: {
-                userId: enrollment.userId,
-                lessonId: { in: lessonIds },
-                isCompleted: true,
-              },
-            })
-          : 0;
+        const completedCount =
+          totalLessons > 0
+            ? await this.prisma.userProgress.count({
+                where: {
+                  userId: enrollment.userId,
+                  lessonId: { in: lessonIds },
+                  isCompleted: true,
+                },
+              })
+            : 0;
 
         const lastActivity = await this.prisma.userActivityLog.findFirst({
           where: {
@@ -1333,10 +1332,7 @@ export class InstructorService {
           where: {
             userId: enrollment.userId,
             quiz: {
-              OR: [
-                { module: { courseId } },
-                { course: { id: courseId } },
-              ],
+              OR: [{ module: { courseId } }, { course: { id: courseId } }],
             },
           },
           select: { score: true },
@@ -1554,10 +1550,7 @@ export class InstructorService {
       );
       revenueByMonth.push({
         month: monthDate.toLocaleString('default', { month: 'short' }),
-        revenue: monthEnrollments.reduce(
-          (sum, e) => sum + e.course.price,
-          0,
-        ),
+        revenue: monthEnrollments.reduce((sum, e) => sum + e.course.price, 0),
         enrollments: monthEnrollments.length,
         year: monthDate.getFullYear(),
       });
@@ -1656,8 +1649,7 @@ export class InstructorService {
         // Average time to complete
         const totalTime = course.modules.reduce(
           (sum, m) =>
-            sum +
-            m.lessons.reduce((ls, l) => ls + (l.completionTime || 0), 0),
+            sum + m.lessons.reduce((ls, l) => ls + (l.completionTime || 0), 0),
           0,
         );
 

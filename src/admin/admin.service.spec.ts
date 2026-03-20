@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdminService } from './admin.service';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
 import { MailService } from '../mail/mail.service';
 import { AuthService } from '../auth/auth.service';
@@ -75,6 +76,10 @@ describe('AdminService', () => {
     createAndStoreOtpForUser: jest.fn(),
   };
 
+  const mockConfigService = {
+    get: jest.fn().mockReturnValue('http://localhost:5173'),
+  };
+
   beforeEach(async () => {
     jest.clearAllMocks();
 
@@ -92,6 +97,10 @@ describe('AdminService', () => {
         {
           provide: AuthService,
           useValue: mockAuthService,
+        },
+        {
+          provide: ConfigService,
+          useValue: mockConfigService,
         },
       ],
     }).compile();

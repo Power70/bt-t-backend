@@ -7,7 +7,12 @@ import { MailModule } from '../mail/mail.module';
 import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [ConfigModule, PrismaModule, MailModule, forwardRef(() => AuthModule)],
+  imports: [
+    ConfigModule,
+    PrismaModule,
+    MailModule,
+    forwardRef(() => AuthModule),
+  ],
   controllers: [AdminController],
   providers: [AdminService],
   exports: [AdminService],

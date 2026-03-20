@@ -718,8 +718,7 @@ export class AdminController {
   @Get('invitations')
   @ApiOperation({
     summary: 'Get all invitations',
-    description:
-      'Retrieves all instructor invitations with pagination.',
+    description: 'Retrieves all instructor invitations with pagination.',
   })
   @ApiResponse({
     status: 200,
@@ -1127,4 +1126,3 @@ export class AdminController {
     );
   }
 }
-

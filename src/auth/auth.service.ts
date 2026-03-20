@@ -337,9 +337,7 @@ export class AuthService {
   /**
    * Register an instructor using an invitation token
    */
-  async registerInstructor(
-    dto: RegisterInstructorDto,
-  ): Promise<AuthResult> {
+  async registerInstructor(dto: RegisterInstructorDto): Promise<AuthResult> {
     // Validate the invitation token
     const invitation = await this.prisma.instructorInvitation.findUnique({
       where: { token: dto.token },
