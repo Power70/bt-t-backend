@@ -481,6 +481,142 @@ export class AdminService {
     return updatedCourse;
   }
 
+  /**
+   * Duplicate a course (deep clone modules, lessons, quizzes, final assessment)
+   */
+  async duplicateCourse(id: string) {
+    const course = await this.prisma.course.findUnique({
+      where: { id },
+      include: {
+        modules: {
+          include: {
+            lessons: { orderBy: { order: 'asc' } },
+            quiz: {
+              include: {
+                questions: { include: { options: true } },
+              },
+            },
+          },
+          orderBy: { order: 'asc' },
+        },
+        finalAssessment: {
+          include: {
+            questions: { include: { options: true } },
+          },
+        },
+      },
+    });
+
+    if (!course) {
+      throw new NotFoundException('Course not found');
+    }
+
+    let slug = generateSlug(`${course.title} copy`);
+    let counter = 0;
+    while (await this.prisma.course.findUnique({ where: { slug } })) {
+      counter++;
+      slug = `${generateSlug(`${course.title} copy`)}-${counter}`;
+    }
+
+    return this.prisma.$transaction(async (tx) => {
+      const newCourse = await tx.course.create({
+        data: {
+          title: `${course.title} (Copy)`,
+          slug,
+          description: course.description,
+          imageUrl: course.imageUrl,
+          price: course.price,
+          isPublished: false,
+          instructorId: course.instructorId,
+          categoryId: course.categoryId,
+          completionTime: course.completionTime,
+        },
+      });
+
+      for (const mod of course.modules) {
+        const newModule = await tx.module.create({
+          data: {
+            title: mod.title,
+            order: mod.order,
+            courseId: newCourse.id,
+          },
+        });
+
+        for (const lesson of mod.lessons) {
+          await tx.lesson.create({
+            data: {
+              title: lesson.title,
+              type: lesson.type,
+              content: lesson.content,
+              videoUrl: lesson.videoUrl,
+              order: lesson.order,
+              completionTime: lesson.completionTime,
+              moduleId: newModule.id,
+            },
+          });
+        }
+
+        if (mod.quiz) {
+          const newQuiz = await tx.quiz.create({
+            data: { moduleId: newModule.id },
+          });
+          for (const q of mod.quiz.questions) {
+            const newQuestion = await tx.question.create({
+              data: { text: q.text, quizId: newQuiz.id },
+            });
+            await tx.option.createMany({
+              data: q.options.map((opt) => ({
+                text: opt.text,
+                isCorrect: opt.isCorrect,
+                questionId: newQuestion.id,
+              })),
+            });
+          }
+        }
+      }
+
+      if (course.finalAssessment) {
+        const newAssessment = await tx.quiz.create({ data: {} });
+        for (const q of course.finalAssessment.questions) {
+          const newQuestion = await tx.question.create({
+            data: { text: q.text, quizId: newAssessment.id },
+          });
+          await tx.option.createMany({
+            data: q.options.map((opt) => ({
+              text: opt.text,
+              isCorrect: opt.isCorrect,
+              questionId: newQuestion.id,
+            })),
+          });
+        }
+        await tx.course.update({
+          where: { id: newCourse.id },
+          data: { finalAssessmentId: newAssessment.id },
+        });
+      }
+
+      return tx.course.findUnique({
+        where: { id: newCourse.id },
+        include: {
+          instructor: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+          category: true,
+          _count: {
+            select: {
+              modules: true,
+              enrollments: true,
+            },
+          },
+        },
+      });
+    });
+  }
+
   // ============================================
   // MODULE MANAGEMENT
   // ============================================

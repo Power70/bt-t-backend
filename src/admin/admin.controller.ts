@@ -190,6 +190,30 @@ export class AdminController {
     return this.adminService.toggleCoursePublish(id);
   }
 
+  @Post('courses/:id/duplicate')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({
+    summary: 'Duplicate a course (deep clone)',
+    description:
+      'Creates a full copy of a course including modules, lessons, quizzes, and final assessment.',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'Course ID',
+    type: String,
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Course duplicated successfully',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Course not found',
+  })
+  async duplicateCourse(@Param('id') id: string) {
+    return this.adminService.duplicateCourse(id);
+  }
+
   // ============================================
   // MODULE MANAGEMENT ENDPOINTS
   // ============================================
