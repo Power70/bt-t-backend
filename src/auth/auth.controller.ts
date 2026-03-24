@@ -28,6 +28,7 @@ import { CreateUserDto } from '../user/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { ResendOtpDto } from './dto/resend-otp.dto';
+import { GoogleAuthDto } from './dto/google-auth.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
@@ -88,6 +89,48 @@ export class AuthController {
   })
   async login(@Body() loginDto: LoginDto) {
     return this.authService.login(loginDto);
+  }
+
+  /**
+   * Authenticate or register with Google and set authentication cookie
+   */
+  @Post('google-auth')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Authenticate with Google',
+    description:
+      'Authenticates a user using a Google OAuth access token. Creates a new STUDENT account if one does not exist, then sets authentication cookie.',
+  })
+  @ApiBody({ type: GoogleAuthDto })
+  @ApiResponse({
+    status: 200,
+    description: 'Google authentication successful.',
+  })
+  @ApiUnauthorizedResponse({
+    description: 'Invalid Google token',
+  })
+  @ApiBadRequestResponse({
+    description: 'Validation error',
+  })
+  async googleAuth(
+    @Body() googleAuthDto: GoogleAuthDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const result = await this.authService.googleAuth(googleAuthDto);
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    response.cookie('Authentication', result.accessToken, {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      path: '/',
+    });
+
+    return {
+      message: 'Authentication successful',
+      user: result.user,
+    };
   }
 
   /**
@@ -326,10 +369,19 @@ export class AuthController {
       user: { id: string; role?: UserRole; email?: string };
     },
   ) {
-    return {
+    const userId = req.user.id;
+
+    if (!userId) {
+      return {
+        message: 'Profile access denied',
+        user: null,
+      };
+    }
+
+    return this.authService.getProfileById(userId).then((user) => ({
       message: 'Profile access granted',
-      user: req.user,
-    };
+      user,
+    }));
   }
 
   /**

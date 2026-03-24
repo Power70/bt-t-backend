@@ -20,7 +20,10 @@ import * as crypto from 'crypto';
 import { ConfigService } from '@nestjs/config';
 import { ResetPasswordDto } from './dto/reset-password-dto';
 import { RegisterInstructorDto } from './dto/register-instructor.dto';
+import { GoogleAuthDto } from './dto/google-auth.dto';
 import { UserRole } from '../../generated/prisma';
+import { User } from '../../generated/prisma';
+import axios from 'axios';
 
 export interface AuthResult {
   accessToken: string;
@@ -83,6 +86,142 @@ export class AuthService {
     });
 
     return { token, counter: newCounter };
+  }
+
+  /**
+   * Authenticate (or auto-register) a user with Google OAuth.
+   */
+  async googleAuth(dto: GoogleAuthDto): Promise<AuthResult> {
+    const googleUser = await this.validateGoogleAccessToken(dto.accessToken);
+
+    let user = await this.usersService.findRawByEmail(googleUser.email);
+
+    if (!user) {
+      const randomPassword = crypto.randomBytes(32).toString('hex');
+      const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
+      user = await this.prisma.user.create({
+        data: {
+          email: googleUser.email,
+          name: googleUser.name,
+          password: hashedPassword,
+          role: UserRole.STUDENT,
+          isVerified: true,
+        },
+      });
+    } else if (!user.isVerified) {
+      user = await this.prisma.user.update({
+        where: { id: user.id },
+        data: { isVerified: true },
+      });
+    }
+
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+    };
+
+    const accessToken = this.jwtService.sign(payload);
+
+    return {
+      accessToken,
+      user: this.toUserEntity(user),
+    };
+  }
+
+  private async validateGoogleAccessToken(accessToken: string): Promise<{
+    email: string;
+    name: string;
+  }> {
+    const googleClientId = this.configService.get<string>('GOOGLE_CLIENT_ID');
+
+    try {
+      const tokenInfoResponse = await axios.get<{
+        issued_to?: string;
+        audience?: string;
+        aud?: string;
+        email?: string;
+        verified_email?: string | boolean;
+      }>('https://oauth2.googleapis.com/tokeninfo', {
+        params: { access_token: accessToken },
+      });
+
+      const tokenAudience =
+        tokenInfoResponse.data.issued_to ||
+        tokenInfoResponse.data.audience ||
+        tokenInfoResponse.data.aud;
+
+      if (googleClientId && tokenAudience !== googleClientId) {
+        throw new UnauthorizedException('Google token audience mismatch');
+      }
+
+      const tokenVerifiedRaw = tokenInfoResponse.data.verified_email;
+      const tokenVerified =
+        tokenVerifiedRaw === true
+          ? true
+          : tokenVerifiedRaw === false
+            ? false
+            : typeof tokenVerifiedRaw === 'string'
+              ? tokenVerifiedRaw.toLowerCase() === 'true'
+              : undefined;
+
+      const userInfoResponse = await axios.get<{
+        email?: string;
+        email_verified?: boolean;
+        name?: string;
+      }>('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const email =
+        userInfoResponse.data.email?.trim() ||
+        tokenInfoResponse.data.email?.trim();
+
+      const isEmailVerified =
+        userInfoResponse.data.email_verified ?? tokenVerified;
+
+      if (!email || isEmailVerified === false) {
+        throw new UnauthorizedException('Google account email is not verified');
+      }
+
+      const fallbackName = email.split('@')[0] || 'Google User';
+
+      return {
+        email,
+        name: userInfoResponse.data.name?.trim() || fallbackName,
+      };
+    } catch (error) {
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
+
+      throw new UnauthorizedException('Invalid Google access token');
+    }
+  }
+
+  private toUserEntity(user: User): UserEntity {
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      isVerified: user.isVerified,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+  }
+
+  async getProfileById(userId: string): Promise<UserEntity> {
+    const user = await this.usersService.findRawById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return this.toUserEntity(user);
   }
 
   /**
