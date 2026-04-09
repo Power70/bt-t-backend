@@ -1365,6 +1365,7 @@ export class StudentService {
             id: true,
             title: true,
             slug: true,
+            imageUrl: true,
           },
         },
         user: {
@@ -1414,6 +1415,7 @@ export class StudentService {
             id: true,
             title: true,
             slug: true,
+            imageUrl: true,
           },
         },
         user: {

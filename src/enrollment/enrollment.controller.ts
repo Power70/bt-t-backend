@@ -4,6 +4,7 @@ import {
   Get,
   Body,
   Param,
+  Query,
   UseGuards,
   Request,
   HttpCode,
@@ -77,6 +78,35 @@ export class EnrollmentController {
       initiateEnrollmentDto,
       userId,
     );
+  }
+
+  /**
+   * Get published courses for public pages (no authentication required)
+   * GET /enrollments/public-courses
+   */
+  @Get('public-courses')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Get published courses (public)',
+    description:
+      'Returns a paginated list of published courses for public pages such as landing and course catalog.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Published courses retrieved successfully',
+  })
+  async getPublicCourses(
+    @Query('page') page?: string,
+    @Query('limit') limit?: string,
+    @Query('search') search?: string,
+    @Query('category') category?: string,
+  ) {
+    return this.enrollmentService.getPublicCourses({
+      page: page ? Number(page) : 1,
+      limit: limit ? Number(limit) : 9,
+      search,
+      category,
+    });
   }
 
   /**

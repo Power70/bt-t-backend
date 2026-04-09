@@ -329,4 +329,108 @@ export class EnrollmentService {
 
     return !!enrollment;
   }
+
+  async getPublicCourses(filters: {
+    page?: number;
+    limit?: number;
+    search?: string;
+    category?: string;
+  }) {
+    const page = filters.page && filters.page > 0 ? filters.page : 1;
+    const limit = filters.limit && filters.limit > 0 ? filters.limit : 9;
+    const skip = (page - 1) * limit;
+
+    const where: any = {
+      isPublished: true,
+    };
+
+    if (filters.search) {
+      where.OR = [
+        {
+          title: {
+            contains: filters.search,
+            mode: 'insensitive',
+          },
+        },
+        {
+          description: {
+            contains: filters.search,
+            mode: 'insensitive',
+          },
+        },
+        {
+          instructor: {
+            name: {
+              contains: filters.search,
+              mode: 'insensitive',
+            },
+          },
+        },
+        {
+          category: {
+            name: {
+              contains: filters.search,
+              mode: 'insensitive',
+            },
+          },
+        },
+      ];
+    }
+
+    if (filters.category) {
+      where.category = {
+        name: {
+          contains: filters.category,
+          mode: 'insensitive',
+        },
+      };
+    }
+
+    const [total, courses] = await Promise.all([
+      this.prisma.course.count({ where }),
+      this.prisma.course.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          instructor: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          _count: {
+            select: {
+              modules: true,
+              enrollments: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+    ]);
+
+    const totalPages = Math.max(1, Math.ceil(total / limit));
+
+    return {
+      data: courses,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
+    };
+  }
 }

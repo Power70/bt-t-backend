@@ -9,6 +9,12 @@ class CertificateCourseDto {
 
   @ApiProperty({ example: 'complete-javascript-course' })
   slug: string;
+
+  @ApiProperty({
+    example: 'https://cdn.example.com/course-image.jpg',
+    nullable: true,
+  })
+  imageUrl: string | null;
 }
 
 class CertificateUserDto {
