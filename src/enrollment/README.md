@@ -14,12 +14,6 @@ This module handles student enrollment in courses with Paystack payment integrat
 
 Add the following environment variables to your `.env` file:
 
-```env
-# Paystack Configuration
-PAYSTACK_SECRET_KEY=sk_test_6ae84ae181ac87bc0b64be6251429b39678c4cd1
-PAYSTACK_PUBLIC_KEY=pk_test_3c11c7f62bceefeb3a897cedd98e114583f7d67c
-PAYSTACK_CALLBACK_URL=https://deshawn-connected-evelynn.ngrok-free.dev/api-docs
-```
 
 ## API Endpoints
 
