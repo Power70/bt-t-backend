@@ -23,7 +23,7 @@ async function main() {
   await prisma.user.deleteMany();
 
   // Hash password for all users (same password for easy testing)
-  const hashedPassword = await bcrypt.hash('Test1234!', 10);
+  const hashedPassword = await bcrypt.hash('test1234', 10);
 
   // 1. Create Users
   console.log('👥 Creating users...');
