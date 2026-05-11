@@ -317,7 +317,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\torzor.peter_enbros\\OneDrive\\Desktop\\index\\tam\\BT-and-T\\bt-t-frontend\\bt-t-backend\\generated\\prisma",
+      "value": "C:\\dev\\bt-t-frontend\\bt-t-backend\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -331,7 +331,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\torzor.peter_enbros\\OneDrive\\Desktop\\index\\tam\\BT-and-T\\bt-t-frontend\\bt-t-backend\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\dev\\bt-t-frontend\\bt-t-backend\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -345,6 +345,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
